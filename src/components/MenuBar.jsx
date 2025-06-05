@@ -6,6 +6,7 @@ function MenuBar() {
       <Link to="/">Inicio</Link> | <Link to="/mapa">Mapa</Link> |{" "}
       <Link to="/formulario">Formulario</Link> |{" "}
       <Link to="/registro">Registro</Link>
+      
     </nav>
   );
 }

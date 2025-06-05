@@ -2,23 +2,6 @@ import { useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import Formulario from "./Formulario";
 import EventoCard from "./EventoCard";
-import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database"; // Para Realtime Database
-import { getAuth } from "firebase/auth";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDfy5_wwPos7Yz-rgtdEtER2LvNkZz8ct0",
-  authDomain: "hazplan-7db16.firebaseapp.com",
-  projectId: "hazplan-7db16",
-  storageBucket: "hazplan-7db16.appspot.com",
-  messagingSenderId: "105317671583",
-  appId: "1:105317671583:web:7254fa6acb65447ac4b8aa",
-  measurementId: "G-G3E2QYRMCP",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app); // Para Realtime Database
-const auth = getAuth(app);
 
 async function geocodeColonia(colonia) {
   const apiKey = "pk.75718cf70ebc64c3d8a6b00f1cb5d3ad";
@@ -106,4 +89,3 @@ function Mapa() {
 }
 
 export default Mapa;
-export { db, auth };
