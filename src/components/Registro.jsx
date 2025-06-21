@@ -1,15 +1,57 @@
+import React, { useState } from "react";
+import { supabase } from "../supabaseClient";
+import { useNavigate } from "react-router-dom";
+
 function Registro() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const registerCorreo = async (e) => {
+    e.preventDefault();
+    const { error } = await supabase.auth.signUp({ email, password });
+    if (error) {
+      setError(error.message);
+    } else {
+      setError("");
+      navigate("/crear-perfil");
+    }
+  };
+
+  // NUEVO: función para Google
+  const registerGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: window.location.origin + "/crear-perfil",
+      },
+    });
+    if (error) setError(error.message);
+  };
+
   return (
     <div>
       <h2>Registro</h2>
-      {/* Aquí puedes agregar botones para Google, Facebook y un formulario para correo, nombre, apellido, edad */}
-      <button>Registrarse con Google</button>
-      <button>Registrarse con Facebook</button>
-      <form>
-        <input type="text" placeholder="Correo" required />
-        <input type="text" placeholder="Nombre" required />
-        <input type="text" placeholder="Apellido" required />
-        <input type="number" placeholder="Edad" required />
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <button type="button" onClick={registerGoogle}>
+        Registrarse con Google
+      </button>
+      <form onSubmit={registerCorreo}>
+        <input
+          type="email"
+          placeholder="Correo"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Contraseña"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button type="submit">Registrarse</button>
       </form>
     </div>

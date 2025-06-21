@@ -12,8 +12,7 @@ dist
 dist-ssr
 *.local
 
-# Environment variables
-.env
+
 
 # Editor directories and files
 .vscode/*
@@ -28,3 +27,8 @@ dist-ssr
 
 # Ignorar configuración de Firebase
 src/firebase.js
+# Environment variables
+.env
+src/.env
+src/.Env
+src/supabaseClient.js

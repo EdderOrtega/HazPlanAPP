@@ -10,7 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "firebase": "^11.8.1",
+    "@supabase/supabase-js": "^2.49.10",
+    "framer-motion": "^12.16.0",
     "hazplan": "file:",
     "leaflet": "^1.9.4",
     "react": "^19.1.0",

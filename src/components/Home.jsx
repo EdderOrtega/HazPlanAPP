@@ -1,6 +1,12 @@
+import capibaraMascota from "../assets/capibaraMascota.png";
 function Home() {
   return (
     <div>
+      <img
+        src={capibaraMascota}
+        alt="Logo de HazPlan"
+        style={{ width: "100%", height: "auto" }}
+      />
       <h1>HazPlan</h1>
       <p>
         Bienvenido a la app para crear y compartir eventos comunitarios en

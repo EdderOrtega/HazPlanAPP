@@ -1,38 +1,24 @@
 import React, { useState } from "react";
-import { auth } from "../firebase";
-import {
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
+import { supabase } from "../supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const loginCorreo = async (e) => {
     e.preventDefault();
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) {
+      setError(error.message);
+    } else {
       setError("");
-      alert("Login exitoso!");
-      // Redirige o actualiza el estado aquí si lo necesitas
-    } catch (err) {
-      setError(err.message);
-      console.error("Error login correo:", err);
-    }
-  };
-
-  const loginGoogle = async () => {
-    try {
-      await signInWithPopup(auth, new GoogleAuthProvider());
-      setError("");
-      alert("Login con Google exitoso!");
-      // Redirige o actualiza el estado aquí si lo necesitas
-    } catch (err) {
-      setError(err.message);
-      console.error("Error login Google:", err);
+      navigate("/perfil");
     }
   };
 
@@ -40,10 +26,7 @@ function Login() {
     <div>
       <h2>Iniciar sesión</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
-
       <form onSubmit={loginCorreo}>
-        <button onClick={loginGoogle}>Iniciar sesión con Google</button>
-
         <input
           type="email"
           placeholder="Correo"
@@ -58,7 +41,7 @@ function Login() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Iniciar sesión con correo</button>
+        <button type="submit">Iniciar sesión</button>
       </form>
     </div>
   );
