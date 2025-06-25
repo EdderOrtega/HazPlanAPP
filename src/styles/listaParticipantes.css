@@ -1,0 +1,10 @@
+/* Puedes poner esto en tu archivo de estilos global o en el CSS del componente */
+.avatar-participante {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #e0e0e0;
+  background: #f0f0f0;
+  margin-right: 10px;
+}

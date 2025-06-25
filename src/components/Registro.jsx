@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { supabase } from "../supabaseClient";
 import { useNavigate } from "react-router-dom";
+import ModalRegistroExitoso from "./ui/ModalRegistroExitoso";
 
 function Registro() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   const registerCorreo = async (e) => {
@@ -15,7 +17,7 @@ function Registro() {
       setError(error.message);
     } else {
       setError("");
-      navigate("/crear-perfil");
+      handleRegistroExitoso();
     }
   };
 
@@ -28,6 +30,15 @@ function Registro() {
       },
     });
     if (error) setError(error.message);
+  };
+
+  const handleRegistroExitoso = () => {
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    navigate("/crear-perfil");
   };
 
   return (
@@ -54,6 +65,7 @@ function Registro() {
         />
         <button type="submit">Registrarse</button>
       </form>
+      {showModal && <ModalRegistroExitoso onClose={handleModalClose} />}
     </div>
   );
 }

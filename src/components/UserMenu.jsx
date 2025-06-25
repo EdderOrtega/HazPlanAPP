@@ -58,7 +58,7 @@ function UserMenu({ user }) {
       style={{
         position: "fixed",
         top: 16,
-        right: 24,
+        right: 14,
         zIndex: 1000,
         backgroundColor: "pink",
         borderRadius: 8,

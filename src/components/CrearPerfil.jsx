@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../supabaseClient";
 import { useNavigate } from "react-router-dom";
+import ModalPerfilCreado from "./ui/ModalPerfilCreado";
 
 function CrearPerfil() {
+  const [step, setStep] = useState(1);
   const [nombre, setNombre] = useState("");
   const [edad, setEdad] = useState("");
   const [gustos, setGustos] = useState("");
@@ -11,6 +13,7 @@ function CrearPerfil() {
   const [bio, setBio] = useState("");
   const [ubicacion, setUbicacion] = useState("");
   const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,20 +27,18 @@ function CrearPerfil() {
       }
     };
     checkAuth();
-  }, []);
+  }, [navigate]);
 
   const handleFotosEventos = (e) => {
     const files = Array.from(e.target.files).slice(0, 4);
     setFotosEventos(files);
   };
 
-  // Sube la imagen y retorna la ruta (no la URL pública)
   const subirImagen = async (file, carpeta = "perfiles") => {
     if (!file) {
       setError("Selecciona una imagen válida.");
       return;
     }
-
     const nombreArchivo = `${carpeta}/${Date.now()}_${file.name}`;
     const { error } = await supabase.storage
       .from("hazplanimagenes")
@@ -49,36 +50,27 @@ function CrearPerfil() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Subir foto de perfil
       let fotoPerfilPath = "";
       if (fotoPerfil) {
         fotoPerfilPath = await subirImagen(fotoPerfil, "perfiles");
       }
-
-      // Subir fotos de eventos
       const fotosEventosPaths = [];
       for (const foto of fotosEventos) {
         const path = await subirImagen(foto, "eventos");
         fotosEventosPaths.push(path);
       }
-
-      // Obtener el usuario autenticado
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      console.log("Usuario autenticado:", user);
-      console.log("user.id:", user.id);
       if (!user) {
         setError("Debes iniciar sesión para subir imágenes.");
         return;
       }
-
-      // Guarda el perfil en la tabla "perfiles"
       const { error: insertError } = await supabase
         .from("usuariosRegistrados")
         .insert([
           {
-            user_id: user.id, // Nuevo campo para el id del usuario autenticado
+            user_id: user.id,
             nombre,
             edad,
             gustos,
@@ -89,71 +81,145 @@ function CrearPerfil() {
           },
         ]);
       if (insertError) throw insertError;
-
-      alert("¡Perfil creado!");
-      // Aquí podrías redirigir o limpiar el formulario
+      setShowModal(true);
     } catch (err) {
       setError("Error al subir imágenes o crear perfil");
       console.error(err);
     }
   };
 
+  const handleVerPerfil = () => {
+    setShowModal(false);
+    navigate("/perfil");
+  };
+
+  // Pasos del wizard
   return (
     <div>
       <h2>Crear Perfil</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
+
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Nombre completo"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          required
-        />
-        <input
-          type="number"
-          placeholder="Edad"
-          value={edad}
-          onChange={(e) => setEdad(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Gustos e intereses (separados por coma)"
-          value={gustos}
-          onChange={(e) => setGustos(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Ubicación (ciudad o colonia)"
-          value={ubicacion}
-          onChange={(e) => setUbicacion(e.target.value)}
-        />
-        <textarea
-          placeholder="Biografía o descripción corta"
-          value={bio}
-          onChange={(e) => setBio(e.target.value)}
-        />
-        <label>
-          Foto de perfil:
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setFotoPerfil(e.target.files[0])}
-            required
-          />
-        </label>
-        <label>
-          Fotos de eventos (máx. 4):
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleFotosEventos}
-          />
-        </label>
-        <button type="submit">Guardar perfil</button>
+        {step === 1 && (
+          <div>
+            <label>Nombre completo:</label>
+            <input
+              type="text"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              required
+            />
+            <button type="button" onClick={() => setStep(2)} disabled={!nombre}>
+              Siguiente
+            </button>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div>
+            <label>Edad:</label>
+            <input
+              type="number"
+              value={edad}
+              onChange={(e) => setEdad(e.target.value)}
+              required
+            />
+            <button type="button" onClick={() => setStep(1)}>
+              Atrás
+            </button>
+            <button type="button" onClick={() => setStep(3)} disabled={!edad}>
+              Siguiente
+            </button>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div>
+            <label>Foto de perfil:</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFotoPerfil(e.target.files[0])}
+              required
+            />
+            <button type="button" onClick={() => setStep(2)}>
+              Atrás
+            </button>
+            <button
+              type="button"
+              onClick={() => setStep(4)}
+              disabled={!fotoPerfil}
+            >
+              Siguiente
+            </button>
+          </div>
+        )}
+
+        {step === 4 && (
+          <div>
+            <label>Gustos e intereses (separados por coma):</label>
+            <input
+              type="text"
+              value={gustos}
+              onChange={(e) => setGustos(e.target.value)}
+            />
+            <button type="button" onClick={() => setStep(3)}>
+              Atrás
+            </button>
+            <button type="button" onClick={() => setStep(5)}>
+              Siguiente
+            </button>
+          </div>
+        )}
+
+        {step === 5 && (
+          <div>
+            <label>Ubicación (ciudad o colonia):</label>
+            <input
+              type="text"
+              value={ubicacion}
+              onChange={(e) => setUbicacion(e.target.value)}
+            />
+            <button type="button" onClick={() => setStep(4)}>
+              Atrás
+            </button>
+            <button type="button" onClick={() => setStep(6)}>
+              Siguiente
+            </button>
+          </div>
+        )}
+
+        {step === 6 && (
+          <div>
+            <label>Biografía o descripción corta:</label>
+            <textarea value={bio} onChange={(e) => setBio(e.target.value)} />
+            <button type="button" onClick={() => setStep(5)}>
+              Atrás
+            </button>
+            <button type="button" onClick={() => setStep(7)}>
+              Siguiente
+            </button>
+          </div>
+        )}
+
+        {step === 7 && (
+          <div>
+            <label>Fotos de eventos (máx. 4):</label>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleFotosEventos}
+            />
+            <button type="button" onClick={() => setStep(6)}>
+              Atrás
+            </button>
+            <button type="submit">Finalizar y guardar perfil</button>
+          </div>
+        )}
       </form>
+
+      {showModal && <ModalPerfilCreado onVerPerfil={handleVerPerfil} />}
     </div>
   );
 }

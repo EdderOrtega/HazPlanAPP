@@ -1,32 +1,100 @@
-function EventoCard({ evento }) {
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../supabaseClient";
+import "../styles/eventoCard.css"; // Asegúrate de tener este CSS
+function EventoCard({ evento, user }) {
+  const [participando, setParticipando] = useState(false);
+  const [cargando, setCargando] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Verificar si el usuario ya participa
+    if (user) {
+      const checkParticipacion = async () => {
+        const { data } = await supabase
+          .from("participantes_eventos")
+          .select("*")
+          .eq("evento_id", evento.id)
+          .eq("user_id", user.id)
+          .single();
+
+        setParticipando(!!data);
+      };
+
+      checkParticipacion();
+    }
+  }, [evento.id, user]);
+
+  const participarEvento = async () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    setCargando(true);
+
+    const { error } = await supabase
+      .from("participantes_eventos")
+      .insert({ evento_id: evento.id, user_id: user.id });
+
+    if (!error) {
+      setParticipando(true);
+      navigate(`/evento/${evento.id}`); // Redirige al detalle del evento
+    }
+
+    setCargando(false);
+  };
+
+  const irAlEvento = () => {
+    navigate(`/evento/${evento.id}`);
+  };
+
   return (
-    <div>
-      <h3>{evento.nombreEvento}</h3>
+    <div className="evento-card">
+      <h3>{evento.nombre}</h3>
       <p>
-        <b>Usuario:</b> {evento.usuario}
+        <strong>Descripción:</strong> {evento.descripcion}
       </p>
       <p>
-        <b>Ubicación:</b> {evento.ubicacion}
+        <strong>Ubicación:</strong> {evento.ubicacion}
       </p>
       <p>
-        <b>Fecha y hora:</b> {evento.fechaHora}
+        <strong>Fecha y hora de inicio:</strong>{" "}
+        {evento.fecha
+          ? new Date(evento.fecha).toLocaleString()
+          : "No especificada"}
       </p>
       <p>
-        <b>Tipo:</b> {evento.tipo}
+        <strong>Hora de finalización:</strong>{" "}
+        {evento.fecha_fin
+          ? new Date(evento.fecha_fin).toLocaleString()
+          : "No especificada"}
       </p>
       <p>
-        <b>Cupo:</b> {evento.cupo}
+        <strong>Tipo:</strong> {evento.tipo}
       </p>
       <p>
-        <b>Invitación:</b> {evento.frase}
+        <strong>Cupo:</strong> {evento.cupo}
       </p>
-      <img
-        src={evento.imagen}
-        alt={evento.nombreEvento}
-        style={{ width: "100px" }}
-      />
-      <button>Unirse al evento</button>
+      <p>
+        <strong>Frase clave:</strong> {evento.descripcion || "No especificada"}
+      </p>
+
+      {participando ? (
+        <button onClick={irAlEvento} className="btn-primary">
+          Ver evento
+        </button>
+      ) : (
+        <button
+          onClick={participarEvento}
+          disabled={cargando}
+          className="btn-secondary"
+        >
+          {cargando ? "Procesando..." : "Participar"}
+        </button>
+      )}
     </div>
   );
 }
+
 export default EventoCard;

@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { supabase } from "./supabaseClient";
 import MenuBar from "./components/MenuBar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Registro from "./components/Registro";
 import Login from "./components/Login";
 import Formulario from "./components/Formulario";
 import Mapa from "./components/Mapa";
 import PerfilUsuario from "./components/PerfilUsuario";
-import Logo from "./components/Logo"
+import Logo from "./components/navigation/Logo";
 import ChatEvento from "./components/ChatEvento";
 import CrearPerfil from "./components/CrearPerfil";
 import UserMenu from "./components/UserMenu";
 import VectorAnimado from "./components/VectorAnimado";
-import { supabase } from "./supabaseClient";
+import EventoDetalle from "./components/EventoDetalle";
 import "./App.css";
+import Loader from "./components/ui/Loader";
+import LogoFijo from "./components/ui/LogoFijo";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -44,7 +47,7 @@ function App() {
 
   return (
     <Router>
-      <MenuBar user={user} />
+      <LogoFijo />
       {user && <UserMenu user={user} />}
       <Routes>
         <Route path="/" element={<Home />} />
@@ -54,8 +57,11 @@ function App() {
         <Route path="/perfil" element={<PerfilUsuario />} />
         <Route path="/mapa" element={<Mapa />} />
         <Route path="/chat/:eventoId" element={<ChatEvento />} />
+        <Route path="/evento/:eventoId" element={<EventoDetalle />} />
         <Route path="/crear-perfil" element={<CrearPerfil />} />
+        <Route path="/crear-evento" element={<Formulario />} />
       </Routes>
+      {user && <MenuBar user={user} />}
     </Router>
   );
 }

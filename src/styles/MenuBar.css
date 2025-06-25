@@ -1,0 +1,49 @@
+/* Puedes poner esto en tu archivo global o en MenuBar.css */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: #fff;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 100;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
+}
+.bottom-nav a {
+  color: #888;
+  font-size: 1.8rem;
+  text-decoration: none;
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: color 0.2s;
+  padding: 0.3rem 0 0.1rem 0;
+}
+.bottom-nav a.active,
+.bottom-nav a.crear-evento {
+  color: #2e7d32;
+}
+.bottom-nav a.crear-evento {
+  position: relative;
+  top: -18px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(46, 125, 50, 0.15);
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  border: 2px solid #2e7d32;
+}
+.bottom-nav span {
+  font-size: 0.8rem;
+  margin-top: 2px;
+}

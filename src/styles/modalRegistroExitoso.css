@@ -1,0 +1,40 @@
+.modal-registro-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-registro {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  text-align: center;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.15);
+  max-width: 350px;
+}
+
+.modal-capibara-img {
+  width: 80px;
+  margin-bottom: 1rem;
+}
+.modal-registro h2 {
+  margin: 0.5rem 0 0.5rem 0;
+  color: #2e7d32;
+}
+.modal-registro button {
+  margin-top: 1.2rem;
+  padding: 0.5rem 1.5rem;
+  background: #2e7d32;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}

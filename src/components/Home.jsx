@@ -1,5 +1,19 @@
+import { useEffect, useState } from "react";
+import { supabase } from "../supabaseClient";
 import capibaraMascota from "../assets/capibaraMascota.png";
+import { Link } from "react-router-dom";
+
 function Home() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => setUser(session?.user ?? null)
+    );
+    return () => listener.subscription.unsubscribe();
+  }, []);
+
   return (
     <div>
       <img
@@ -12,7 +26,11 @@ function Home() {
         Bienvenido a la app para crear y compartir eventos comunitarios en
         Monterrey.
       </p>
-      <a href="/registro">Registro</a> | <a href="/login">Login</a>
+      {!user && (
+        <>
+          <Link to="/registro">Registro</Link> | <Link to="/login">Login</Link>
+        </>
+      )}
       <h3>¿Qué puedes hacer?</h3>
       <ul>
         <li>Crear y buscar eventos por categoría</li>
