@@ -1,7 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { FiHome, FiMap, FiPlusCircle, FiBell, FiUser } from "react-icons/fi";
-import "../styles/menuBar.css";
-
+import "../styles/MenuBar.css";
 function MenuBar({ user }) {
   const location = useLocation();
 
