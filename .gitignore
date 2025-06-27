@@ -32,7 +32,6 @@ dist-ssr
 *.env
 
 # API Keys and configuration files
-src/supabaseClient.js
 src/firebase.js
 geocode.js
 src/.env
