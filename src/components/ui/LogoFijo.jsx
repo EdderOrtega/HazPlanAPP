@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Logo from "../navigation/Logo";
-import "../../styles/logoFijo.css";
+import "../../styles/logoFijo.css"; // VERCEL DEPLOY FIX - minúscula correcta
 
 export default function LogoFijo() {
   return (
