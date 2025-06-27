@@ -1,7 +1,7 @@
 // Crear nuevo archivo ChatGrupal.jsx
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "../supabaseClient";
-import "../styles/ChatGrupal.css";
+import "../styles/chatGrupal.css";
 
 function ChatGrupal({ eventoId }) {
   const [mensajes, setMensajes] = useState([]);

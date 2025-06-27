@@ -1,7 +1,7 @@
 // Crear nuevo archivo ListaParticipantes.jsx
 import { useState, useEffect } from "react";
 import { supabase } from "../supabaseClient";
-import "../styles/ListaParticipantes.css";
+import "../styles/listaParticipantes.css";
 import { Link } from "react-router-dom";
 
 function ListaParticipantes({ eventoId }) {

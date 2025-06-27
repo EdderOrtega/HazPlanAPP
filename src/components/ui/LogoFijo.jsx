@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Logo from "../navigation/Logo";
-import "../../styles/LogoFijo.css";
+import "../../styles/logoFijo.css";
 
 export default function LogoFijo() {
   return (

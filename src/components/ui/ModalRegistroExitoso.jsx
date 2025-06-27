@@ -1,4 +1,4 @@
-import "../../styles/ModalRegistroExitoso.css";
+import "../../styles/modalRegistroExitoso.css";
 import capibara from "../../assets/capibaraMascota.png";
 
 function ModalRegistroExitoso({ onClose }) {

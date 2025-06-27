@@ -1,4 +1,4 @@
-import "../../styles/ModalPerfilCreado.css";
+import "../../styles/modalPerfilCreado.css";
 import capibara from "../../assets/capibaraMascota.png";
 
 function ModalPerfilCreado({ onVerPerfil }) {
