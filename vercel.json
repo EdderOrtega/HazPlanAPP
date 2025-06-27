@@ -1,0 +1,10 @@
+{
+  "functions": ["api/*.js"],
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

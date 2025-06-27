@@ -50,7 +50,6 @@ limpiar_eventos.js
 server-local.js
 
 # Archivos de configuración sensibles
-vercel.json
 netlify.toml
 
 # Build outputs de funciones serverless
