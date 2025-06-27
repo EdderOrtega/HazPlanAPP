@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { supabase } from "../supabaseClient";
 import { FiHome, FiMap, FiPlusCircle, FiBell, FiUser } from "react-icons/fi";
 import "../styles/MenuBar.css";
 

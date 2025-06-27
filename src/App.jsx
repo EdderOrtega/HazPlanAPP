@@ -17,7 +17,7 @@ import EventoDetalle from "./components/EventoDetalle";
 import EditarEvento from "./components/events/EditarEvento";
 import "./App.css";
 import Loader from "./components/ui/Loader";
-import LogoFijo from "./components/ui/LogoFijo";
+import LogoFijo from "./components/ui/logoFijo";
 
 function App() {
   const [user, setUser] = useState(null);
