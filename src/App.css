@@ -1,5 +1,8 @@
 @import "leaflet/dist/leaflet.css";
-
+--var colores {
+  --color-primary: #8855c2;
+  --color-secondary: #d4a3d9;
+}
 #root {
   max-width: 1280px;
   margin: 0 auto;

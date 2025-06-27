@@ -14,6 +14,7 @@ import CrearPerfil from "./components/CrearPerfil";
 import UserMenu from "./components/UserMenu";
 import VectorAnimado from "./components/VectorAnimado";
 import EventoDetalle from "./components/EventoDetalle";
+import EditarEvento from "./components/events/EditarEvento";
 import "./App.css";
 import Loader from "./components/ui/Loader";
 import LogoFijo from "./components/ui/LogoFijo";
@@ -60,6 +61,8 @@ function App() {
         <Route path="/evento/:eventoId" element={<EventoDetalle />} />
         <Route path="/crear-perfil" element={<CrearPerfil />} />
         <Route path="/crear-evento" element={<Formulario />} />
+        <Route path="/perfil-usuario/:userId" element={<PerfilUsuario />} />
+        <Route path="/editar-evento/:eventoId" element={<EditarEvento />} />
       </Routes>
       {user && <MenuBar user={user} />}
     </Router>

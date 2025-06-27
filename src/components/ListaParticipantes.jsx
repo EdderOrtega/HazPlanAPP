@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../supabaseClient";
 import "../styles/ListaParticipantes.css";
+import { Link } from "react-router-dom";
+
 function ListaParticipantes({ eventoId }) {
   const [participantes, setParticipantes] = useState([]);
   const [perfiles, setPerfiles] = useState({});
@@ -64,16 +66,18 @@ function ListaParticipantes({ eventoId }) {
           const perfil = perfiles[participante.user_id] || {};
           return (
             <li key={participante.id} className="participante-item">
-              {perfil.foto_perfil_url ? (
-                <img
-                  src={perfil.foto_perfil_url}
-                  alt="Perfil"
-                  className="avatar-participante"
-                />
-              ) : (
-                <div className="avatar-placeholder"></div>
-              )}
-              <span>{perfil.nombre || "Usuario"}</span>
+              <Link to={`/perfil-usuario/${participante.user_id}`}>
+                {perfil.foto_perfil_url ? (
+                  <img
+                    src={perfil.foto_perfil_url}
+                    alt="Perfil"
+                    className="avatar-participante"
+                  />
+                ) : (
+                  <div className="avatar-placeholder"></div>
+                )}
+                <span>{perfil.nombre || "Usuario"}</span>
+              </Link>
             </li>
           );
         })}

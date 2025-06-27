@@ -60,11 +60,12 @@ function UserMenu({ user }) {
         top: 16,
         right: 14,
         zIndex: 1000,
-        backgroundColor: "pink",
+        backgroundColor: "#b42acb",
         borderRadius: 8,
         padding: "0.3rem",
         boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
         cursor: "pointer",
+        border: "3px solid #ddd",
       }}
       ref={menuRef}
     >
@@ -89,7 +90,7 @@ function UserMenu({ user }) {
           }}
         />
         <span style={{ fontWeight: "bold" }}>{perfil.nombre}</span>
-        <span style={{ fontSize: 20 }}>▼</span>
+        <span style={{ fontSize: 17, padding: 4, marginTop: 2 }}>▼</span>
       </div>
       {open && (
         <div
@@ -107,7 +108,7 @@ function UserMenu({ user }) {
         >
           <div
             style={{
-              backgroundColor: "black",
+              backgroundColor: "#b42acb",
               padding: "0.5rem 1rem",
               margin: "0.5rem",
               cursor: "pointer",
@@ -118,7 +119,7 @@ function UserMenu({ user }) {
           </div>
           <div
             style={{
-              backgroundColor: "black",
+              backgroundColor: "red",
               padding: "0.5rem 1rem",
               margin: "0.5rem",
               cursor: "pointer",

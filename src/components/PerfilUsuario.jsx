@@ -6,6 +6,7 @@ function PerfilUsuario() {
   const [perfil, setPerfil] = useState(null);
   const [fotoPerfilUrl, setFotoPerfilUrl] = useState("");
   const [loading, setLoading] = useState(true);
+  const [misEventos, setMisEventos] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,13 +42,37 @@ function PerfilUsuario() {
         setFotoPerfilUrl(urlData?.signedUrl || "");
       }
       setLoading(false);
+
+      // Traer eventos creados por el usuario
+      const { data: eventosData } = await supabase
+        .from("eventos")
+        .select("*")
+        .eq("user_id", user.id);
+      setMisEventos(eventosData || []);
     };
 
     fetchPerfil();
   }, [navigate]);
 
+  const handleBorrarEvento = async (eventoId) => {
+    if (window.confirm("¿Seguro que quieres borrar este evento?")) {
+      await supabase.from("eventos").delete().eq("id", eventoId);
+      setMisEventos(misEventos.filter((e) => e.id !== eventoId));
+    }
+  };
+
   if (loading) return <p>Cargando perfil...</p>;
-  if (!perfil) return <p>No se encontró el perfil.</p>;
+  if (!perfil) {
+    return (
+      <div>
+        <h2>¡Bienvenido!</h2>
+        <p>No has creado tu perfil aún.</p>
+        <button onClick={() => navigate("/crear-perfil")}>
+          Crear o editar perfil
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -74,6 +99,25 @@ function PerfilUsuario() {
       <p>
         <b>Bio:</b> {perfil.bio}
       </p>
+      <h2>Mis eventos</h2>
+      {misEventos.length === 0 ? (
+        <p>No has creado eventos aún.</p>
+      ) : (
+        <ul>
+          {misEventos.map((evento) => (
+            <li key={evento.id}>
+              <b>{evento.nombre}</b> - {evento.fecha}
+              {/* Botones para editar y borrar (solo estructura, funcionalidad después) */}
+              <button onClick={() => navigate(`/editar-evento/${evento.id}`)}>
+                Editar
+              </button>
+              <button onClick={() => handleBorrarEvento(evento.id)}>
+                Borrar
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

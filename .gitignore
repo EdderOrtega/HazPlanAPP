@@ -12,8 +12,6 @@ dist
 dist-ssr
 *.local
 
-
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -25,10 +23,39 @@ dist-ssr
 *.sln
 *.sw?
 
-# Ignorar configuración de Firebase
-src/firebase.js
-# Environment variables
+# Environment variables and sensitive files
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# API Keys and configuration files
+src/supabaseClient.js
+src/firebase.js
+geocode.js
 src/.env
 src/.Env
-src/supabaseClient.js
+
+# Documentation files (privados)
+*.md
+!README.md
+INSTRUCCIONES_DEPLOY.md
+SOLUCION_BUG_MAPA.md
+
+# Scripts de desarrollo/testing
+crear_evento_prueba.js
+debug_eventos.js
+limpiar_eventos.js
+server-local.js
+
+# Archivos de configuración sensibles
+vercel.json
+netlify.toml
+
+# Build outputs de funciones serverless
+.vercel
+.netlify
+functions/
+api/.env
