@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "../../styles/ModalPerfilCreado.css";
+import "../../styles/modalPerfilCreado.css";
 import capibara from "../../assets/capibaraMascota.png";
 
 const ModalEventoCreadoExistosamente = ({ onClose }) => {
