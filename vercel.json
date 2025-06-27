@@ -1,6 +1,9 @@
 {
-  "functions": ["api/*.js"],
-  "framework": "vite",
+  "functions": {
+    "api/*.js": {
+      "runtime": "@vercel/node"
+    }
+  },
   "rewrites": [
     {
       "source": "/(.*)",
