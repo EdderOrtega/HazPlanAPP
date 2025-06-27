@@ -156,7 +156,7 @@ function Mapa() {
   //aqui//aqui
   //aqui
   //aqui
-  const vehiculoIdAutorizado = "1"; // Cambia por el ID real autorizado
+  const vehiculoIdAutorizado = "2f6d5e34-da27-469a-9728-61aa0a67e52a"; // Cambia por el ID real autorizado
   const location = useLocation(); // Hook para detectar navegación
   //aqui
   //aqui

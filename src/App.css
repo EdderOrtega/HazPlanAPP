@@ -2,6 +2,7 @@
 --var colores {
   --color-primary: #8855c2;
   --color-secondary: #d4a3d9;
+  --color-tertiary: #667eea;
 }
 #root {
   max-width: 1280px;

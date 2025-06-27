@@ -1,0 +1,417 @@
+/* Diseño moderno para perfil de usuario tipo Rappi */
+.perfil-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* Loading */
+.perfil-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  gap: 16px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e3e3e3;
+  border-top: 3px solid #ff6b6b;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Perfil vacío */
+.perfil-vacio {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.perfil-icono {
+  font-size: 80px;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.perfil-vacio h2 {
+  color: #333;
+  margin-bottom: 12px;
+  font-size: 24px;
+}
+
+.perfil-vacio p {
+  color: #666;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.btn-crear-perfil {
+  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.btn-crear-perfil:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+/* Header del perfil */
+.perfil-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 30px 25px;
+  margin-bottom: 20px;
+  color: white;
+  position: relative;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.perfil-foto-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 20px;
+}
+
+.perfil-foto {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.perfil-foto-placeholder {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  border: 4px solid white;
+}
+
+.btn-editar-foto {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(255, 107, 107, 0.3);
+}
+
+.btn-editar-foto:hover {
+  transform: scale(1.1);
+}
+
+.perfil-info {
+  text-align: center;
+}
+
+.perfil-nombre {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.perfil-edad {
+  font-size: 16px;
+  opacity: 0.9;
+  margin: 0 0 15px 0;
+}
+
+.perfil-ubicacion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0.9;
+  font-size: 14px;
+}
+
+/* Detalles del perfil */
+.perfil-detalles {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.detalle-card {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.detalle-card:hover {
+  transform: translateY(-2px);
+}
+
+.detalle-card h3 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.detalle-card p {
+  margin: 0;
+  color: #666;
+  line-height: 1.5;
+}
+
+.gustos-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.gusto-tag {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Sección de eventos */
+.eventos-section {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+}
+
+.eventos-header {
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.3s ease;
+}
+
+.eventos-header:hover {
+  background: #f8f9fa;
+}
+
+.eventos-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.eventos-title h3 {
+  margin: 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.icono {
+  color: #667eea;
+  font-size: 18px;
+}
+
+.eventos-lista {
+  padding: 0 20px 20px;
+}
+
+.eventos-vacio {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.eventos-icono {
+  font-size: 60px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.eventos-vacio p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.btn-crear-evento {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-crear-evento:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* Tarjetas de eventos */
+.evento-card {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-left: 4px solid #ff6b6b;
+  transition: all 0.3s ease;
+}
+
+.evento-card:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.1);
+}
+
+.evento-card:last-child {
+  margin-bottom: 0;
+}
+
+.evento-nombre {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.evento-detalles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 12px;
+}
+
+.evento-fecha,
+.evento-ubicacion,
+.evento-cupo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #666;
+}
+
+.icono-pequeno {
+  font-size: 14px;
+  color: #667eea;
+}
+
+.evento-descripcion {
+  color: #777;
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 0 0 20px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.evento-acciones {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-editar,
+.btn-eliminar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-editar {
+  background: #667eea;
+  color: white;
+}
+
+.btn-editar:hover {
+  background: #5a67d8;
+  transform: translateY(-1px);
+}
+
+.btn-eliminar {
+  background: #ff6b6b;
+  color: white;
+}
+
+.btn-eliminar:hover {
+  background: #ff5252;
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .perfil-container {
+    padding: 15px;
+  }
+
+  .perfil-header {
+    padding: 25px 20px;
+  }
+
+  .evento-detalles {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .evento-acciones {
+    flex-direction: column;
+  }
+
+  .btn-editar,
+  .btn-eliminar {
+    justify-content: center;
+  }
+}
