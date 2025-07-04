@@ -1,14 +1,32 @@
 @import "leaflet/dist/leaflet.css";
---var colores {
-  --color-primary: #8855c2;
-  --color-secondary: #d4a3d9;
+
+:root {
+  --color-primary: #593c8f;
+  --color-secondary: #fbdffe;
   --color-tertiary: #667eea;
+  --colorfondo: #593c8f;
 }
+
+/* Ajustes para el navbar fijo */
+body {
+  margin: 0;
+  padding: 0;
+  /* Removemos padding-top global para evitar problemas de centrado */
+}
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left; /* Cambiamos de center a left para layout normal */
+  background-color: blueviolet;
+}
+
+/* Ajuste para contenedores principales */
+.main-content {
+  padding-top: 20px;
+  min-height: calc(100vh - 60px);
 }
 
 .logo {

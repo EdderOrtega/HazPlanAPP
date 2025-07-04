@@ -1,0 +1,331 @@
+/* ============================================
+   CARRUSEL DE FILTROS CON ICONOS - SOLO DESLIZABLE
+   ============================================ */
+
+.filter-carousel-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  padding: 0 10px;
+  position: relative;
+}
+
+.filter-carousel {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  width: 400px;
+  max-width: 100%;
+  max-height: 150px;
+  position: relative;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  cursor: grab;
+}
+
+.filter-carousel:active {
+  cursor: grabbing;
+}
+
+.filter-track {
+  display: flex;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  gap: 12px;
+  user-select: none;
+  cursor: grab;
+  touch-action: pan-x;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+.filter-track:active {
+  cursor: grabbing;
+}
+
+.filter-item {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  min-width: 120px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid transparent;
+  position: relative;
+}
+
+.filter-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.filter-item.active {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.filter-image {
+  width: 100px !important;
+  height: 100px !important;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  transform: scale(1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.filter-item.active .filter-image {
+  transform: scale(1.1);
+  filter: brightness(1.1) contrast(1.1) saturate(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.filter-label {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  line-height: 1.2;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+  padding: 2px 5px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  backdrop-filter: blur(2px);
+}
+
+.filter-item.active .filter-label {
+  opacity: 0.9;
+  font-weight: 700;
+}
+
+/* Indicadores de navegación */
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator-dot.active {
+  background: white;
+  transform: scale(1.2);
+}
+
+/* Contador de eventos */
+.events-counter {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff4757;
+  color: white;
+  border-radius: 14px;
+  padding: 4px 8px;
+  font-size: 15px;
+  font-weight: bold;
+  min-width: 22px;
+  text-align: center;
+  animation: pulse-counter 2s infinite;
+  box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4);
+  border: 2px solid white;
+}
+
+@keyframes pulse-counter {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Efectos de arrastre */
+.filter-track.dragging {
+  transition: none;
+}
+
+.filter-item.dragging {
+  pointer-events: none;
+}
+
+/* Gradientes de desvanecimiento en los bordes */
+.carousel-fade-left,
+.carousel-fade-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.carousel-fade-left {
+  left: 8px;
+  background: linear-gradient(to right, rgba(89, 60, 143, 0.8), transparent);
+}
+
+.carousel-fade-right {
+  right: 8px;
+  background: linear-gradient(to left, rgba(89, 60, 143, 0.8), transparent);
+}
+
+/* Indicador de deslizamiento */
+.swipe-indicator {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #666;
+  animation: swipe-hint 3s infinite;
+  pointer-events: none;
+  z-index: 6;
+}
+
+@keyframes swipe-hint {
+  0%,
+  70%,
+  100% {
+    opacity: 0;
+    transform: translateY(-50%) translateX(0);
+  }
+  10%,
+  60% {
+    opacity: 1;
+    transform: translateY(-50%) translateX(-5px);
+  }
+}
+
+.filter-carousel:hover .swipe-indicator {
+  animation: none;
+  opacity: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filter-carousel-container {
+    padding: 0 15px;
+  }
+
+  .filter-carousel {
+    max-width: 100%;
+    max-height: 100px;
+    padding: 10px;
+  }
+
+  .filter-track {
+    gap: 8px;
+  }
+
+  .filter-item {
+    min-width: 100px;
+    padding: 8px 10px;
+  }
+
+  .filter-image {
+    width: 70px !important;
+    height: 70px !important;
+  }
+
+  .filter-label {
+    font-size: 10px;
+    padding: 1px 4px;
+    bottom: 3px;
+  }
+
+  .swipe-indicator {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    right: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-carousel {
+    max-width: 100%;
+    max-height: 150px;
+    padding: 8px;
+  }
+
+  .filter-track {
+    gap: 6px;
+  }
+
+  .filter-item {
+    min-width: 85px;
+    padding: 6px 8px;
+  }
+
+  .filter-image {
+    width: 60px;
+    height: 60px;
+  }
+
+  .filter-label {
+    font-size: 9px;
+    padding: 1px 3px;
+    bottom: 2px;
+  }
+
+  .swipe-indicator {
+    width: 25px;
+    height: 25px;
+    font-size: 12px;
+    right: 10px;
+  }
+}
+
+/* Desktop/Pantallas grandes */
+@media (min-width: 769px) {
+  .filter-image {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  .filter-item {
+    min-width: 120px;
+    padding: 10px 12px;
+  }
+
+  .filter-label {
+    font-size: 11px;
+    padding: 2px 5px;
+    bottom: 6px;
+  }
+}

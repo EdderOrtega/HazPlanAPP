@@ -130,24 +130,31 @@ function Formulario() {
       user_id: userId,
     });
 
-    const { error: insertError } = await supabase.from("eventos").insert({
-      nombre: nombreEvento,
-      descripcion,
-      tipo,
-      ubicacion,
-      fecha,
-      fecha_fin,
-      cupo,
-      user_id: userId,
-      lat: coordenadas.lat,
-      lon: coordenadas.lon,
-    });
+    const { data: eventData, error: insertError } = await supabase
+      .from("eventos")
+      .insert({
+        nombre: nombreEvento,
+        descripcion,
+        tipo,
+        ubicacion,
+        fecha,
+        fecha_fin,
+        cupo,
+        user_id: userId,
+        lat: coordenadas.lat,
+        lon: coordenadas.lon,
+      })
+      .select();
 
     if (insertError) {
       console.error("❌ Error al crear el evento:", insertError);
       setError("Error al crear el evento. Por favor, intenta nuevamente.");
     } else {
-      console.log("✅ Evento creado exitosamente");
+      console.log("✅ Evento creado exitosamente:", eventData);
+      console.log(
+        "📡 El evento debería aparecer en el mapa automáticamente vía realtime"
+      );
+
       // Resetear formulario
       setForm({
         nombreEvento: "",
@@ -167,7 +174,16 @@ function Formulario() {
   };
 
   return (
-    <>
+    <div
+      style={{
+        marginTop: "80px",
+        paddingBottom: "80px",
+        padding: "20px",
+        maxWidth: "800px",
+        margin: "80px auto 80px auto",
+        background: "#593c8f",
+      }}
+    >
       <form onSubmit={handleSubmit}>
         {step === 1 && (
           <div>
@@ -320,7 +336,7 @@ function Formulario() {
           onClose={() => setMostrarModalExito(false)}
         />
       )}
-    </>
+    </div>
   );
 }
 

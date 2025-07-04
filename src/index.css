@@ -2,10 +2,28 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  background-color: darkorchid;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #3a1861;
+  /* Paleta de colores principal - Solo morados y tonos compatibles */
+  --primary-purple: #8b5cf6; /* Violeta suave moderno */
+  --dark-purple: #5b21b6; /* Morado muy oscuro */
+  --deep-purple: #6d28d9; /* Morado profundo */
+  --light-purple: #c084fc; /* Morado claro suave */
+  --accent-purple: #9333ea; /* Morado de acento */
+  --violet: #a855f7; /* Violeta claro */
+  --indigo: #7c3aed; /* Índigo morado */
+  --blue: #8b5cf6; /* Ahora es morado en lugar de azul */
+  --cyan: #a78bfa; /* Lavanda en lugar de cian */
+  --teal: #8b5cf6; /* Morado en lugar de verde azulado */
+  --orange: #8b5cf6; /* Morado en lugar de naranja */
+  --pink: #ec4899; /* Rosa suave - se mantiene */
+  --white: #ffffff; /* Blanco puro */
+  --light-gray: rgba(255, 255, 255, 0.9); /* Blanco suave */
+  --gray: rgba(255, 255, 255, 0.7); /* Gris claro */
+
+  color-scheme: dark;
+  color: var(--white);
+  background-color: var(--deep-purple);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,12 +33,13 @@
 
 a {
   font-weight: 500;
-  color: #ffffff;
+  color: var(--white);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--primary-purple);
 }
+
 form {
   display: flex;
   flex-direction: column;
@@ -34,6 +53,7 @@ form label {
   font-size: larger;
   font-weight: bolder;
   margin: 10px;
+  color: var(--white);
 }
 form input {
   font-size: large;
@@ -41,49 +61,138 @@ form input {
   margin: 10px;
   padding: 5px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--primary-purple);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--white);
 }
+
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  padding: 0;
   min-width: 320px;
   min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    var(--dark-purple) 0%,
+    var(--deep-purple) 50%,
+    var(--primary-purple) 100%
+  );
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  color: var(--white);
 }
 
 button {
-  border-radius: 8px;
+  border-radius: 12px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background: linear-gradient(45deg, var(--primary-purple), var(--dark-purple));
+  color: var(--white);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
 }
+
 button:hover {
-  border-color: #646cff;
+  background: linear-gradient(
+    45deg,
+    var(--light-purple),
+    var(--primary-purple)
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
 }
+
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 2px solid var(--primary-purple);
+  outline-offset: 2px;
+}
+
+/* Smooth scrolling para toda la página */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar personalizado con colores principales */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--deep-purple);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, var(--primary-purple), var(--dark-purple));
+  border-radius: 5px;
+  border: 1px solid var(--dark-purple);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, var(--light-purple), var(--violet));
+}
+
+/* Animaciones adicionales para elementos GSAP */
+.gsap-element {
+  will-change: transform, opacity;
+}
+
+/* Optimizaciones para mejor performance */
+* {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Clases utilitarias para colores */
+.text-primary {
+  color: var(--primary-purple);
+}
+.text-white {
+  color: var(--white);
+}
+.text-light {
+  color: var(--light-gray);
+}
+.bg-primary {
+  background-color: var(--primary-purple);
+}
+.bg-dark {
+  background-color: var(--deep-purple);
+}
+.gradient-primary {
+  background: linear-gradient(45deg, var(--primary-purple), var(--dark-purple));
+}
+.gradient-colorful {
+  background: linear-gradient(
+    45deg,
+    var(--light-purple),
+    var(--violet),
+    var(--primary-purple)
+  );
 }
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: var(--deep-purple);
+    background-color: var(--white);
   }
   a:hover {
-    color: #747bff;
+    color: var(--primary-purple);
   }
   button {
-    background-color: #f9f9f9;
+    background: linear-gradient(
+      45deg,
+      var(--primary-purple),
+      var(--dark-purple)
+    );
+    color: var(--white);
   }
 }

@@ -3,8 +3,11 @@
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
+  margin-top: 60px;
+  padding-top: 80px; /* Para el navbar fijo */
+  padding-bottom: 100px; /* Para el menubar inferior */
   background: #f8f9fa;
-  min-height: 100vh;
+  min-height: calc(100vh - 80px); /* Ajuste para altura correcta */
 }
 
 /* Loading */
@@ -13,7 +16,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 50vh;
+  height: 100vh;
+  padding-top: 60px; /* Para el navbar */
   gap: 16px;
 }
 

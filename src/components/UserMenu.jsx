@@ -1,16 +1,19 @@
 import React, { useEffect, useState, useRef } from "react";
 import { supabase } from "../supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { FiBell, FiMail } from "react-icons/fi";
 
 function UserMenu({ user }) {
   const [perfil, setPerfil] = useState(null);
   const [fotoPerfilUrl, setFotoPerfilUrl] = useState("");
-  const [open, setOpen] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [notificacionesNoLeidas] = useState(0);
+  const [mensajesNoLeidos] = useState(0);
   const navigate = useNavigate();
   const menuRef = useRef();
 
   useEffect(() => {
-    if (!user) return; // Solo ejecuta si hay usuario
+    if (!user) return;
 
     const fetchPerfil = async () => {
       try {
@@ -39,7 +42,7 @@ function UserMenu({ user }) {
   useEffect(() => {
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setOpen(false);
+        setShowProfileMenu(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -60,76 +63,181 @@ function UserMenu({ user }) {
         top: 16,
         right: 14,
         zIndex: 1000,
-        backgroundColor: "#b42acb",
-        borderRadius: 8,
-        padding: "0.3rem",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        cursor: "pointer",
-        border: "3px solid #ddd",
+        display: "flex",
+        alignItems: "center",
+        gap: "12px",
       }}
       ref={menuRef}
     >
+      {/* Botón de Notificaciones */}
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
+          backgroundColor: "#b42acb",
+          borderRadius: "50%",
+          padding: "8px",
           cursor: "pointer",
-          gap: "0.5rem",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+          border: "2px solid #ddd",
+          position: "relative",
         }}
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => navigate("/notificaciones")}
       >
-        <img
-          src={fotoPerfilUrl || "https://ui-avatars.com/api/?name=U"}
-          alt="avatar"
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: "50%",
-            objectFit: "cover",
-            border: "2px solid #eee",
-          }}
-        />
-        <span style={{ fontWeight: "bold" }}>{perfil.nombre}</span>
-        <span style={{ fontSize: 17, padding: 4, marginTop: 2 }}>▼</span>
+        <FiBell size={20} color="white" />
+        {/* Badge de notificaciones */}
+        {notificacionesNoLeidas > 0 && (
+          <div
+            style={{
+              position: "absolute",
+              top: "-2px",
+              right: "-2px",
+              backgroundColor: "#ff4444",
+              borderRadius: "50%",
+              minWidth: "16px",
+              height: "16px",
+              fontSize: "10px",
+              color: "white",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: "bold",
+              padding: "0 2px",
+            }}
+          >
+            {notificacionesNoLeidas > 99 ? "99+" : notificacionesNoLeidas}
+          </div>
+        )}
       </div>
-      {open && (
+
+      {/* Botón de Mensajes */}
+      <div
+        style={{
+          backgroundColor: "#b42acb",
+          borderRadius: "50%",
+          padding: "8px",
+          cursor: "pointer",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+          border: "2px solid #ddd",
+          position: "relative",
+        }}
+        onClick={() => navigate("/mensajes")}
+      >
+        <FiMail size={20} color="white" />
+        {/* Badge de mensajes */}
+        {mensajesNoLeidos > 0 && (
+          <div
+            style={{
+              position: "absolute",
+              top: "-2px",
+              right: "-2px",
+              backgroundColor: "#ff4444",
+              borderRadius: "50%",
+              minWidth: "16px",
+              height: "16px",
+              fontSize: "10px",
+              color: "white",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: "bold",
+              padding: "0 2px",
+            }}
+          >
+            {mensajesNoLeidos > 99 ? "99+" : mensajesNoLeidos}
+          </div>
+        )}
+      </div>
+
+      {/* Foto de Perfil con Menú */}
+      <div style={{ position: "relative" }}>
         <div
           style={{
-            position: "absolute",
-            top: 48,
-            right: 0,
-            background: "white",
-            border: "1px solid #ddd",
-            borderRadius: 8,
-            boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
-            minWidth: 160,
-            padding: "0.5rem 0",
+            backgroundColor: "#b42acb",
+            borderRadius: "50%",
+            padding: "4px",
+            cursor: "pointer",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+            border: "2px solid #ddd",
           }}
+          onClick={() => setShowProfileMenu((prev) => !prev)}
         >
-          <div
+          <img
+            src={fotoPerfilUrl || "https://ui-avatars.com/api/?name=U"}
+            alt="avatar"
             style={{
-              backgroundColor: "#b42acb",
-              padding: "0.5rem 1rem",
-              margin: "0.5rem",
-              cursor: "pointer",
+              width: 32,
+              height: 32,
+              borderRadius: "50%",
+              objectFit: "cover",
             }}
-            onClick={() => navigate("/perfil")}
-          >
-            Ver perfil
-          </div>
-          <div
-            style={{
-              backgroundColor: "red",
-              padding: "0.5rem 1rem",
-              margin: "0.5rem",
-              cursor: "pointer",
-            }}
-            onClick={handleLogout}
-          >
-            Cerrar sesión
-          </div>
+          />
         </div>
-      )}
+
+        {/* Menú desplegable del perfil */}
+        {showProfileMenu && (
+          <div
+            style={{
+              position: "absolute",
+              top: "45px",
+              right: 0,
+              background: "white",
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+              minWidth: "140px",
+              padding: "8px 0",
+              zIndex: 1001,
+            }}
+          >
+            <div
+              style={{
+                padding: "8px 16px",
+                cursor: "pointer",
+                fontSize: "14px",
+                fontWeight: "500",
+                color: "#333",
+                transition: "background-color 0.2s",
+              }}
+              onClick={() => {
+                navigate("/perfil");
+                setShowProfileMenu(false);
+              }}
+              onMouseEnter={(e) => (e.target.style.backgroundColor = "#f5f5f5")}
+              onMouseLeave={(e) =>
+                (e.target.style.backgroundColor = "transparent")
+              }
+            >
+              👤 Ver perfil
+            </div>
+            <hr
+              style={{
+                margin: "4px 0",
+                border: "none",
+                borderTop: "1px solid #eee",
+              }}
+            />
+            <div
+              style={{
+                padding: "8px 16px",
+                cursor: "pointer",
+                fontSize: "14px",
+                fontWeight: "500",
+                color: "#dc3545",
+                transition: "background-color 0.2s",
+              }}
+              onClick={() => {
+                handleLogout();
+                setShowProfileMenu(false);
+              }}
+              onMouseEnter={(e) => (e.target.style.backgroundColor = "#fff5f5")}
+              onMouseLeave={(e) =>
+                (e.target.style.backgroundColor = "transparent")
+              }
+            >
+              🚪 Cerrar sesión
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

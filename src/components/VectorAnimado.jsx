@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 
 function AnimatedText({ text, delay = 0 }) {
@@ -5,9 +6,12 @@ function AnimatedText({ text, delay = 0 }) {
     <h1
       style={{
         fontWeight: 700,
-        margin: 60,
+        margin: "20px 0",
         display: "flex",
         justifyContent: "center",
+        color: "white",
+        fontSize: "2.5rem",
+        textShadow: "0 2px 10px rgba(0,0,0,0.3)",
       }}
     >
       {text.split("").map((char, i) => (
@@ -33,10 +37,15 @@ function VectorAnimado() {
   return (
     <div
       style={{
-        width: 113,
-        margin: "2rem auto",
-        justifyItems: "center",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+        width: "100%",
         textAlign: "center",
+        background: "#593c8f",
+        padding: "20px",
       }}
     >
       <AnimatedText text="Bienvenidos" delay={2} />
@@ -46,6 +55,7 @@ function VectorAnimado() {
         viewBox="0 0 113 140"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        style={{ margin: "20px 0" }}
       >
         {/* Stroke animado */}
         <motion.path

@@ -11,6 +11,7 @@ import {
   FiUsers,
 } from "react-icons/fi";
 import "../styles/perfilUsuario.css";
+import Loader from "./ui/Loader";
 
 function PerfilUsuario() {
   const [perfil, setPerfil] = useState(null);
@@ -77,8 +78,7 @@ function PerfilUsuario() {
   if (loading)
     return (
       <div className="perfil-loading">
-        <div className="loading-spinner"></div>
-        <p>Cargando perfil...</p>
+        <Loader />
       </div>
     );
 

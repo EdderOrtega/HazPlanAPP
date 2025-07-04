@@ -11,10 +11,13 @@ import PerfilUsuario from "./components/PerfilUsuario";
 import Logo from "./components/navigation/Logo";
 import ChatEvento from "./components/ChatEvento";
 import CrearPerfil from "./components/CrearPerfil";
-import UserMenu from "./components/UserMenu";
+import Navbar from "./components/Navbar";
 import VectorAnimado from "./components/VectorAnimado";
 import EventoDetalle from "./components/EventoDetalle";
 import EditarEvento from "./components/events/EditarEvento";
+import MisEventos from "./components/MisEventos";
+import Notificaciones from "./components/Notificaciones";
+import Mensajes from "./components/Mensajes";
 import "./App.css";
 import Loader from "./components/ui/Loader";
 import LogoFijo from "./components/ui/LogoFijo";
@@ -48,10 +51,9 @@ function App() {
 
   return (
     <Router>
-      <LogoFijo />
-      {user && <UserMenu user={user} />}
+      <Navbar user={user} />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home user={user} />} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/login" element={<Login />} />
         <Route path="/formulario" element={<Formulario />} />
@@ -63,6 +65,9 @@ function App() {
         <Route path="/crear-evento" element={<Formulario />} />
         <Route path="/perfil-usuario/:userId" element={<PerfilUsuario />} />
         <Route path="/editar-evento/:eventoId" element={<EditarEvento />} />
+        <Route path="/mis-eventos" element={<MisEventos />} />
+        <Route path="/notificaciones" element={<Notificaciones />} />
+        <Route path="/mensajes" element={<Mensajes />} />
       </Routes>
       {user && <MenuBar user={user} />}
     </Router>

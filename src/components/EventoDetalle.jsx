@@ -5,6 +5,7 @@ import { supabase } from "../supabaseClient";
 import ListaParticipantes from "./ListaParticipantes";
 import ChatGrupal from "./ChatGrupal";
 import "../styles/eventosDetalle.css";
+import Loader from "./ui/Loader";
 function EventoDetalle() {
   const [evento, setEvento] = useState(null);
   const [creador, setCreador] = useState(null);
@@ -49,7 +50,20 @@ function EventoDetalle() {
   }, [eventoId, navigate]);
 
   if (cargando) {
-    return <div>Cargando evento...</div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          paddingTop: "60px",
+          background: "#593c8f",
+        }}
+      >
+        <Loader />
+      </div>
+    );
   }
 
   return (
@@ -81,23 +95,30 @@ function EventoDetalle() {
         {seccionActiva === "detalles" && (
           <div className="evento-detalles">
             <p>
-              <strong>Descripción:</strong> {evento.descripcion}
+              <strong>Descripción:</strong>{" "}
+              {evento.descripcion || "Sin descripción disponible"}
             </p>
             <p>
-              <strong>Ubicación:</strong> {evento.ubicacion}
+              <strong>Ubicación:</strong>{" "}
+              {evento.ubicacion || "Ubicación no especificada"}
             </p>
             <p>
               <strong>Fecha:</strong>{" "}
-              {new Date(evento.fecha).toLocaleDateString()}
+              {new Date(evento.fecha).toLocaleDateString("es-ES", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
             </p>
             <p>
-              <strong>Tipo:</strong> {evento.tipo}
+              <strong>Tipo:</strong> {evento.tipo || "Sin categoría"}
             </p>
 
             {creador && (
               <div className="evento-creador">
                 <h4>Organizado por:</h4>
-                <p>{creador.nombre}</p>
+                <p>{creador.nombre || "Usuario"}</p>
               </div>
             )}
           </div>

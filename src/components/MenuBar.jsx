@@ -1,5 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-import { FiHome, FiMap, FiPlusCircle, FiBell, FiUser } from "react-icons/fi";
+import {
+  FiHome,
+  FiMap,
+  FiPlusCircle,
+  FiCalendar,
+  FiUser,
+} from "react-icons/fi";
 import "../styles/MenuBar.css";
 function MenuBar({ user }) {
   const location = useLocation();
@@ -28,11 +34,11 @@ function MenuBar({ user }) {
         <FiPlusCircle size={32} />
       </Link>
       <Link
-        to="/notificaciones"
-        className={location.pathname === "/notificaciones" ? "active" : ""}
+        to="/mis-eventos"
+        className={location.pathname === "/mis-eventos" ? "active" : ""}
       >
-        <FiBell />
-        <span>Notificaciones</span>
+        <FiCalendar />
+        <span>Mis Eventos</span>
       </Link>
       <Link
         to={user ? "/perfil" : "/login"}

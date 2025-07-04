@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "../supabaseClient";
 import "../styles/listaParticipantes.css";
 import { Link } from "react-router-dom";
-
+import Loader from "./ui/Loader";
 function ListaParticipantes({ eventoId }) {
   const [participantes, setParticipantes] = useState([]);
   const [perfiles, setPerfiles] = useState({});
@@ -12,6 +12,7 @@ function ListaParticipantes({ eventoId }) {
   useEffect(() => {
     const fetchParticipantes = async () => {
       setCargando(true);
+      console.log("📋 Cargando participantes para evento:", eventoId);
 
       // 1. Trae los participantes
       const { data, error } = await supabase
@@ -20,6 +21,7 @@ function ListaParticipantes({ eventoId }) {
         .eq("evento_id", eventoId);
 
       if (!error && data) {
+        console.log("✅ Participantes cargados:", data.length);
         setParticipantes(data);
 
         // 2. Trae los perfiles de usuario
@@ -45,17 +47,63 @@ function ListaParticipantes({ eventoId }) {
           }
         }
         setPerfiles(perfilesTemp);
+      } else {
+        console.error("❌ Error al cargar participantes:", error);
       }
 
       setCargando(false);
     };
 
     fetchParticipantes();
-    // eslint-disable-next-line
+
+    // Suscribirse a cambios en tiempo real en participantes
+    console.log("📡 Configurando realtime para participantes...");
+    const participantesChannel = supabase
+      .channel(`participantes-${eventoId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "participantes_eventos",
+          filter: `evento_id=eq.${eventoId}`,
+        },
+        (payload) => {
+          console.log("📡 Cambio en participantes detectado:", payload);
+
+          if (payload.eventType === "INSERT") {
+            console.log("➕ Nuevo participante agregado");
+            fetchParticipantes(); // Recargar lista completa
+          } else if (payload.eventType === "DELETE") {
+            console.log("➖ Participante eliminado");
+            fetchParticipantes(); // Recargar lista completa
+          }
+        }
+      )
+      .subscribe((status) => {
+        console.log("📡 Estado del canal participantes:", status);
+      });
+
+    return () => {
+      console.log("🧹 Limpiando canal de participantes");
+      supabase.removeChannel(participantesChannel);
+    };
   }, [eventoId]);
 
   if (cargando) {
-    return <div>Cargando participantes...</div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "40px",
+          minHeight: "200px",
+        }}
+      >
+        <Loader />
+      </div>
+    );
   }
 
   return (

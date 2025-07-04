@@ -11,11 +11,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@rive-app/react-canvas": "^4.21.4",
     "@supabase/supabase-js": "^2.49.10",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
     "express": "^5.1.0",
     "framer-motion": "^12.16.0",
+    "gsap": "^3.13.0",
     "hazplan": "file:",
     "leaflet": "^1.9.4",
     "node-fetch": "^3.3.2",

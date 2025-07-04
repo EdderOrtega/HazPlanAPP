@@ -92,6 +92,8 @@
 .form-mensaje input[type="text"] {
   flex: 1;
   border: none;
+  color: #000f0d;
+
   border-radius: 20px;
   padding: 10px 16px;
   font-size: 1em;

@@ -1,3 +1,140 @@
-p {
+/* CSS Simple para Sección de Detalles de Eventos */
+
+.evento-detalle {
+  max-width: 800px;
+  margin: 80px auto 20px auto; /* Cambiado para mejor centrado y más margen superior */
+  padding: 20px;
+  background: #593c8f;
+  border-radius: 20px;
   color: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.evento-detalle h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.evento-navegacion {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px;
+  border-radius: 12px;
+}
+
+.evento-navegacion button {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.evento-navegacion button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.evento-navegacion button.activo {
+  background: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.evento-contenido {
+  padding: 20px 0;
+}
+
+.evento-detalles p {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px 20px;
+  margin: 15px 0;
+  border-radius: 10px;
+  border-left: 4px solid rgba(255, 255, 255, 0.3);
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.evento-detalles strong {
+  color: #e1bee7;
+  display: inline-block;
+  margin-right: 10px;
+  min-width: 100px;
+}
+
+.evento-creador {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.evento-creador h4 {
+  color: #e1bee7;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.evento-creador p {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  background: none;
+  padding: 0;
+  border: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .evento-detalle {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  .evento-detalle h2 {
+    font-size: 1.8rem;
+  }
+
+  .evento-navegacion {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .evento-detalles p {
+    padding: 12px 15px;
+    font-size: 1rem;
+  }
+
+  .evento-detalles strong {
+    display: block;
+    margin-bottom: 5px;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .evento-detalle {
+    margin: 5px;
+    padding: 12px;
+  }
+
+  .evento-detalle h2 {
+    font-size: 1.6rem;
+  }
+
+  .evento-detalles p {
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
 }
