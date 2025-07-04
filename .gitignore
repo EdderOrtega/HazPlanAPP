@@ -48,6 +48,28 @@ crear_evento_prueba.js
 debug_eventos.js
 limpiar_eventos.js
 server-local.js
+diagnostico_eventos.js
+diagnostico_realtime_navegador.js
+diagnostico_realtime.js
+limpiar_eventos_coordenadas_invalidas.js
+test_carrusel_logica.js
+test_eventos_tiempo_real.js
+test_realtime_sincronizacion.js
+test_sincronizacion_final.js
+verificar_estado_app.js
+verificar_realtime_simple.js
+
+# Archivos SQL de desarrollo/testing
+*.sql
+diagnostico_participantes_eventos.sql
+eliminar_evento_13.sql
+limpiar_eventos_coordenadas_invalidas.sql
+limpiar_eventos_sql.sql
+supabase_eventos_tiempo_real.sql
+supabase_notificaciones_mensajes.sql
+supabase_setup_simple.sql
+verificar_realtime.sql
+verificar_tablas.sql
 
 # Archivos de configuración sensibles
 netlify.toml

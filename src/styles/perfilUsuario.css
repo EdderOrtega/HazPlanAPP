@@ -6,7 +6,7 @@
   margin-top: 60px;
   padding-top: 80px; /* Para el navbar fijo */
   padding-bottom: 100px; /* Para el menubar inferior */
-  background: #f8f9fa;
+  background: #e3d8f8;
   min-height: calc(100vh - 80px); /* Ajuste para altura correcta */
 }
 

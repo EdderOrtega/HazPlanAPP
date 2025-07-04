@@ -16,6 +16,7 @@ const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [dragDistance, setDragDistance] = useState(0);
   const trackRef = useRef(null);
 
   // Definir filtros con iconos de imágenes
@@ -116,26 +117,39 @@ const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
 
   // Manejar drag/swipe
   const handleMouseDown = (e) => {
-    setIsDragging(true);
+    setIsDragging(false); // Inicialmente no es drag
     setStartX(e.pageX - trackRef.current.offsetLeft);
     setScrollLeft(currentIndex);
+    setDragDistance(0);
     trackRef.current.style.cursor = "grabbing";
   };
 
   const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.pageX - trackRef.current.offsetLeft;
-    const walk = (x - startX) / 80; // Mayor sensibilidad del arrastre
-    const newIndex = Math.round(scrollLeft - walk);
+    if (startX === 0) return; // No hay mouse down previo
 
-    // Aplicar límites inmediatamente
-    const boundedIndex = applyBounds(newIndex);
-    setCurrentIndex(boundedIndex);
+    const currentX = e.pageX - trackRef.current.offsetLeft;
+    const distance = Math.abs(currentX - startX);
+    setDragDistance(distance);
+
+    // Solo activar dragging si se movió más de 10px
+    if (distance > 10) {
+      setIsDragging(true);
+      e.preventDefault();
+      const walk = (currentX - startX) / 80;
+      const newIndex = Math.round(scrollLeft - walk);
+      const boundedIndex = applyBounds(newIndex);
+      setCurrentIndex(boundedIndex);
+    }
   };
 
   const handleMouseUp = () => {
-    setIsDragging(false);
+    // Si no se movió mucho, no fue un drag
+    if (dragDistance < 10) {
+      setIsDragging(false);
+    }
+
+    setStartX(0);
+    setDragDistance(0);
     trackRef.current.style.cursor = "grab";
     resetPosition();
   };
@@ -160,7 +174,6 @@ const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
 
   const handleTouchEnd = () => {
     setIsDragging(false);
-    resetPosition();
   };
 
   // Efectos del teclado con límites
@@ -185,10 +198,21 @@ const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
       "Total filters:",
       filtros.length
     );
-  }, [currentIndex, filtros.length]);
+    console.log("🔍 FilterCarousel - eventosCounts:", eventosCounts);
+    console.log("🔍 FilterCarousel - filtro actual:", filtro);
+  }, [currentIndex, filtros.length, eventosCounts, filtro]);
 
   const handleFilterSelect = (filterValue) => {
+    console.log("🔍 FilterCarousel - Filtro seleccionado:", filterValue);
+    console.log("🔍 FilterCarousel - Tipo de filtro:", typeof filterValue);
     setFiltro(filterValue);
+  };
+
+  const handleFilterClick = (filterValue, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("🎯 Click directo en filtro:", filterValue);
+    handleFilterSelect(filterValue);
   };
 
   return (
@@ -227,11 +251,13 @@ const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
                 className={`filter-item ${isActive ? "active" : ""} ${
                   isDragging ? "dragging" : ""
                 }`}
-                onClick={() => !isDragging && handleFilterSelect(filter.value)}
+                onClick={(e) => handleFilterClick(filter.value, e)}
+                onMouseDown={(e) => e.stopPropagation()}
                 style={{
                   background: isActive
                     ? `linear-gradient(135deg, ${filter.color}, ${filter.color}dd)`
                     : "rgba(255, 255, 255, 0.1)",
+                  cursor: "pointer",
                 }}
               >
                 <img
