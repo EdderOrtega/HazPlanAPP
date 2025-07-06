@@ -1,0 +1,4 @@
+Force cache invalidation: 2024-12-19T18:30:00Z
+Build timestamp: 1734631800000
+Cache buster ID: ${Date.now()}
+This file forces Vercel to rebuild and bypass cache
