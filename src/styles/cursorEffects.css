@@ -1,0 +1,142 @@
+/* ===============================================
+   EFECTOS DE CURSOR INTERACTIVO
+   =============================================== */
+
+.custom-cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s ease;
+  mix-blend-mode: difference;
+  opacity: 0;
+}
+
+.custom-cursor.active {
+  opacity: 1;
+}
+
+.custom-cursor.hover {
+  transform: scale(2);
+  background: linear-gradient(135deg, #764ba2, #667eea);
+}
+
+.custom-cursor.click {
+  transform: scale(0.8);
+}
+
+/* Efectos de ripple para clicks */
+.ripple-effect {
+  position: fixed;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(102, 126, 234, 0.4) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 9998;
+  animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+  from {
+    transform: scale(0);
+    opacity: 1;
+  }
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Efectos especiales en botones y enlaces */
+.interactive-element {
+  position: relative;
+  overflow: hidden;
+}
+
+.interactive-element::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+  z-index: 1;
+}
+
+.interactive-element:hover::before {
+  left: 100%;
+}
+
+/* Partículas en hover para elementos especiales */
+.particle-hover {
+  position: relative;
+}
+
+.particle-hover::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(
+    circle,
+    rgba(102, 126, 234, 0.6) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.particle-hover:hover::after {
+  width: 100px;
+  height: 100px;
+  opacity: 0.3;
+}
+
+/* Efectos de magnetismo para botones */
+.magnetic-button {
+  transition: transform 0.2s ease;
+  transform-origin: center;
+}
+
+.magnetic-button:hover {
+  animation: magneticPulse 2s infinite;
+}
+
+@keyframes magneticPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 20px rgba(102, 126, 234, 0);
+  }
+}
+
+/* Responsive - deshabilitar en móviles */
+@media (max-width: 768px) {
+  .custom-cursor {
+    display: none;
+  }
+
+  .magnetic-button:hover {
+    animation: none;
+  }
+}

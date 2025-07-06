@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../../styles/filterCarousel.css";
+import "../../styles/contrastImprovements.css";
 
 // Importar las imágenes de assets
 import arte from "../../assets/arte.png";
@@ -131,11 +132,12 @@ const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
     const distance = Math.abs(currentX - startX);
     setDragDistance(distance);
 
-    // Solo activar dragging si se movió más de 10px
-    if (distance > 10) {
+    // Solo activar dragging si se movió más de 5px (más sensible)
+    if (distance > 5) {
       setIsDragging(true);
       e.preventDefault();
-      const walk = (currentX - startX) / 80;
+      // Hacer el movimiento más fluido reduciendo la división
+      const walk = (currentX - startX) / 60; // Cambiado de 80 a 60
       const newIndex = Math.round(scrollLeft - walk);
       const boundedIndex = applyBounds(newIndex);
       setCurrentIndex(boundedIndex);
@@ -144,13 +146,16 @@ const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
 
   const handleMouseUp = () => {
     // Si no se movió mucho, no fue un drag
-    if (dragDistance < 10) {
+    if (dragDistance < 5) {
+      // Cambiado de 10 a 5
       setIsDragging(false);
     }
 
     setStartX(0);
     setDragDistance(0);
-    trackRef.current.style.cursor = "grab";
+    if (trackRef.current) {
+      trackRef.current.style.cursor = "grab";
+    }
     resetPosition();
   };
 
@@ -164,7 +169,7 @@ const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
   const handleTouchMove = (e) => {
     if (!isDragging) return;
     const x = e.touches[0].pageX;
-    const walk = (x - startX) / 60; // Mayor sensibilidad en móvil
+    const walk = (x - startX) / 50; // Mejorada sensibilidad en móvil (de 60 a 50)
     const newIndex = Math.round(scrollLeft - walk);
 
     // Aplicar límites inmediatamente
@@ -265,11 +270,13 @@ const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
                   alt={filter.label}
                   className="filter-image"
                 />
-                <div className="filter-label">{filter.label}</div>
+                <div className="filter-label small-text-contrast">
+                  {filter.label}
+                </div>
 
                 {/* Contador de eventos */}
                 {count > 0 && (
-                  <div className="events-counter">
+                  <div className="events-counter badge-contrast">
                     {count > 99 ? "99+" : count}
                   </div>
                 )}

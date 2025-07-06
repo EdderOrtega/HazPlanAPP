@@ -8,7 +8,7 @@ import iconoHazPlan from "../assets/iconoHazPlanRedondo.png";
 import { FiBell, FiMessageCircle, FiUser, FiMenu, FiX } from "react-icons/fi";
 import "../styles/navbar.css";
 
-function Navbar({ user }) {
+function Navbar({ user, onShowComingSoon }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [showNotifications, setShowNotifications] = useState(false);
@@ -92,6 +92,21 @@ function Navbar({ user }) {
                     <Mensajes />
                   </div>
                 )}
+              </div>
+
+              {/* Botón promocional "Más ciudades" */}
+              <div className="navbar-item">
+                <button
+                  className="navbar-button promo-btn"
+                  onClick={() => {
+                    onShowComingSoon();
+                    closeAllMenus();
+                  }}
+                  title="Ver ciudades próximamente"
+                >
+                  <span className="promo-icon">🚀</span>
+                  <span className="navbar-label">Más ciudades</span>
+                </button>
               </div>
 
               {/* Perfil */}

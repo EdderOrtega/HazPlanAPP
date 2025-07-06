@@ -1,0 +1,263 @@
+/* Estilos CSS para los iconos de categorías en el mapa */
+.leaflet-marker-icon.category-icon {
+  border-radius: 50% 50% 50% 0 !important;
+  border: 3px solid #667eea !important;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4) !important;
+  transition: all 0.2s ease !important;
+  background-color: white !important;
+  background-size: 70% 70% !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  position: relative !important;
+}
+
+.leaflet-marker-icon.category-icon::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: -8px !important;
+  left: 50% !important;
+  transform: translateX(-50%) rotate(45deg) !important;
+  width: 12px !important;
+  height: 12px !important;
+  background-color: white !important;
+  border-right: 3px solid #667eea !important;
+  border-bottom: 3px solid #667eea !important;
+  border-radius: 0 0 3px 0 !important;
+  box-shadow: 2px 2px 4px rgba(124, 58, 237, 0.3) !important;
+}
+
+.leaflet-marker-icon.category-icon:hover {
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.6) !important;
+  border-width: 4px !important;
+  background-size: 80% 80% !important;
+}
+
+.leaflet-marker-icon.category-icon:hover::after {
+  border-width: 4px !important;
+}
+
+/* Colores por categoría */
+.leaflet-marker-icon.category-deportes {
+  border-color: #ff6b6b !important;
+}
+.leaflet-marker-icon.category-deportes::after {
+  border-right-color: #ff6b6b !important;
+  border-bottom-color: #ff6b6b !important;
+}
+
+.leaflet-marker-icon.category-arte {
+  border-color: #9b59b6 !important;
+}
+.leaflet-marker-icon.category-arte::after {
+  border-right-color: #9b59b6 !important;
+  border-bottom-color: #9b59b6 !important;
+}
+
+.leaflet-marker-icon.category-comunidad {
+  border-color: #3498db !important;
+}
+.leaflet-marker-icon.category-comunidad::after {
+  border-right-color: #3498db !important;
+  border-bottom-color: #3498db !important;
+}
+
+.leaflet-marker-icon.category-fandoms {
+  border-color: #e74c3c !important;
+}
+.leaflet-marker-icon.category-fandoms::after {
+  border-right-color: #e74c3c !important;
+  border-bottom-color: #e74c3c !important;
+}
+
+.leaflet-marker-icon.category-mascotas {
+  border-color: #f39c12 !important;
+}
+.leaflet-marker-icon.category-mascotas::after {
+  border-right-color: #f39c12 !important;
+  border-bottom-color: #f39c12 !important;
+}
+
+.leaflet-marker-icon.category-medioambiente {
+  border-color: #27ae60 !important;
+}
+.leaflet-marker-icon.category-medioambiente::after {
+  border-right-color: #27ae60 !important;
+  border-bottom-color: #27ae60 !important;
+}
+
+.leaflet-marker-icon.category-salud {
+  border-color: #e67e22 !important;
+}
+.leaflet-marker-icon.category-salud::after {
+  border-right-color: #e67e22 !important;
+  border-bottom-color: #e67e22 !important;
+}
+
+.leaflet-marker-icon.category-inclusion {
+  border-color: #8e44ad !important;
+}
+.leaflet-marker-icon.category-inclusion::after {
+  border-right-color: #8e44ad !important;
+  border-bottom-color: #8e44ad !important;
+}
+
+.leaflet-marker-icon.category-todos {
+  border-color: #667eea !important;
+}
+.leaflet-marker-icon.category-todos::after {
+  border-right-color: #667eea !important;
+  border-bottom-color: #667eea !important;
+}
+
+/* Estilos para nuevas categorías de eventos */
+
+/* Eventos de Ayuda Ciudadana */
+.leaflet-marker-icon.category-ayuda_ciudadana {
+  border-color: #4caf50 !important;
+}
+.leaflet-marker-icon.category-ayuda_ciudadana::after {
+  border-right-color: #4caf50 !important;
+  border-bottom-color: #4caf50 !important;
+}
+
+.leaflet-marker-icon.category-limpieza_parques,
+.leaflet-marker-icon.category-reforestacion,
+.leaflet-marker-icon.category-jardineria,
+.leaflet-marker-icon.category-limpieza_rios {
+  border-color: #2e7d32 !important;
+}
+.leaflet-marker-icon.category-limpieza_parques::after,
+.leaflet-marker-icon.category-reforestacion::after,
+.leaflet-marker-icon.category-jardineria::after,
+.leaflet-marker-icon.category-limpieza_rios::after {
+  border-right-color: #2e7d32 !important;
+  border-bottom-color: #2e7d32 !important;
+}
+
+.leaflet-marker-icon.category-limpieza_calles,
+.leaflet-marker-icon.category-construccion_comunitaria {
+  border-color: #388e3c !important;
+}
+.leaflet-marker-icon.category-limpieza_calles::after,
+.leaflet-marker-icon.category-construccion_comunitaria::after {
+  border-right-color: #388e3c !important;
+  border-bottom-color: #388e3c !important;
+}
+
+.leaflet-marker-icon.category-pintura_murales {
+  border-color: #43a047 !important;
+}
+.leaflet-marker-icon.category-pintura_murales::after {
+  border-right-color: #43a047 !important;
+  border-bottom-color: #43a047 !important;
+}
+
+/* Eventos de ONGs/Refugios */
+.leaflet-marker-icon.category-ayuda_ongs {
+  border-color: #ff9800 !important;
+}
+.leaflet-marker-icon.category-ayuda_ongs::after {
+  border-right-color: #ff9800 !important;
+  border-bottom-color: #ff9800 !important;
+}
+
+.leaflet-marker-icon.category-emergencia_animales,
+.leaflet-marker-icon.category-rescate_animales,
+.leaflet-marker-icon.category-alimentacion_refugio,
+.leaflet-marker-icon.category-transporte_animales {
+  border-color: #f57c00 !important;
+}
+.leaflet-marker-icon.category-emergencia_animales::after,
+.leaflet-marker-icon.category-rescate_animales::after,
+.leaflet-marker-icon.category-alimentacion_refugio::after,
+.leaflet-marker-icon.category-transporte_animales::after {
+  border-right-color: #f57c00 !important;
+  border-bottom-color: #f57c00 !important;
+}
+
+.leaflet-marker-icon.category-atencion_medica,
+.leaflet-marker-icon.category-asistencia_social {
+  border-color: #ff8f00 !important;
+}
+.leaflet-marker-icon.category-atencion_medica::after,
+.leaflet-marker-icon.category-asistencia_social::after {
+  border-right-color: #ff8f00 !important;
+  border-bottom-color: #ff8f00 !important;
+}
+
+.leaflet-marker-icon.category-construccion_refugio,
+.leaflet-marker-icon.category-limpieza_refugio,
+.leaflet-marker-icon.category-donaciones_materiales {
+  border-color: #ff6f00 !important;
+}
+.leaflet-marker-icon.category-construccion_refugio::after,
+.leaflet-marker-icon.category-limpieza_refugio::after,
+.leaflet-marker-icon.category-donaciones_materiales::after {
+  border-right-color: #ff6f00 !important;
+  border-bottom-color: #ff6f00 !important;
+}
+
+/* Eventos Premium */
+.leaflet-marker-icon.category-evento_premium {
+  border-color: #9c27b0 !important;
+  background: linear-gradient(135deg, #e1bee7, #ce93d8) !important;
+  box-shadow: 0 4px 12px rgba(156, 39, 176, 0.5) !important;
+}
+.leaflet-marker-icon.category-evento_premium::after {
+  border-right-color: #9c27b0 !important;
+  border-bottom-color: #9c27b0 !important;
+  background: linear-gradient(135deg, #e1bee7, #ce93d8) !important;
+}
+
+.leaflet-marker-icon.category-networking,
+.leaflet-marker-icon.category-feria_empleo,
+.leaflet-marker-icon.category-expo_comercial,
+.leaflet-marker-icon.category-lanzamiento {
+  border-color: #7b1fa2 !important;
+}
+.leaflet-marker-icon.category-networking::after,
+.leaflet-marker-icon.category-feria_empleo::after,
+.leaflet-marker-icon.category-expo_comercial::after,
+.leaflet-marker-icon.category-lanzamiento::after {
+  border-right-color: #7b1fa2 !important;
+  border-bottom-color: #7b1fa2 !important;
+}
+
+.leaflet-marker-icon.category-conferencia,
+.leaflet-marker-icon.category-workshop,
+.leaflet-marker-icon.category-capacitacion {
+  border-color: #8e24aa !important;
+}
+.leaflet-marker-icon.category-conferencia::after,
+.leaflet-marker-icon.category-workshop::after,
+.leaflet-marker-icon.category-capacitacion::after {
+  border-right-color: #8e24aa !important;
+  border-bottom-color: #8e24aa !important;
+}
+
+.leaflet-marker-icon.category-team_building {
+  border-color: #ad52ce !important;
+}
+.leaflet-marker-icon.category-team_building::after {
+  border-right-color: #ad52ce !important;
+  border-bottom-color: #ad52ce !important;
+}
+
+.leaflet-marker-icon.category-gala_empresarial {
+  border-color: #ba68c8 !important;
+  background: linear-gradient(135deg, #f3e5f5, #e1bee7) !important;
+  box-shadow: 0 4px 12px rgba(186, 104, 200, 0.5) !important;
+}
+.leaflet-marker-icon.category-gala_empresarial::after {
+  border-right-color: #ba68c8 !important;
+  border-bottom-color: #ba68c8 !important;
+  background: linear-gradient(135deg, #f3e5f5, #e1bee7) !important;
+}
+
+/* Efectos hover especiales para eventos premium */
+.leaflet-marker-icon.category-evento_premium:hover,
+.leaflet-marker-icon.category-gala_empresarial:hover {
+  box-shadow: 0 6px 20px rgba(156, 39, 176, 0.7) !important;
+  border-width: 4px !important;
+  background-size: 85% 85% !important;
+}

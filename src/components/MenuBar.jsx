@@ -24,9 +24,9 @@ function MenuBar({ user }) {
         <span>Mapa</span>
       </Link>
       <Link
-        to="/crear-evento"
+        to="/formulario"
         className={
-          location.pathname === "/crear-evento"
+          location.pathname === "/formulario"
             ? "active crear-evento"
             : "crear-evento"
         }

@@ -3,9 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import EventoCard from "./EventoCard";
 import "../styles/dashboardInicio.css";
+import "../styles/pageTransitions.css";
 import Loader from "./ui/Loader";
+import {
+  useScrollAnimation,
+  useStaggerAnimation,
+} from "../hooks/useAnimations";
 
-function DashboardInicio({ user }) {
+function DashboardInicio({ user, onShowComingSoon }) {
   const navigate = useNavigate();
   const [eventosRecomendados, setEventosRecomendados] = useState([]);
   const [proximosEventos, setProximosEventos] = useState([]);
@@ -14,6 +19,10 @@ function DashboardInicio({ user }) {
     eventosCreados: 0,
     proximosEventos: 0,
   });
+
+  // Hooks para animaciones
+  const statsRef = useStaggerAnimation(150);
+  const [eventsRef, eventsVisible] = useScrollAnimation(0.1);
   const [negociosRecomendados] = useState([
     {
       id: 1,
@@ -125,26 +134,26 @@ function DashboardInicio({ user }) {
   }
 
   return (
-    <div className="dashboard-inicio">
-      {/* Header personalizado */}
+    <div className="dashboard-inicio page-transition-container">
+      {/* Header personalizado con animación */}
       <div className="dashboard-header">
         <h1>¡Hola! 👋</h1>
         <p>Descubre eventos increíbles cerca de ti</p>
       </div>
 
-      {/* Estadísticas rápidas */}
-      <div className="stats-grid">
-        <div className="stat-card">
+      {/* Estadísticas rápidas con stagger animation */}
+      <div ref={statsRef} className="stats-grid stagger-animation">
+        <div className="stat-card hover-lift">
           <div className="stat-icon">🎉</div>
           <div className="stat-number">{estadisticas.eventosAsistidos}</div>
           <div className="stat-label">Eventos asistidos</div>
         </div>
-        <div className="stat-card">
+        <div className="stat-card hover-lift">
           <div className="stat-icon">📅</div>
           <div className="stat-number">{estadisticas.eventosCreados}</div>
           <div className="stat-label">Eventos creados</div>
         </div>
-        <div className="stat-card">
+        <div className="stat-card hover-lift">
           <div className="stat-icon">⏰</div>
           <div className="stat-number">{estadisticas.proximosEventos}</div>
           <div className="stat-label">Próximos eventos</div>
@@ -171,15 +180,27 @@ function DashboardInicio({ user }) {
         >
           📋 Mis eventos
         </button>
+        {/* Botón promocional para el modal Coming Soon */}
+        <button className="action-btn promo" onClick={onShowComingSoon}>
+          🚀 Más ciudades
+        </button>
       </div>
 
       {/* Próximos eventos del usuario */}
       {proximosEventos.length > 0 && (
-        <div className="section">
+        <div
+          ref={eventsRef}
+          className={`section ${
+            eventsVisible ? "animate-on-scroll in-view" : "animate-on-scroll"
+          }`}
+        >
           <h2 className="section-title">📅 Tus próximos eventos</h2>
-          <div className="eventos-horizontal">
+          <div className="eventos-horizontal stagger-animation">
             {proximosEventos.map((evento) => (
-              <div key={evento.id} className="evento-card-mini">
+              <div
+                key={evento.id}
+                className="evento-card-mini hover-lift glass-effect"
+              >
                 <h4>{evento.nombre}</h4>
                 <p>📍 {evento.ubicacion}</p>
                 <p>📅 {new Date(evento.fecha).toLocaleDateString()}</p>

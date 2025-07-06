@@ -1,0 +1,707 @@
+/* ===============================================
+   MODAL COMING SOON TIPO TIKTOK - PANTALLA COMPLETA
+   =============================================== */
+
+.coming-soon-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  animation: modalFadeIn 0.4s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 420px;
+  background: #000;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+/* Mobile first - pantalla completa en móviles */
+@media (max-width: 768px) {
+  .modal-container {
+    max-width: 100%;
+    border-radius: 0;
+  }
+}
+
+/* Desktop - modal centrado */
+@media (min-width: 769px) {
+  .modal-container {
+    max-width: 380px;
+    height: 80vh;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* Video de fondo */
+.modal-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  /* Mejoras de calidad visual profesional */
+  filter: contrast(1.15) brightness(1.1) saturate(1.3) sepia(0.1)
+    hue-rotate(5deg);
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  image-rendering: crisp-edges;
+  /* Suavizado para mejor renderizado */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
+  /* Transparencia aumentada para que se vea más el texto */
+  opacity: 0.7;
+  /* Transición suave */
+  transition: all 0.3s ease;
+}
+
+/* Efecto hover para interactividad */
+.modal-video:hover {
+  filter: contrast(1.2) brightness(1.15) saturate(1.35) sepia(0.05);
+  opacity: 0.8;
+}
+
+/* Mejoras para pantallas de alta resolución */
+@media only screen and (-webkit-min-device-pixel-ratio: 2),
+  only screen and (min--moz-device-pixel-ratio: 2),
+  only screen and (-o-min-device-pixel-ratio: 2/1),
+  only screen and (min-device-pixel-ratio: 2),
+  only screen and (min-resolution: 192dpi),
+  only screen and (min-resolution: 2dppx) {
+  .modal-video {
+    filter: contrast(1.15) brightness(1.08) saturate(1.25)
+      unsharp-mask(1px 1px 0.5);
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
+
+/* Mejoras adicionales para dispositivos móviles */
+@media (max-width: 768px) {
+  .modal-video {
+    /* Optimización para móviles */
+    filter: contrast(1.12) brightness(1.06) saturate(1.22);
+    -webkit-transform: translateZ(0) scale3d(1, 1, 1);
+    transform: translateZ(0) scale3d(1, 1, 1);
+  }
+}
+
+/* Overlay oscuro profesional */
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.1) 30%,
+    rgba(0, 0, 0, 0.1) 70%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  z-index: 2;
+  /* Opacidad reducida para que se vea más el texto */
+  opacity: 0.5;
+  /* Gradiente más sutil */
+  background-image: radial-gradient(
+    circle at center,
+    rgba(0, 0, 0, 0.05) 0%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+  /* Viñeta más suave */
+  box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.2);
+}
+
+/* Barras cinematográficas */
+.cinematic-bars {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.bar-top,
+.bar-bottom {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(90deg, #000, #111, #000);
+  animation: barsSlideIn 1s ease-out;
+}
+
+.bar-top {
+  top: 0;
+}
+
+.bar-bottom {
+  bottom: 0;
+}
+
+@keyframes barsSlideIn {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Botón cerrar */
+.modal-close {
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: #593c8f;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Contenido principal */
+.modal-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  z-index: 5;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.modal-content.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Header con logo HazPlan */
+.modal-header {
+  width: calc(100% - 40px);
+  max-width: 100%;
+  margin: 30px auto 0 auto;
+  position: relative;
+  z-index: 10;
+  background: rgba(89, 60, 143, 0.3);
+  border-radius: 15px;
+  padding: 20px;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(89, 60, 143, 0.2);
+  text-align: center;
+}
+
+.hazplan-logo {
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  margin: 0;
+  letter-spacing: 2px;
+  animation: logoSlide 4s ease-in-out infinite;
+  position: relative;
+}
+
+/* Nueva animación más sutil */
+@keyframes logoSlide {
+  0%,
+  100% {
+    transform: translateX(0px) scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateX(5px) scale(1.02);
+    opacity: 1;
+  }
+}
+
+/* Contenedor de textos centrado */
+.modal-text-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  perspective: 1000px;
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenedor esférico */
+.text-sphere-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  height: 300px;
+  transform-style: preserve-3d;
+  margin: 0 auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Textos con efecto esférico */
+.text-sphere {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) translateZ(0px) rotateY(0deg);
+  width: 100%;
+  text-align: center;
+  transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0;
+  z-index: 1;
+  filter: blur(0px);
+}
+
+/* Estado activo - en el centro */
+.text-sphere.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) translateZ(0px) rotateY(0deg) scale(1);
+  z-index: 3;
+  filter: blur(0px);
+  animation: textGlow 3s ease-in-out infinite;
+}
+
+/* Estado detrás - se aleja con desenfoque */
+.text-sphere.behind {
+  opacity: 0.2;
+  transform: translate(-50%, -50%) translateZ(-300px) rotateY(-60deg) scale(0.6);
+  z-index: 1;
+  filter: blur(2px);
+}
+
+/* Estado adelante - se prepara para entrar */
+.text-sphere.front {
+  opacity: 0.1;
+  transform: translate(-50%, -50%) translateZ(200px) rotateY(45deg) scale(0.8);
+  z-index: 2;
+  filter: blur(1px);
+}
+
+@keyframes textGlow {
+  0%,
+  100% {
+    filter: blur(0px) drop-shadow(0 0 10px rgba(118, 75, 162, 0.5));
+  }
+  50% {
+    filter: blur(0px) drop-shadow(0 0 20px rgba(102, 126, 234, 0.8));
+  }
+}
+
+/* Estilos de texto esférico */
+.sphere-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: white;
+  text-shadow: 0 0 10px rgba(89, 60, 143, 0.9), 0 0 20px rgba(118, 75, 162, 0.7),
+    0 2px 4px rgba(102, 126, 234, 0.8);
+  margin: 0 0 15px 0;
+  letter-spacing: 1px;
+  animation: titlePulse 2s ease-in-out infinite;
+}
+
+.sphere-subtitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #f0f0f0;
+  text-shadow: 0 0 10px rgba(118, 75, 162, 0.6),
+    0 1px 3px rgba(89, 60, 143, 0.8);
+  margin: 0 0 12px 0;
+  letter-spacing: 0.5px;
+}
+
+.sphere-description {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #e0e0e0;
+  text-shadow: 0 0 8px rgba(102, 126, 234, 0.4),
+    0 1px 2px rgba(89, 60, 143, 0.8);
+  margin: 0;
+  line-height: 1.4;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+@keyframes titlePulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.logo-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 80px;
+  background: radial-gradient(
+    circle,
+    rgba(102, 126, 234, 0.3) 0%,
+    transparent 70%
+  );
+  animation: glowPulse 2s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+/* Container de textos */
+.modal-text-container {
+  position: relative;
+  height: 200px;
+  margin-bottom: 30px;
+}
+
+.modal-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-text.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.modal-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  margin: 0 0 15px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 20px rgba(102, 126, 234, 0.5);
+  animation: titleFloat 3s ease-in-out infinite;
+}
+
+@keyframes titleFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.modal-subtitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 10px 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.modal-description {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Indicadores de texto */
+.text-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px 0;
+  width: 100%;
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.indicator.active {
+  background: white;
+  transform: scale(1.3);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Botón de acción */
+.modal-actions {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.btn-notify {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-notify:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.button-glow {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.6s ease;
+}
+
+.btn-notify:hover .button-glow {
+  left: 100%;
+}
+
+/* Partículas */
+.modal-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  animation: particleFloat linear infinite;
+}
+
+.particle-0 {
+  background: rgba(102, 126, 234, 0.7);
+}
+.particle-1 {
+  background: rgba(118, 75, 162, 0.7);
+}
+.particle-2 {
+  background: rgba(255, 255, 255, 0.5);
+}
+.particle-3 {
+  background: rgba(102, 126, 234, 0.4);
+}
+
+@keyframes particleFloat {
+  from {
+    transform: translateY(100vh) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100px) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Hint de deslizar */
+.swipe-hint {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  text-align: center;
+  z-index: 6;
+  animation: swipeHint 3s ease-in-out infinite;
+}
+
+@keyframes swipeHint {
+  0%,
+  70%,
+  100% {
+    opacity: 0.6;
+    transform: translateX(-50%) translateY(0);
+  }
+  35% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px);
+  }
+}
+
+/* Solo mostrar en móviles */
+@media (min-width: 769px) {
+  .swipe-hint {
+    display: none;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .hazplan-logo {
+    font-size: 2.2rem;
+  }
+
+  .sphere-title {
+    font-size: 2rem;
+  }
+
+  .sphere-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .sphere-description {
+    font-size: 0.9rem;
+    max-width: 250px;
+  }
+
+  .text-sphere-container {
+    height: 250px;
+  }
+
+  .btn-notify {
+    padding: 14px 28px;
+    font-size: 1rem;
+  }
+
+  .modal-content {
+    padding: 15px;
+  }
+
+  .modal-header {
+    margin: 20px auto 0 auto;
+  }
+
+  /* Reducir efecto 3D en móviles para mejor rendimiento */
+  .text-sphere.behind {
+    transform: translate(-50%, -50%) translateZ(-100px) rotateY(-30deg)
+      scale(0.8);
+  }
+
+  .text-sphere.front {
+    transform: translate(-50%, -50%) translateZ(100px) rotateY(30deg) scale(0.9);
+  }
+}
+
+@media (max-width: 768px) {
+  .hazplan-logo {
+    font-size: 2.5rem;
+  }
+
+  .sphere-title {
+    font-size: 2.2rem;
+  }
+
+  .sphere-subtitle {
+    font-size: 1.3rem;
+  }
+
+  .text-sphere-container {
+    height: 280px;
+  }
+}

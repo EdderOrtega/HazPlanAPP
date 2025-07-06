@@ -1,15 +1,32 @@
+/* EventoCard con efectos premium y animaciones cinematográficas */
+
 .evento-card {
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  border: 2px solid #e3f2fd;
-  border-radius: 16px;
-  padding: 24px;
-  margin: 20px 0;
-  box-shadow: 0 4px 20px rgba(52, 152, 219, 0.15);
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  padding: 30px;
+  margin: 24px 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
+  transform: translateZ(0);
+  animation: fadeInCard 0.6s ease-out both;
 }
 
+@keyframes fadeInCard {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Efectos de fondo animados */
 .evento-card::before {
   content: "";
   position: absolute;
@@ -17,84 +34,203 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #3498db, #2980b9);
+  background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+  background-size: 200% 100%;
+  animation: gradientFlow 3s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.evento-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.6s ease;
+  z-index: 1;
 }
 
 .evento-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(52, 152, 219, 0.25);
-  border-color: #3498db;
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 25px 50px rgba(102, 126, 234, 0.2),
+    0 12px 24px rgba(0, 0, 0, 0.1);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.evento-card:hover::after {
+  left: 100%;
 }
 
 .evento-card h3 {
   color: #1a365d;
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0 0 20px 0;
-  border-bottom: 3px solid #3498db;
-  padding-bottom: 12px;
-  background: linear-gradient(135deg, #2c3e50, #34495e);
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0 0 24px 0;
+  padding-bottom: 16px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  position: relative;
+  z-index: 2;
+  line-height: 1.3;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  /* Fallback para navegadores que no soportan background-clip */
+  color: #1a365d;
+}
+
+/* Asegurar que el texto sea visible */
+@supports not (-webkit-background-clip: text) {
+  .evento-card h3 {
+    color: #1a365d !important;
+    background: none !important;
+  }
+}
+
+.evento-card h3::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 2px;
+  animation: expandLine 2s ease-out;
+}
+
+@keyframes expandLine {
+  from {
+    width: 0;
+  }
+  to {
+    width: 60px;
+  }
 }
 
 .evento-card p {
   color: #2c3e50;
-  margin: 10px 0;
-  line-height: 1.6;
-  font-size: 1rem;
+  margin: 12px 0;
+  line-height: 1.7;
+  font-size: 1.05rem;
+  position: relative;
+  z-index: 2;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 .evento-card p strong {
   color: #1a365d;
   font-weight: 700;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
 }
 
+/* Fallback para strong elements */
+@supports not (-webkit-background-clip: text) {
+  .evento-card p strong {
+    color: #1a365d !important;
+    background: none !important;
+  }
+}
+
+/* Botones con efectos premium */
 .evento-card .btn-primary,
 .evento-card .btn-secondary {
-  padding: 14px 28px;
+  padding: 16px 32px;
   border: none;
-  border-radius: 12px;
+  border-radius: 16px;
   font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 20px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-top: 24px;
   width: 100%;
-  max-width: 220px;
+  max-width: 240px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.evento-card .btn-primary::before,
+.evento-card .btn-secondary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.evento-card .btn-primary:hover::before,
+.evento-card .btn-secondary:hover::before {
+  left: 100%;
 }
 
 .evento-card .btn-primary {
   background: linear-gradient(135deg, #27ae60, #229954);
   color: white;
+  border: 2px solid transparent;
 }
 
 .evento-card .btn-primary:hover {
   background: linear-gradient(135deg, #229954, #1e8449);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(39, 174, 96, 0.4);
 }
 
 .evento-card .btn-secondary {
-  background: linear-gradient(135deg, #3498db, #2980b9);
+  background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
+  border: 2px solid transparent;
 }
 
 .evento-card .btn-secondary:hover {
-  background: linear-gradient(135deg, #2980b9, #21618c);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+  background: linear-gradient(135deg, #764ba2, #5a4ca7);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
 }
 
 .evento-card .btn-secondary:disabled {
   background: linear-gradient(135deg, #bdc3c7, #95a5a6);
   cursor: not-allowed;
   transform: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  opacity: 0.7;
+}
+
+.evento-card .btn-secondary:disabled:hover {
+  transform: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .evento-card .evento-tipo {

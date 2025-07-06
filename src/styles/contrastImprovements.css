@@ -1,0 +1,157 @@
+/* ===============================================
+   MEJORAS GLOBALES DE CONTRASTE Y LEGIBILIDAD
+   =============================================== */
+
+/* Asegurar contraste en elementos con glassmorphism */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.glass-effect * {
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.glass-effect h1,
+.glass-effect h2,
+.glass-effect h3,
+.glass-effect h4 {
+  color: #1a365d !important;
+  font-weight: 700 !important;
+}
+
+.glass-effect p,
+.glass-effect span,
+.glass-effect div {
+  color: #2c3e50 !important;
+  font-weight: 500 !important;
+}
+
+/* Mejoras para fondos gradient */
+.gradient-text-safe {
+  background: none !important;
+  color: #1a365d !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Botones con mejor contraste */
+.btn-contrast {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #1a365d !important;
+  border: 2px solid rgba(0, 0, 0, 0.1) !important;
+  text-shadow: none !important;
+  font-weight: 700 !important;
+}
+
+.btn-contrast:hover {
+  background: rgba(255, 255, 255, 1) !important;
+  color: #667eea !important;
+  border-color: #667eea !important;
+}
+
+/* Elementos sobre fondos oscuros */
+.on-dark-bg {
+  color: white !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 1px 2px rgba(0, 0, 0, 0.6) !important;
+}
+
+.on-dark-bg h1,
+.on-dark-bg h2,
+.on-dark-bg h3,
+.on-dark-bg h4 {
+  color: white !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8), 0 1px 2px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Elementos sobre fondos claros */
+.on-light-bg {
+  color: #1a365d !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8) !important;
+}
+
+.on-light-bg h1,
+.on-light-bg h2,
+.on-light-bg h3,
+.on-light-bg h4 {
+  color: #1a365d !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Etiquetas y badges con mejor contraste */
+.badge-contrast {
+  background: rgba(0, 0, 0, 0.8) !important;
+  color: white !important;
+  text-shadow: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  font-weight: 700 !important;
+}
+
+/* Labels y textos pequeños */
+.small-text-contrast {
+  background: rgba(0, 0, 0, 0.7) !important;
+  color: white !important;
+  padding: 4px 8px !important;
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 2px solid #000 !important;
+  }
+
+  .on-dark-bg {
+    background: rgba(0, 0, 0, 0.9) !important;
+    color: white !important;
+  }
+
+  .gradient-text-safe,
+  .glass-effect * {
+    color: #000 !important;
+    text-shadow: none !important;
+  }
+}
+
+/* Modo oscuro amigable */
+@media (prefers-color-scheme: dark) {
+  .glass-effect {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .glass-effect h1,
+  .glass-effect h2,
+  .glass-effect h3,
+  .glass-effect h4,
+  .glass-effect p,
+  .glass-effect span,
+  .glass-effect div {
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+  }
+}
+
+/* Utilidades para mejorar legibilidad rápidamente */
+.force-dark-text {
+  color: #1a365d !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8) !important;
+}
+
+.force-light-text {
+  color: white !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+}
+
+.force-high-contrast {
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #000 !important;
+  border: 1px solid #ccc !important;
+  text-shadow: none !important;
+}

@@ -7,7 +7,7 @@ import DashboardInicio from "./DashboardInicio";
 import { initializeHomeAnimations } from "../utils/homeAnimations";
 import "../styles/homeAnimations.css";
 
-function Home({ user }) {
+function Home({ user, onShowComingSoon }) {
   const containerRef = useRef();
   const heroRef = useRef();
   const featuresRef = useRef();
@@ -33,7 +33,7 @@ function Home({ user }) {
 
   // Si el usuario está logueado, mostrar dashboard personalizado
   if (user) {
-    return <DashboardInicio user={user} />;
+    return <DashboardInicio user={user} onShowComingSoon={onShowComingSoon} />;
   }
 
   // Si no está logueado, mostrar landing page tradicional

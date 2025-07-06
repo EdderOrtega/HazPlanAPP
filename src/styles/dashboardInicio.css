@@ -1,13 +1,42 @@
-/* Dashboard Inicio - Usuarios logueados */
+/* Dashboard Inicio - Usuarios logueados con Animaciones Premium */
 
 .dashboard-inicio {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  padding-top: 80px; /* Para el navbar fijo */
-  padding-bottom: 100px; /* Para el menubar inferior */
-  background: #e3d8f8;
-  min-height: calc(100vh - 80px); /* Ajuste para altura correcta */
+  padding-top: 80px;
+  padding-bottom: 100px;
+  background: linear-gradient(135deg, #e3d8f8 0%, #f0ebff 50%, #e8deff 100%);
+  min-height: calc(100vh - 80px);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Efectos de fondo animados */
+.dashboard-inicio::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(102, 126, 234, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(118, 75, 162, 0.1) 0%,
+      transparent 50%
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dashboard-inicio > * {
+  position: relative;
+  z-index: 1;
 }
 
 .dashboard-loading {
@@ -15,116 +44,332 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding-top: 60px; /* Para el navbar */
+  padding-top: 60px;
 }
 
-/* Header */
+/* Header con efectos 3D */
 .dashboard-header {
   text-align: center;
   margin-top: 100px;
   margin-bottom: 30px;
-  padding: 20px;
+  padding: 30px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 20px;
+  border-radius: 24px;
   color: white;
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3),
+    0 10px 20px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: perspective(1000px) rotateX(2deg);
+  animation: fadeInStay 0.8s ease-out;
+  position: relative;
+  overflow: hidden;
+  /* Mantener visible siempre */
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition: all 0.3s ease;
+}
+
+.dashboard-header:hover {
+  transform: perspective(1000px) rotateX(1deg) translateY(-2px);
+  box-shadow: 0 25px 50px rgba(102, 126, 234, 0.4),
+    0 15px 25px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.dashboard-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes fadeInStay {
+  from {
+    opacity: 0;
+    transform: perspective(1000px) rotateX(2deg) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(1000px) rotateX(2deg) translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: perspective(1000px) rotateX(2deg) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(1000px) rotateX(2deg) translateY(0);
+  }
 }
 
 .dashboard-header h1 {
   font-size: 2.5rem;
   margin: 0 0 10px 0;
   font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .dashboard-header p {
   font-size: 1.1rem;
   margin: 0;
-  opacity: 0.9;
-  color: whitesmoke;
+  opacity: 0.95;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* Estadísticas */
+/* Estadísticas con efectos 3D y animaciones */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 15px;
-  margin-bottom: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+  animation: fadeInGrid 1s ease-out 0.3s both;
+}
+
+@keyframes fadeInGrid {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .stat-card {
-  background: white;
-  padding: 20px;
-  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  border-radius: 20px;
   text-align: center;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: slideInUp 0.6s ease-out both;
+}
+
+.stat-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.stat-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.stat-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.stat-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
 }
 
 .stat-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2),
+    0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card:hover::before {
+  transform: scaleX(1);
 }
 
 .stat-icon {
-  font-size: 2rem;
-  margin-bottom: 10px;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover .stat-icon {
+  transform: scale(1.1) rotate(5deg);
 }
 
 .stat-number {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  line-height: 1;
+  /* Fallback para mejor legibilidad */
   color: #667eea;
-  margin-bottom: 5px;
+}
+
+@supports not (-webkit-background-clip: text) {
+  .stat-number {
+    color: #667eea !important;
+    background: none !important;
+  }
 }
 
 .stat-label {
-  font-size: 0.9rem;
-  color: #666;
-  font-weight: 500;
+  font-size: 1rem;
+  color: #4a5568;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
-/* Acciones rápidas */
+/* Acciones rápidas con efectos modernos */
 .quick-actions {
   display: flex;
-  gap: 15px;
-  margin-bottom: 30px;
+  gap: 20px;
+  margin-bottom: 40px;
   flex-wrap: wrap;
+  animation: fadeInUp 1s ease-out 0.5s both;
 }
 
 .action-btn {
   flex: 1;
-  padding: 15px 20px;
+  min-width: 200px;
+  padding: 18px 25px;
   border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 16px;
+  font-size: 1.1rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  text-align: center;
-  min-width: 140px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  backdrop-filter: blur(10px);
+}
+
+.action-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.action-btn:hover::before {
+  left: 100%;
+}
+
+.action-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
 }
 
 .action-btn.primary {
   background: linear-gradient(45deg, #667eea, #764ba2);
   color: white;
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
 }
 
 .action-btn.primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.6);
 }
 
 .action-btn.secondary {
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
   color: #667eea;
-  border: 2px solid #667eea;
+  border: 2px solid rgba(102, 126, 234, 0.3);
 }
 
 .action-btn.secondary:hover {
   background: #667eea;
   color: white;
-  transform: translateY(-2px);
+  border-color: #667eea;
+}
+
+/* Botón promocional especial */
+.action-btn.promo {
+  background: linear-gradient(45deg, #ff6b6b, #ee5a24, #ff9f43);
+  color: white;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+  animation: promoGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes promoGlow {
+  0% {
+    box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+  }
+  100% {
+    box-shadow: 0 12px 30px rgba(255, 107, 107, 0.7);
+  }
+}
+
+.action-btn.promo::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.6s ease;
+}
+
+.action-btn.promo:hover::after {
+  left: 100%;
+}
+
+.action-btn.promo:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(255, 107, 107, 0.8);
+  background: linear-gradient(45deg, #ff5252, #d32f2f, #ff7043);
 }
 
 /* Secciones */
@@ -333,10 +578,17 @@
   background: #5a6fd8;
 }
 
-/* Responsive */
+/* Animaciones stagger para elementos dinámicos */
+.stagger-item-animate {
+  animation: slideInUp 0.6s ease-out both;
+}
+
+/* Responsive improvements */
 @media (max-width: 768px) {
-  .dashboard-inicio {
-    padding: 15px;
+  .dashboard-header {
+    transform: perspective(1000px) rotateX(0deg);
+    margin-top: 50px;
+    padding: 20px;
   }
 
   .dashboard-header h1 {
@@ -344,37 +596,23 @@
   }
 
   .stats-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .stat-card {
+    padding: 20px;
   }
 
   .quick-actions {
     flex-direction: column;
+    gap: 15px;
   }
 
   .action-btn {
-    min-width: 100%;
-  }
-
-  .eventos-horizontal {
-    gap: 10px;
-  }
-
-  .evento-card-mini {
-    min-width: 180px;
-    padding: 12px;
-  }
-
-  .negocios-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .negocio-card {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .tips-grid {
-    grid-template-columns: 1fr;
+    min-width: auto;
+    padding: 14px 20px;
+    font-size: 1rem;
   }
 }
 

@@ -2,34 +2,55 @@ import React, { useState } from "react";
 import { supabase } from "../supabaseClient";
 import { useNavigate } from "react-router-dom";
 import ModalRegistroExitoso from "./ui/ModalRegistroExitoso";
+import iconoHazPlan from "../assets/iconoHazPlanRedondo.png";
+import "../styles/registro.css";
 
 function Registro() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
   const registerCorreo = async (e) => {
     e.preventDefault();
-    const { error } = await supabase.auth.signUp({ email, password });
-    if (error) {
-      setError(error.message);
-    } else {
-      setError("");
-      handleRegistroExitoso();
+    setLoading(true);
+    setError("");
+
+    try {
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) {
+        setError(error.message);
+      } else {
+        handleRegistroExitoso();
+      }
+    } catch {
+      setError("Error de conexión. Intenta de nuevo.");
+    } finally {
+      setLoading(false);
     }
   };
 
   // NUEVO: función para Google
   const registerGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: window.location.origin + "/crear-perfil",
-      },
-    });
-    if (error) setError(error.message);
+    setGoogleLoading(true);
+    setError("");
+
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin + "/crear-perfil",
+        },
+      });
+      if (error) setError(error.message);
+    } catch {
+      setError("Error al conectar con Google. Intenta de nuevo.");
+    } finally {
+      setGoogleLoading(false);
+    }
   };
 
   const handleRegistroExitoso = () => {
@@ -42,88 +63,106 @@ function Registro() {
   };
 
   return (
-    <div
-      style={{
-        marginTop: "80px",
-        paddingBottom: "80px",
-        padding: "40px",
-        maxWidth: "400px",
-        margin: "80px auto 80px auto",
-        background: "white",
-        borderRadius: "12px",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-      }}
-    >
-      <h2
-        style={{ textAlign: "center", color: "#593c8f", marginBottom: "30px" }}
-      >
-        Registro
-      </h2>
-      {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
-      <button
-        type="button"
-        onClick={registerGoogle}
-        style={{
-          width: "100%",
-          padding: "12px",
-          backgroundColor: "#db4437",
-          color: "white",
-          border: "none",
-          borderRadius: "8px",
-          fontSize: "16px",
-          fontWeight: "500",
-          cursor: "pointer",
-          marginBottom: "20px",
-        }}
-      >
-        Registrarse con Google
-      </button>
-      <form
-        onSubmit={registerCorreo}
-        style={{ display: "flex", flexDirection: "column", gap: "15px" }}
-      >
-        <input
-          type="email"
-          placeholder="Correo"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{
-            padding: "12px",
-            borderRadius: "8px",
-            border: "1px solid #ddd",
-            fontSize: "16px",
-          }}
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          style={{
-            padding: "12px",
-            borderRadius: "8px",
-            border: "1px solid #ddd",
-            fontSize: "16px",
-          }}
-        />
-        <button
-          type="submit"
-          style={{
-            padding: "12px",
-            backgroundColor: "#593c8f",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            fontSize: "16px",
-            fontWeight: "500",
-            cursor: "pointer",
-          }}
-        >
-          Registrarse
-        </button>
-      </form>
+    <div className="registro-page">
+      <div className="registro-container">
+        <div className="registro-card">
+          {/* Logo */}
+          <div className="registro-logo">
+            <img src={iconoHazPlan} alt="HazPlan Logo" />
+          </div>
+
+          {/* Título */}
+          <h1 className="registro-title">Únete a HazPlan</h1>
+          <p className="registro-subtitle">
+            Crea tu cuenta y comienza a planificar
+          </p>
+
+          {/* Error message */}
+          {error && (
+            <div className="registro-error">
+              <span>{error}</span>
+            </div>
+          )}
+
+          {/* Botón de Google */}
+          <button
+            type="button"
+            onClick={registerGoogle}
+            className={`google-button ${googleLoading ? "loading" : ""}`}
+            disabled={googleLoading || loading}
+          >
+            {googleLoading ? (
+              <>
+                <div className="spinner"></div>
+                <span>Conectando con Google...</span>
+              </>
+            ) : (
+              <span>Registrarse con Google</span>
+            )}
+          </button>
+
+          {/* Divider */}
+          <div className="divider">
+            <span>o continúa con email</span>
+          </div>
+
+          {/* Formulario */}
+          <form onSubmit={registerCorreo} className="registro-form">
+            <div className="input-group">
+              <label htmlFor="email">Correo electrónico</label>
+              <div className="input-wrapper">
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="tu@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={loading || googleLoading}
+                />
+              </div>
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="password">Contraseña</label>
+              <div className="input-wrapper">
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="Mínimo 6 caracteres"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={loading || googleLoading}
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className={`registro-button ${loading ? "loading" : ""}`}
+              disabled={loading || googleLoading}
+            >
+              {loading ? (
+                <>
+                  <div className="spinner"></div>
+                  <span>Creando cuenta...</span>
+                </>
+              ) : (
+                <span>Crear cuenta</span>
+              )}
+            </button>
+          </form>
+
+          {/* Footer del formulario */}
+          <div className="registro-footer">
+            <p>
+              ¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
       {showModal && <ModalRegistroExitoso onClose={handleModalClose} />}
     </div>
   );

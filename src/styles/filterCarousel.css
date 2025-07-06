@@ -25,6 +25,9 @@
   padding: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   cursor: grab;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .filter-carousel:active {
@@ -33,13 +36,14 @@
 
 .filter-track {
   display: flex;
-  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   gap: 12px;
   user-select: none;
   cursor: grab;
   touch-action: pan-x;
   min-width: 100%;
   box-sizing: border-box;
+  will-change: transform;
 }
 
 .filter-track:active {
@@ -56,15 +60,17 @@
   min-width: 120px;
   border-radius: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid transparent;
   position: relative;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .filter-item:hover {
   background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
+  transform: translateY(-2px) translateZ(0);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
@@ -98,23 +104,30 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   color: white;
   text-align: center;
   line-height: 1.2;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-  opacity: 0.7;
-  transition: opacity 0.3s ease;
-  z-index: 2;
-  padding: 2px 5px;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 6px;
-  backdrop-filter: blur(2px);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 1px 2px rgba(0, 0, 0, 0.8),
+    0 0 8px rgba(0, 0, 0, 0.5);
+  opacity: 1;
+  transition: all 0.3s ease;
+  z-index: 3;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.5px;
 }
 
 .filter-item.active .filter-label {
-  opacity: 0.9;
-  font-weight: 700;
+  opacity: 1;
+  font-weight: 800;
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 1), 0 1px 3px rgba(0, 0, 0, 0.9),
+    0 0 10px rgba(102, 126, 234, 0.5);
 }
 
 /* Indicadores de navegación */
@@ -170,6 +183,10 @@
 /* Efectos de arrastre */
 .filter-track.dragging {
   transition: none;
+}
+
+.filter-track:not(.dragging) {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .filter-item.dragging {
@@ -264,8 +281,11 @@
 
   .filter-label {
     font-size: 10px;
-    padding: 1px 4px;
+    padding: 3px 6px;
     bottom: 3px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 1), 0 1px 2px rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.8);
   }
 
   .swipe-indicator {
@@ -299,8 +319,11 @@
 
   .filter-label {
     font-size: 9px;
-    padding: 1px 3px;
+    padding: 2px 5px;
     bottom: 2px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 1), 0 1px 2px rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.8);
   }
 
   .swipe-indicator {
@@ -325,7 +348,10 @@
 
   .filter-label {
     font-size: 11px;
-    padding: 2px 5px;
+    padding: 4px 8px;
     bottom: 6px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 1), 0 1px 2px rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.8);
   }
 }

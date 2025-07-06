@@ -1,92 +1,116 @@
 import React, { useState } from "react";
 import { supabase } from "../supabaseClient";
 import { useNavigate } from "react-router-dom";
+import "../styles/login.css";
+import logoHazPlan from "../assets/iconoHazPlanRedondo.png";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const loginCorreo = async (e) => {
     e.preventDefault();
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) {
-      setError(error.message);
-    } else {
-      setError("");
-      navigate("/perfil");
+    setLoading(true);
+    setError("");
+
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        setError(error.message);
+      } else {
+        navigate("/perfil");
+      }
+    } catch {
+      setError("Error de conexión. Intenta de nuevo.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div
-      style={{
-        marginTop: "80px",
-        paddingBottom: "80px",
-        padding: "40px",
-        maxWidth: "400px",
-        margin: "80px auto 80px auto",
-        background: "white",
-        borderRadius: "12px",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-      }}
-    >
-      <h2
-        style={{ textAlign: "center", color: "#593c8f", marginBottom: "30px" }}
-      >
-        Iniciar sesión
-      </h2>
-      {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
-      <form
-        onSubmit={loginCorreo}
-        style={{ display: "flex", flexDirection: "column", gap: "15px" }}
-      >
-        <input
-          type="email"
-          placeholder="Correo"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{
-            padding: "12px",
-            borderRadius: "8px",
-            border: "1px solid #ddd",
-            fontSize: "16px",
-          }}
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          style={{
-            padding: "12px",
-            borderRadius: "8px",
-            border: "1px solid #ddd",
-            fontSize: "16px",
-          }}
-        />
-        <button
-          type="submit"
-          style={{
-            padding: "12px",
-            backgroundColor: "#593c8f",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            fontSize: "16px",
-            fontWeight: "500",
-            cursor: "pointer",
-          }}
-        >
-          Iniciar sesión
-        </button>
-      </form>
+    <div className="login-page">
+      <div className="login-background"></div>
+      <div className="login-container">
+        <div className="login-card">
+          {/* Logo */}
+          <div className="login-logo">
+            <img src={logoHazPlan} alt="HazPlan Logo" />
+          </div>
+
+          {/* Título */}
+          <h1 className="login-title">Bienvenido a HazPlan</h1>
+          <p className="login-subtitle">Inicia sesión para continuar</p>
+
+          {/* Error message */}
+          {error && (
+            <div className="error-message">
+              <span>{error}</span>
+            </div>
+          )}
+
+          {/* Formulario */}
+          <form onSubmit={loginCorreo} className="login-form">
+            <div className="input-group">
+              <label htmlFor="email">Correo electrónico</label>
+              <div className="input-wrapper">
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="tu@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="password">Contraseña</label>
+              <div className="input-wrapper">
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="Tu contraseña"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className={`login-button ${loading ? "loading" : ""}`}
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <div className="spinner"></div>
+                  <span>Iniciando sesión...</span>
+                </>
+              ) : (
+                <span>Iniciar sesión</span>
+              )}
+            </button>
+          </form>
+
+          {/* Footer del formulario */}
+          <div className="login-footer">
+            <p>
+              ¿No tienes cuenta? <a href="/registro">Regístrate aquí</a>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

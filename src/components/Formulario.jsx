@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { supabase } from "../supabaseClient";
 import CalendarioEvento from "../components/events/CalendarioEvento";
-import ModalEventoCreadoExistosamente from "../components/ui/ModalEventoCreadoExistosamente"; // <-- AGREGA ESTA IMPORTACIÓN
+import ModalEventoCreadoExistosamente from "../components/ui/ModalEventoCreadoExistosamente";
+import EventTypeSelector from "./EventTypeSelector";
 
 function Formulario() {
   const [step, setStep] = useState(1);
