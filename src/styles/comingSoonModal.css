@@ -2,6 +2,8 @@
    MODAL COMING SOON TIPO TIKTOK - PANTALLA COMPLETA
    =============================================== */
 
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap");
+
 .coming-soon-modal {
   position: fixed;
   top: 0;
@@ -65,28 +67,42 @@
   height: 100%;
   object-fit: cover;
   z-index: 1;
-  /* Mejoras de calidad visual profesional */
-  filter: contrast(1.15) brightness(1.1) saturate(1.3) sepia(0.1)
-    hue-rotate(5deg);
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: optimize-contrast;
-  image-rendering: crisp-edges;
-  /* Suavizado para mejor renderizado */
+  /* Aplicamos el mismo filtro cinematográfico del IntroScreen */
+  filter: brightness(0.7) contrast(1.1) saturate(1.2);
+  opacity: 0.8;
+  transition: opacity 2s ease-in-out;
+  /* Mejoras de renderizado */
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
   will-change: transform;
-  /* Transparencia aumentada para que se vea más el texto */
-  opacity: 0.7;
-  /* Transición suave */
-  transition: all 0.3s ease;
+  /* Animación de entrada similar al IntroScreen */
+  animation: videoFadeInModal 3s ease-in-out forwards;
+}
+
+@keyframes videoFadeInModal {
+  0% {
+    opacity: 0;
+    transform: scale(1.05);
+    filter: brightness(0.5) contrast(1.2) saturate(1.1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.02);
+    filter: brightness(0.6) contrast(1.15) saturate(1.15);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+    filter: brightness(0.7) contrast(1.1) saturate(1.2);
+  }
 }
 
 /* Efecto hover para interactividad */
 .modal-video:hover {
-  filter: contrast(1.2) brightness(1.15) saturate(1.35) sepia(0.05);
-  opacity: 0.8;
+  filter: brightness(0.75) contrast(1.15) saturate(1.25);
+  opacity: 0.85;
 }
 
 /* Mejoras para pantallas de alta resolución */
@@ -113,7 +129,7 @@
   }
 }
 
-/* Overlay oscuro profesional */
+/* Overlay cinematográfico con filtro morado */
 .modal-overlay {
   position: absolute;
   top: 0;
@@ -121,23 +137,24 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.2) 0%,
-    rgba(0, 0, 0, 0.1) 30%,
-    rgba(0, 0, 0, 0.1) 70%,
-    rgba(0, 0, 0, 0.3) 100%
+    45deg,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(89, 60, 143, 0.3) 50%,
+    rgba(118, 75, 162, 0.4) 100%
   );
   z-index: 2;
-  /* Opacidad reducida para que se vea más el texto */
-  opacity: 0.5;
-  /* Gradiente más sutil */
-  background-image: radial-gradient(
-    circle at center,
-    rgba(0, 0, 0, 0.05) 0%,
-    rgba(0, 0, 0, 0.15) 100%
-  );
-  /* Viñeta más suave */
-  box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  /* Animación de entrada suave */
+  animation: overlayFadeIn 2s ease-out forwards;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Barras cinematográficas */
@@ -703,5 +720,117 @@
 
   .text-sphere-container {
     height: 280px;
+  }
+}
+
+/* ===============================================
+   LOGO CINEMATOGRÁFICO DE BIENVENIDA
+   =============================================== */
+
+.modal-intro-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 8; /* Encima de todo */
+  opacity: 0;
+  transition: all 2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.modal-intro-logo.animate {
+  opacity: 1;
+  animation: modalLogoReveal 3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+@keyframes modalLogoReveal {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3) rotateY(180deg) rotateX(45deg);
+    filter: blur(10px);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1) rotateY(0deg) rotateX(0deg);
+    filter: blur(0px);
+  }
+  85% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotateY(0deg) rotateX(0deg);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8) rotateY(-20deg) rotateX(10deg);
+    filter: blur(3px);
+  }
+}
+
+.modal-logo-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.modal-logo-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  box-shadow: 0 0 40px rgba(89, 60, 143, 0.8);
+  animation: modalLogoGlow 1.5s ease-in-out infinite alternate,
+    modalLogoFormation 1.5s ease-out forwards;
+  transform: scale(0);
+  opacity: 0;
+}
+
+@keyframes modalLogoFormation {
+  0% {
+    transform: scale(0) rotateZ(180deg);
+    opacity: 0;
+    filter: blur(20px);
+  }
+  50% {
+    transform: scale(1.3) rotateZ(90deg);
+    opacity: 0.7;
+    filter: blur(5px);
+  }
+  100% {
+    transform: scale(1) rotateZ(0deg);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+@keyframes modalLogoGlow {
+  from {
+    box-shadow: 0 0 40px rgba(89, 60, 143, 0.8);
+  }
+  to {
+    box-shadow: 0 0 70px rgba(118, 75, 162, 1);
+  }
+}
+
+.modal-logo-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(
+    circle,
+    rgba(89, 60, 143, 0.4) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  animation: modalLogoGlow 2s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* Responsive para logo del modal */
+@media (max-width: 768px) {
+  .modal-logo-image {
+    width: 80px;
+    height: 80px;
   }
 }

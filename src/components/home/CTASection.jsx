@@ -10,11 +10,12 @@ const CTASection = React.forwardRef((props, ref) => {
       style={{
         padding: "120px 0",
         textAlign: "center",
-        background: "rgba(255, 255, 255, 0.02)",
+        background: "linear-gradient(135deg, #593c8f 0%, blueviolet 100%)",
         borderRadius: "30px",
         margin: "60px 0",
         border: "1px solid rgba(255, 255, 255, 0.1)",
         backdropFilter: "blur(20px)",
+        position: "relative",
       }}
     >
       <h2

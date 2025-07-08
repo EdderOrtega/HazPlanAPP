@@ -1,0 +1,52 @@
+/* ===============================================
+   OPTIMIZACIONES DE RENDIMIENTO PARA LCP
+   =============================================== */
+
+/* Precarga crítica de fuentes */
+@font-face {
+  font-family: "Orbitron";
+  font-weight: 700;
+  font-display: swap; /* Mejora LCP al mostrar texto fallback */
+  src: url("https://fonts.gstatic.com/s/orbitron/v31/yMJWMIlzdpvBhQQL_Qq7dys.woff2")
+    format("woff2");
+}
+
+/* Optimizar renderizado de imágenes */
+img {
+  content-visibility: auto;
+  contain-intrinsic-size: 50px;
+}
+
+/* Optimizar animaciones para dispositivos lentos */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Optimización crítica para el splash */
+.vector-animado-container {
+  will-change: auto;
+  contain: layout style paint;
+}
+
+/* Mejorar renderizado de video */
+.vector-background-video {
+  transform: translateZ(0);
+  will-change: auto;
+  contain: size layout style paint;
+}
+
+/* Lazy loading para iconos flotantes */
+.floating-icons-container {
+  content-visibility: auto;
+  contain-intrinsic-size: 100vh;
+}
+
+/* Optimizar partículas */
+.modal-particles {
+  content-visibility: auto;
+  contain: layout style paint;
+}

@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import ciudadVideo from "../../assets/HazPlanCiudades.mp4";
+import iconoHazPlan from "../../assets/iconoHazPlanRedondo.png";
 import "../../styles/comingSoonModal.css";
 
 const ComingSoonModal = ({ isOpen, onClose }) => {
   const [showContent, setShowContent] = useState(false);
+  const [showLogo, setShowLogo] = useState(false);
+  const [logoAnimation, setLogoAnimation] = useState(false);
   const [currentText, setCurrentText] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const videoRef = useRef(null);
@@ -25,19 +28,36 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
       description: "Forma parte de la revolución social",
     },
     {
-      title: "🏆 ¡Mundial 2026!",
-      subtitle: "Gana boletos para el Mundial",
+      title: " ¡Eventos sorpresas!",
+      subtitle: "Gana boletos para el Mundial 🏆",
       description: "Participa en eventos exclusivos y gana entradas oficiales",
     },
   ];
 
   useEffect(() => {
     if (isOpen) {
+      // Reset de estados
       setShowContent(false);
-      // Secuencia de animación
-      const timer1 = setTimeout(() => setShowContent(true), 1000);
+      setShowLogo(false);
+      setLogoAnimation(false);
 
-      // Iniciar video
+      // Secuencia cinematográfica inspirada en IntroScreen
+      const sequence = [
+        // 1. Mostrar logo inmediatamente al iniciar el video
+        { time: 100, action: () => setShowLogo(true) },
+        { time: 200, action: () => setLogoAnimation(true) },
+        // 2. Quitar logo después de 3 segundos completos de animación (200ms + 3000ms)
+        { time: 3200, action: () => setShowLogo(false) },
+        // 3. Mostrar contenido principal después de que se quite el logo
+        { time: 3700, action: () => setShowContent(true) },
+      ];
+
+      // Ejecutar secuencia
+      const timers = sequence.map(({ time, action }) =>
+        setTimeout(action, time)
+      );
+
+      // Iniciar video automáticamente cuando se abra el modal
       if (videoRef.current) {
         videoRef.current.currentTime = 0;
         videoRef.current.muted = false; // Asegurar que el audio esté activado
@@ -50,13 +70,13 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
         });
       }
 
-      // Cambiar textos cada 3 segundos
+      // Cambiar textos cada 7 segundos
       const textInterval = setInterval(() => {
         setCurrentText((prev) => (prev + 1) % texts.length);
       }, 7000);
 
       return () => {
-        clearTimeout(timer1);
+        timers.forEach(clearTimeout);
         clearInterval(textInterval);
       };
     }
@@ -64,6 +84,8 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
 
   const handleClose = () => {
     setShowContent(false);
+    setShowLogo(false);
+    setLogoAnimation(false);
     setTimeout(() => {
       onClose();
       setCurrentText(0);
@@ -88,16 +110,15 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
   return (
     <div className="coming-soon-modal" onClick={handleBackdropClick}>
       <div className="modal-container">
-        {/* Video de fondo */}
+        {/* Video de fondo - Optimizado */}
         <video
           ref={videoRef}
           className="modal-video"
           loop
           playsInline
-          preload="auto"
+          preload="none" // No cargar hasta que se abra el modal
           poster=""
           style={{
-            // Configuraciones adicionales para mejor calidad
             imageRendering: "-webkit-optimize-contrast",
           }}
         >
@@ -107,6 +128,20 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
 
         {/* Overlay oscuro */}
         <div className="modal-overlay"></div>
+
+        {/* Logo de bienvenida cinematográfico (solo icono, sin texto) */}
+        {showLogo && (
+          <div className={`modal-intro-logo ${logoAnimation ? "animate" : ""}`}>
+            <div className="modal-logo-container">
+              <img
+                src={iconoHazPlan}
+                alt="HazPlan"
+                className="modal-logo-image"
+              />
+              <div className="modal-logo-glow"></div>
+            </div>
+          </div>
+        )}
 
         {/* Barras cinematográficas */}
         <div className="cinematic-bars">
@@ -208,11 +243,6 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
               ></div>
             ))}
           </div>
-        </div>
-
-        {/* Texto de deslizar para cerrar (móvil) */}
-        <div className="swipe-hint">
-          <span>Desliza hacia arriba para cerrar</span>
         </div>
       </div>
     </div>

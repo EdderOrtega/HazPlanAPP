@@ -70,7 +70,7 @@ function IntroScreen({ onFinish }) {
         },
       },
       { time: 8000, action: () => setShowLogo(true) },
-      { time: 10000, action: () => setShowButtons(true) },
+      { time: 12000, action: () => setShowButtons(true) }, // Aumentamos de 10000 a 12000
     ];
 
     const timers = sequence.map(({ time, action }) => setTimeout(action, time));

@@ -28,15 +28,16 @@ import ComingSoonModal from "./components/ui/ComingSoonModal";
 import PromoBanner from "./components/ui/PromoBanner";
 import "./App.css";
 import "./styles/contrastImprovements.css";
+import "./styles/gtaAnimations.css";
+import "./styles/performance.css"; // Optimizaciones de rendimiento
 import Loader from "./components/ui/Loader";
 import LogoFijo from "./components/ui/LogoFijo";
 import { useNotifications } from "./hooks/useNotifications";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [loadingSession, setLoadingSession] = useState(true);
+  const [loadingSession] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
-  const [showIntro, setShowIntro] = useState(false);
   const [showComingSoonModal, setShowComingSoonModal] = useState(false);
 
   // Sistema de notificaciones
@@ -46,7 +47,7 @@ function App() {
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user);
-      setLoadingSession(false);
+      // No cambiar loadingSession aquí
 
       // Mostrar notificación de bienvenida si hay usuario
       if (data.user) {
@@ -62,7 +63,7 @@ function App() {
     const { data: listener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setUser(session?.user ?? null);
-        setLoadingSession(false);
+        // No cambiar loadingSession aquí tampoco
 
         // Notificar cambios de sesión
         if (session?.user && _event === "SIGNED_IN") {
@@ -76,40 +77,38 @@ function App() {
     return () => listener.subscription.unsubscribe();
   }, [success, info]);
 
-  // Splash/animación de bienvenida
+  // Splash/animación de bienvenida - Optimizado para LCP
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSplash(false);
-      // Mostrar intro solo si el usuario no está logueado
-      if (!user) {
-        setShowIntro(true);
-      }
-    }, 1000);
+      // Ya no mostrar intro, ir directo al Home
+    }, 6500); // Reducido a 6000ms para evitar reinicio del video
     return () => clearTimeout(timer);
   }, [user]);
 
-  // Ocultar intro cuando el usuario se loguee
-  useEffect(() => {
-    if (user) {
-      setShowIntro(false);
-    }
-  }, [user]);
+  // Ocultar intro cuando el usuario se loguee - YA NO NECESARIO
+  // useEffect(() => {
+  //   if (user) {
+  //     setShowIntro(false);
+  //   }
+  // }, [user]);
 
   // Función para mostrar el modal Coming Soon
   const handleShowComingSoon = () => {
     setShowComingSoonModal(true);
   };
 
-  useEffect(() => {
-    // Mostrar modal Coming Soon automáticamente después de usar la app por un tiempo
-    if (user) {
-      const timer = setTimeout(() => {
-        setShowComingSoonModal(true);
-      }, 30000); // 30 segundos después del login
+  // COMENTADO: Modal automático después de 30 segundos
+  // useEffect(() => {
+  //   // Mostrar modal Coming Soon automáticamente después de usar la app por un tiempo
+  //   if (user) {
+  //     const timer = setTimeout(() => {
+  //       setShowComingSoonModal(true);
+  //     }, 30000); // 30 segundos después del login
 
-      return () => clearTimeout(timer);
-    }
-  }, [user]);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [user]);
 
   // Shortcut de teclado para mostrar el modal (Ctrl/Cmd + K)
   useEffect(() => {
@@ -127,60 +126,62 @@ function App() {
   if (showSplash || loadingSession) return <VectorAnimado />;
 
   const handleIntroFinish = () => {
-    setShowIntro(false);
+    // Ya no es necesario, pero mantenemos para la ruta /intro
   };
-
-  // Mostrar intro cinematográfica solo para usuarios no logueados
-  if (showIntro && !user) return <IntroScreen onFinish={handleIntroFinish} />;
 
   return (
     <Router>
-      <Navbar user={user} onShowComingSoon={handleShowComingSoon} />
-      <Routes>
-        <Route
-          path="/"
-          element={<Home user={user} onShowComingSoon={handleShowComingSoon} />}
-        />
-        <Route
-          path="/intro"
-          element={<IntroScreen onFinish={handleIntroFinish} />}
-        />
-        <Route path="/registro" element={<Registro />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/formulario" element={<EventCategorySelector />} />
-        <Route path="/perfil" element={<PerfilUsuario />} />
-        <Route path="/mapa" element={<Mapa />} />
-        <Route path="/chat/:eventoId" element={<ChatEvento />} />
-        <Route path="/evento/:eventoId" element={<EventoDetalle />} />
-        <Route path="/crear-perfil" element={<CrearPerfil />} />
-        <Route path="/crear-evento" element={<Formulario />} />
-        <Route
-          path="/crear-evento-ciudadania"
-          element={<FormularioCiudadania />}
-        />
-        <Route path="/crear-evento-ongs" element={<FormularioOngs />} />
-        <Route path="/crear-evento-premium" element={<FormularioPremium />} />
-        <Route path="/perfil-usuario/:userId" element={<PerfilUsuario />} />
-        <Route path="/editar-evento/:eventoId" element={<EditarEvento />} />
-        <Route path="/mis-eventos" element={<MisEventos />} />
-        <Route path="/notificaciones" element={<Notificaciones />} />
-        <Route path="/mensajes" element={<Mensajes />} />
-      </Routes>
-      {user && <MenuBar user={user} />}
+      {/* Ir directo al Home después de la animación */}
+      <>
+        <Navbar user={user} onShowComingSoon={handleShowComingSoon} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Home user={user} onShowComingSoon={handleShowComingSoon} />
+            }
+          />
+          <Route
+            path="/intro"
+            element={<IntroScreen onFinish={handleIntroFinish} />}
+          />
+          <Route path="/registro" element={<Registro />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/formulario" element={<EventCategorySelector />} />
+          <Route path="/perfil" element={<PerfilUsuario />} />
+          <Route path="/mapa" element={<Mapa />} />
+          <Route path="/chat/:eventoId" element={<ChatEvento />} />
+          <Route path="/evento/:eventoId" element={<EventoDetalle />} />
+          <Route path="/crear-perfil" element={<CrearPerfil />} />
+          <Route path="/crear-evento" element={<Formulario />} />
+          <Route
+            path="/crear-evento-ciudadania"
+            element={<FormularioCiudadania />}
+          />
+          <Route path="/crear-evento-ongs" element={<FormularioOngs />} />
+          <Route path="/crear-evento-premium" element={<FormularioPremium />} />
+          <Route path="/perfil-usuario/:userId" element={<PerfilUsuario />} />
+          <Route path="/editar-evento/:eventoId" element={<EditarEvento />} />
+          <Route path="/mis-eventos" element={<MisEventos />} />
+          <Route path="/notificaciones" element={<Notificaciones />} />
+          <Route path="/mensajes" element={<Mensajes />} />
+        </Routes>
+        {user && <MenuBar user={user} />}
 
-      {/* Sistema de notificaciones global */}
-      <NotificationContainer
-        notifications={notifications}
-        removeNotification={removeNotification}
-      />
-      {/* Modal Coming Soon tipo TikTok */}
-      <ComingSoonModal
-        isOpen={showComingSoonModal}
-        onClose={() => setShowComingSoonModal(false)}
-      />
+        {/* Sistema de notificaciones global */}
+        <NotificationContainer
+          notifications={notifications}
+          removeNotification={removeNotification}
+        />
+        {/* Modal Coming Soon tipo TikTok */}
+        <ComingSoonModal
+          isOpen={showComingSoonModal}
+          onClose={() => setShowComingSoonModal(false)}
+        />
 
-      {/* Banner promocional flotante */}
-      <PromoBanner onShowComingSoon={handleShowComingSoon} user={user} />
+        {/* Banner promocional flotante */}
+        <PromoBanner onShowComingSoon={handleShowComingSoon} user={user} />
+      </>
     </Router>
   );
 }
