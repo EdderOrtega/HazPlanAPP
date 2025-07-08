@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import ciudadVideo from "../assets/hazplanMapaVideo.mp4";
+import ciudadVideo from "../assets/HazPlanMapaVideo.mp4";
 // Importar iconos de categorías
 import arteIcon from "../assets/arte.png";
 import deportesIcon from "../assets/deportes.png";
