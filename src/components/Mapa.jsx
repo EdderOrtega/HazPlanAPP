@@ -360,7 +360,8 @@ function Mapa() {
         paddingLeft: "20px",
         paddingRight: "20px",
         minHeight: "calc(100vh - 160px)", // Ajustado para navbar y menubar
-        background: "#593c8f",
+
+        background: "#9C79D7",
       }}
     >
       {/* Filtros con carrusel de iconos */}

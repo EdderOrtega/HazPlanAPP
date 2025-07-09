@@ -77,7 +77,7 @@ function UserMenuNew({ user, onLogout, onNavigate }) {
 
         <button
           className="user-menu-item"
-          onClick={() => onNavigate("/crear-evento")}
+          onClick={() => onNavigate("/formulario")}
         >
           <FiSettings size={16} />
           <span>Crear Evento</span>

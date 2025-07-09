@@ -155,6 +155,8 @@ function MisEventos() {
         paddingTop: "80px", // Para el navbar fijo
         maxWidth: "800px",
         margin: "0 auto",
+        background:
+          "linear-gradient(135deg, #e3d8f8 0%, #f0ebff 50%, #e8deff 100%)",
         paddingBottom: "80px", // Para el menubar
       }}
     >
@@ -169,7 +171,7 @@ function MisEventos() {
           style={{
             fontSize: "28px",
             fontWeight: "bold",
-            color: "whitesmoke",
+            color: "#6b46c1",
             marginBottom: "8px",
           }}
         >
@@ -177,7 +179,7 @@ function MisEventos() {
         </h1>
         <p
           style={{
-            color: "whitesmoke",
+            color: "#8b5cf6",
             fontSize: "16px",
           }}
         >
@@ -247,7 +249,7 @@ function MisEventos() {
       {/* Botón crear evento */}
       <div style={{ marginBottom: "24px", textAlign: "center" }}>
         <button
-          onClick={() => navigate("/crear-evento")}
+          onClick={() => navigate("/formulario")}
           style={{
             backgroundColor: "#b42acb",
             color: "white",
@@ -288,7 +290,7 @@ function MisEventos() {
             intereses!
           </p>
           <button
-            onClick={() => navigate("/crear-evento")}
+            onClick={() => navigate("/formulario")}
             style={{
               backgroundColor: "#b42acb",
               color: "white",
@@ -458,9 +460,9 @@ function MisEventos() {
                     <button
                       onClick={() => navigate(`/evento/${evento.id}`)}
                       style={{
-                        backgroundColor: "#f0f0f0",
-                        color: "#333",
-                        border: "1px solid #ddd",
+                        backgroundColor: "#f8fafc",
+                        color: "white",
+                        border: "1px solid #e2e8f0",
                         padding: "8px 16px",
                         borderRadius: "6px",
                         cursor: "pointer",

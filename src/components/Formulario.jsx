@@ -2,7 +2,16 @@ import { useState } from "react";
 import { supabase } from "../supabaseClient";
 import CalendarioEvento from "../components/events/CalendarioEvento";
 import ModalEventoCreadoExistosamente from "../components/ui/ModalEventoCreadoExistosamente";
-import EventTypeSelector from "./EventTypeSelector";
+import EventTypeSelector from "./EventTypeSelectorLimpio";
+import "../styles/formulario.css";
+import mascotasIcon from "../assets/mascotas.png";
+import medioambienteIcon from "../assets/medioambiente.png";
+import fandomsIcon from "../assets/fandoms.png";
+import arteIcon from "../assets/arte.png";
+import deportesIcon from "../assets/deportes.png";
+import saludIcon from "../assets/salud.png";
+import comunidadIcon from "../assets/comunidad.png";
+import inclusionIcon from "../assets/inclusion.png";
 
 function Formulario() {
   const [step, setStep] = useState(1);
@@ -12,17 +21,14 @@ function Formulario() {
     fecha: "",
     fecha_fin: "",
     tipo: "",
+    categoria: "", // NUEVO: categoría del evento
     cupo: "",
     descripcion: "",
   });
   const [error, setError] = useState("");
   const [coordenadas, setCoordenadas] = useState({ lat: null, lon: null });
   const [validandoUbicacion, setValidandoUbicacion] = useState(false);
-  const [mostrarModalExito, setMostrarModalExito] = useState(false); // <-- AGREGA ESTE ESTADO
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const [mostrarModalExito, setMostrarModalExito] = useState(false);
 
   const next = () => setStep((s) => s + 1);
   const prev = () => setStep((s) => s - 1);
@@ -70,7 +76,7 @@ function Formulario() {
           coordenadas: [resultado.lat, resultado.lon],
         });
 
-        setStep(3);
+        setStep(4);
       } else {
         setError(
           `No se encontró "${form.ubicacion}" en Monterrey. Intenta con una dirección más específica como "Av. Constitución 400, Centro" o lugares conocidos.`
@@ -87,7 +93,7 @@ function Formulario() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setError("");
     const {
       nombreEvento,
       ubicacion,
@@ -119,17 +125,18 @@ function Formulario() {
 
     const userId = user.id;
 
-    console.log("📋 Datos del evento a crear:", {
-      nombre: nombreEvento,
-      descripcion,
-      tipo,
-      ubicacion,
-      fecha,
-      fecha_fin,
-      cupo,
-      coordenadas: coordenadas,
-      user_id: userId,
-    });
+    // Validar duplicados: mismo nombre, fecha y usuario
+    const { data: eventosExistentes } = await supabase
+      .from("eventos")
+      .select("id")
+      .eq("nombre", nombreEvento)
+      .eq("fecha", fecha)
+      .eq("user_id", userId);
+
+    if (eventosExistentes && eventosExistentes.length > 0) {
+      setError("Ya existe un evento con ese nombre y fecha creado por ti.");
+      return;
+    }
 
     const { data: eventData, error: insertError } = await supabase
       .from("eventos")
@@ -174,169 +181,329 @@ function Formulario() {
     }
   };
 
-  return (
-    <div
-      style={{
-        marginTop: "80px",
-        paddingBottom: "80px",
-        padding: "20px",
-        maxWidth: "800px",
-        margin: "80px auto 80px auto",
-        background: "#593c8f",
-      }}
-    >
-      <form onSubmit={handleSubmit}>
-        {step === 1 && (
-          <div>
-            <label>
-              🏷️ Nombre del evento:
-              <input
-                type="text"
-                name="nombreEvento"
-                value={form.nombreEvento}
-                onChange={handleChange}
-                required
-              />
-            </label>
-            <button type="button" onClick={next} disabled={!form.nombreEvento}>
-              Siguiente
-            </button>
-          </div>
-        )}
-        {step === 2 && (
-          <div>
-            <label>
-              📍 Ubicación:
-              <input
-                type="text"
-                name="ubicacion"
-                value={form.ubicacion}
-                onChange={handleChange}
-                placeholder="Ej: Av. Constitución 400, Centro | Macroplaza | Fundidora"
-                required
-              />
-            </label>
-            <button type="button" onClick={prev}>
-              Atrás
-            </button>
-            <button
-              type="button"
-              onClick={validarUbicacion}
-              disabled={!form.ubicacion || validandoUbicacion}
-            >
-              {validandoUbicacion ? "Validando..." : "Siguiente"}
-            </button>
-          </div>
-        )}
-        {step === 3 && (
-          <div>
-            {/* Paso del calendario */}
-            <CalendarioEvento
-              fechaInicio={form.fecha}
-              setFechaInicio={(fecha) => setForm({ ...form, fecha })}
-              fechaFin={form.fecha_fin}
-              setFechaFin={(fecha) => setForm({ ...form, fecha_fin: fecha })}
-            />
-            <button type="button" onClick={prev}>
-              Atrás
-            </button>
-            <button
-              type="button"
-              onClick={next}
-              disabled={!form.fecha || !form.fecha_fin}
-            >
-              Siguiente
-            </button>
-          </div>
-        )}
-        {step === 4 && (
-          <div>
-            <label>
-              🙋‍♂️ Tipo de plan o actividad:
-              <select
-                name="tipo"
-                value={form.tipo}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Selecciona una opción</option>
-                <option value="reforestacion">
-                  🌱 Reforestación y medio ambiente
-                </option>
-                <option value="salud">🧠 Salud mental y bienestar</option>
-                <option value="mascotas">🐶 Actividades con mascotas</option>
-                <option value="fandom">
-                  🎬 Conversatorios de series y películas (fandom)
-                </option>
-                <option value="arte">🎨 Arte, dibujo o manualidades</option>
-                <option value="club">📚 Club de lectura o escritura</option>
-                <option value="juegos">
-                  🎮 Juegos, trivias o retos comunitarios
-                </option>
-                <option value="actividad">
-                  🏃 Caminatas, yoga o actividad física
-                </option>
-              </select>
-            </label>
-            <button type="button" onClick={prev}>
-              Atrás
-            </button>
-            <button type="button" onClick={next} disabled={!form.tipo}>
-              Siguiente
-            </button>
-          </div>
-        )}
-        {step === 5 && (
-          <div>
-            <label>
-              👥 Cantidad de personas o cupo:
-              <input
-                type="number"
-                name="cupo"
-                value={form.cupo}
-                onChange={handleChange}
-                min={1}
-                max={30}
-                required
-              />
-            </label>
-            <button type="button" onClick={prev}>
-              Atrás
-            </button>
-            <button type="button" onClick={next} disabled={!form.cupo}>
-              Siguiente
-            </button>
-          </div>
-        )}
-        {step === 6 && (
-          <div>
-            <label>
-              📝 Descripción del evento:
-              <textarea
-                name="descripcion"
-                value={form.descripcion}
-                onChange={handleChange}
-                placeholder="Describe tu evento aquí..."
-                required
-              />
-            </label>
-            <button type="button" onClick={prev}>
-              Atrás
-            </button>
-            <button type="submit" disabled={!form.descripcion}>
-              Crear evento
-            </button>
-          </div>
-        )}
-        {error && <p style={{ color: "red" }}>{error}</p>}
-      </form>
+  // Lista de categorías solo para eventos personales
+  const categoriasPersonales = [
+    { value: "mascotas", label: "Mascotas", icon: mascotasIcon },
+    { value: "medioambiente", label: "Ecología", icon: medioambienteIcon },
+    { value: "fandom", label: "Fandoms", icon: fandomsIcon },
+    { value: "arte", label: "Arte", icon: arteIcon },
+    { value: "deportes", label: "Deportes", icon: deportesIcon },
+    { value: "salud", label: "Salud", icon: saludIcon },
+    { value: "club", label: "Lectura", icon: comunidadIcon },
+    { value: "juegos", label: "Juegos", icon: inclusionIcon },
+  ];
 
-      {/* Modal de éxito */}
-      {mostrarModalExito && (
-        <ModalEventoCreadoExistosamente
-          onClose={() => setMostrarModalExito(false)}
-        />
-      )}
+  return (
+    <div className="formulario-container">
+      <div className="formulario-card">
+        {/* Indicador de pasos */}
+        <div className="step-indicator">
+          {[1, 2, 3, 4, 5, 6].map((stepNumber) => (
+            <div
+              key={stepNumber}
+              className={`step-dot ${
+                stepNumber === step
+                  ? "active"
+                  : stepNumber < step
+                  ? "completed"
+                  : ""
+              }`}
+            />
+          ))}
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          {step === 1 && (
+            <div className="step-content">
+              <h2 className="step-title">¿Qué tipo de evento quieres crear?</h2>
+              <div className="event-type-container">
+                <EventTypeSelector
+                  selectedType={form.tipo}
+                  onTypeChange={(tipo) => setForm({ ...form, tipo })}
+                  userType="normal"
+                />
+              </div>
+              <div className="form-buttons">
+                <button
+                  type="button"
+                  onClick={() => setStep(2)}
+                  disabled={!form.tipo}
+                  className="btn-form btn-primary"
+                >
+                  Siguiente
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* NUEVO: Paso de categoría solo si es evento personal */}
+          {step === 2 && form.tipo === "personal" && (
+            <div className="step-content">
+              <h2 className="step-title">
+                ¿A qué categoría pertenece tu evento?
+              </h2>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, 1fr)",
+                  gap: "16px",
+                  margin: "24px 0",
+                }}
+              >
+                {categoriasPersonales.map((cat) => (
+                  <div
+                    key={cat.value}
+                    onClick={() => setForm({ ...form, categoria: cat.value })}
+                    style={{
+                      border:
+                        form.categoria === cat.value
+                          ? "2px solid #593c8f"
+                          : "2px solid #e0e0e0",
+                      borderRadius: 12,
+                      padding: 16,
+                      textAlign: "center",
+                      cursor: "pointer",
+                      background:
+                        form.categoria === cat.value ? "#f8f5ff" : "white",
+                      boxShadow:
+                        form.categoria === cat.value
+                          ? "0 4px 12px rgba(89,60,143,0.15)"
+                          : "0 2px 8px rgba(0,0,0,0.05)",
+                      transition: "all 0.2s",
+                    }}
+                  >
+                    <img
+                      src={cat.icon}
+                      alt={cat.label}
+                      style={{
+                        width: 48,
+                        height: 48,
+                        marginBottom: 8,
+                        borderRadius: 40,
+                      }}
+                    />
+                    <div style={{ fontWeight: 600, color: "#2c3e50" }}>
+                      {cat.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="form-buttons">
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  className="btn-form btn-secondary"
+                >
+                  Atrás
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setStep(3)}
+                  disabled={!form.categoria}
+                  className="btn-form btn-primary"
+                >
+                  Siguiente
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Ajustar los pasos siguientes para que el step avance correctamente */}
+          {((step === 2 && form.tipo !== "personal") ||
+            (step === 3 && form.tipo === "personal")) && (
+            <div className="step-content">
+              <h2 className="step-title">¿Cómo se llama tu evento?</h2>
+              <div className="form-group">
+                <label className="form-label">🏷️ Nombre del evento</label>
+                <input
+                  type="text"
+                  name="nombreEvento"
+                  value={form.nombreEvento}
+                  onChange={(e) =>
+                    setForm({ ...form, nombreEvento: e.target.value })
+                  }
+                  className="form-input"
+                  placeholder="Ej: Limpieza del Parque Central"
+                  required
+                />
+              </div>
+              <div className="form-buttons">
+                <button
+                  type="button"
+                  onClick={() => setStep(form.tipo === "personal" ? 2 : 1)}
+                  className="btn-form btn-secondary"
+                >
+                  Atrás
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setStep(form.tipo === "personal" ? 4 : 3)}
+                  disabled={!form.nombreEvento}
+                  className="btn-form btn-primary"
+                >
+                  Siguiente
+                </button>
+              </div>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div className="step-content">
+              <h2 className="step-title">¿Dónde será tu evento?</h2>
+              <div className="form-group">
+                <label className="form-label">📍 Ubicación</label>
+                <input
+                  type="text"
+                  name="ubicacion"
+                  value={form.ubicacion}
+                  onChange={(e) =>
+                    setForm({ ...form, ubicacion: e.target.value })
+                  }
+                  className="form-input"
+                  placeholder="Ej: Av. Constitución 400, Centro | Macroplaza | Fundidora"
+                  required
+                />
+              </div>
+              <div className="form-buttons">
+                <button
+                  type="button"
+                  onClick={prev}
+                  className="btn-form btn-secondary"
+                >
+                  Atrás
+                </button>
+                <button
+                  type="button"
+                  onClick={validarUbicacion}
+                  disabled={!form.ubicacion || validandoUbicacion}
+                  className={`btn-form btn-primary ${
+                    validandoUbicacion ? "loading-button" : ""
+                  }`}
+                >
+                  {validandoUbicacion && (
+                    <span className="loading-spinner-btn"></span>
+                  )}
+                  {validandoUbicacion ? "Validando..." : "Siguiente"}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {step === 4 && (
+            <div className="step-content">
+              <h2 className="step-title">¿Cuándo será tu evento?</h2>
+              <CalendarioEvento
+                fechaInicio={form.fecha}
+                setFechaInicio={(fecha) => setForm({ ...form, fecha })}
+                fechaFin={form.fecha_fin}
+                setFechaFin={(fecha) => setForm({ ...form, fecha_fin: fecha })}
+              />
+              <div className="form-buttons">
+                <button
+                  type="button"
+                  onClick={prev}
+                  className="btn-form btn-secondary"
+                >
+                  Atrás
+                </button>
+                <button
+                  type="button"
+                  onClick={next}
+                  disabled={!form.fecha || !form.fecha_fin}
+                  className="btn-form btn-primary"
+                >
+                  Siguiente
+                </button>
+              </div>
+            </div>
+          )}
+
+          {step === 5 && (
+            <div className="step-content">
+              <h2 className="step-title">
+                ¿Cuántas personas pueden participar?
+              </h2>
+              <div className="form-group">
+                <label className="form-label">
+                  👥 Cantidad de personas o cupo
+                </label>
+                <input
+                  type="number"
+                  name="cupo"
+                  value={form.cupo}
+                  onChange={(e) => setForm({ ...form, cupo: e.target.value })}
+                  className="form-input"
+                  min={1}
+                  max={30}
+                  placeholder="Ej: 15"
+                  required
+                />
+              </div>
+              <div className="form-buttons">
+                <button
+                  type="button"
+                  onClick={prev}
+                  className="btn-form btn-secondary"
+                >
+                  Atrás
+                </button>
+                <button
+                  type="button"
+                  onClick={next}
+                  disabled={!form.cupo}
+                  className="btn-form btn-primary"
+                >
+                  Siguiente
+                </button>
+              </div>
+            </div>
+          )}
+
+          {step === 6 && (
+            <div className="step-content">
+              <h2 className="step-title">Cuéntanos más sobre tu evento</h2>
+              <div className="form-group">
+                <label className="form-label">📝 Descripción del evento</label>
+                <textarea
+                  name="descripcion"
+                  value={form.descripcion}
+                  onChange={(e) =>
+                    setForm({ ...form, descripcion: e.target.value })
+                  }
+                  className="form-textarea"
+                  placeholder="Describe tu evento: objetivos, qué van a hacer, qué deben traer los participantes..."
+                  required
+                />
+              </div>
+              <div className="form-buttons">
+                <button
+                  type="button"
+                  onClick={prev}
+                  className="btn-form btn-secondary"
+                >
+                  Atrás
+                </button>
+                <button
+                  type="submit"
+                  disabled={!form.descripcion}
+                  className="btn-form btn-primary"
+                >
+                  🎉 Crear evento
+                </button>
+              </div>
+            </div>
+          )}
+
+          {error && <div className="error-message">{error}</div>}
+        </form>
+
+        {/* Modal de éxito */}
+        {mostrarModalExito && (
+          <ModalEventoCreadoExistosamente
+            onClose={() => setMostrarModalExito(false)}
+          />
+        )}
+      </div>
     </div>
   );
 }

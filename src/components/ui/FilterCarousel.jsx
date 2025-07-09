@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import "../../styles/filterCarousel.css";
 import "../../styles/contrastImprovements.css";
 
@@ -14,12 +14,6 @@ import salud from "../../assets/salud.png";
 import iconoHazPlanRedondo from "../../assets/iconoHazPlanRedondo.png";
 
 const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-  const [dragDistance, setDragDistance] = useState(0);
-  const trackRef = useRef(null);
-
   // Definir filtros con iconos de imágenes
   const filtros = [
     {
@@ -78,174 +72,17 @@ const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
     },
   ];
 
-  // Simplificar por ahora - usar solo los filtros originales
-  const itemsPerView = 3; // Número de items visibles a la vez
-  const maxIndex = Math.max(0, filtros.length - itemsPerView); // Máximo índice sin espacios vacíos
-
-  // Debug: verificar contenido
-  console.log("Filtros originales:", filtros.length, "Max index:", maxIndex);
-
-  // Inicializar en 0
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  // Calcular el transform simple con límites
-  const getTransformValue = () => {
-    // Asegurar que el índice esté dentro de los límites
-    const boundedIndex = Math.max(0, Math.min(maxIndex, currentIndex));
-    const translateX = -(boundedIndex * (100 / itemsPerView));
-    console.log("Transform:", translateX, "Index:", boundedIndex);
-    return translateX;
-  };
-
-  // Función para aplicar límites
-  const applyBounds = (index) => {
-    return Math.max(0, Math.min(maxIndex, index));
-  };
-
-  // Función para resetear posición cuando sea necesario
-  const resetPosition = () => {
-    const boundedIndex = applyBounds(currentIndex);
-    if (boundedIndex !== currentIndex) {
-      setCurrentIndex(boundedIndex);
-    }
-    console.log(
-      "Reset position called, currentIndex:",
-      currentIndex,
-      "bounded:",
-      boundedIndex
-    );
-  };
-
-  // Manejar drag/swipe
-  const handleMouseDown = (e) => {
-    setIsDragging(false); // Inicialmente no es drag
-    setStartX(e.pageX - trackRef.current.offsetLeft);
-    setScrollLeft(currentIndex);
-    setDragDistance(0);
-    trackRef.current.style.cursor = "grabbing";
-  };
-
-  const handleMouseMove = (e) => {
-    if (startX === 0) return; // No hay mouse down previo
-
-    const currentX = e.pageX - trackRef.current.offsetLeft;
-    const distance = Math.abs(currentX - startX);
-    setDragDistance(distance);
-
-    // Solo activar dragging si se movió más de 5px (más sensible)
-    if (distance > 5) {
-      setIsDragging(true);
-      e.preventDefault();
-      // Hacer el movimiento más fluido reduciendo la división
-      const walk = (currentX - startX) / 60; // Cambiado de 80 a 60
-      const newIndex = Math.round(scrollLeft - walk);
-      const boundedIndex = applyBounds(newIndex);
-      setCurrentIndex(boundedIndex);
-    }
-  };
-
-  const handleMouseUp = () => {
-    // Si no se movió mucho, no fue un drag
-    if (dragDistance < 5) {
-      // Cambiado de 10 a 5
-      setIsDragging(false);
-    }
-
-    setStartX(0);
-    setDragDistance(0);
-    if (trackRef.current) {
-      trackRef.current.style.cursor = "grab";
-    }
-    resetPosition();
-  };
-
-  // Touch events para móviles
-  const handleTouchStart = (e) => {
-    setIsDragging(true);
-    setStartX(e.touches[0].pageX);
-    setScrollLeft(currentIndex);
-  };
-
-  const handleTouchMove = (e) => {
-    if (!isDragging) return;
-    const x = e.touches[0].pageX;
-    const walk = (x - startX) / 50; // Mejorada sensibilidad en móvil (de 60 a 50)
-    const newIndex = Math.round(scrollLeft - walk);
-
-    // Aplicar límites inmediatamente
-    const boundedIndex = applyBounds(newIndex);
-    setCurrentIndex(boundedIndex);
-  };
-
-  const handleTouchEnd = () => {
-    setIsDragging(false);
-  };
-
-  // Efectos del teclado con límites
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "ArrowLeft") {
-        setCurrentIndex((prev) => Math.max(0, Math.min(maxIndex, prev - 1)));
-      } else if (e.key === "ArrowRight") {
-        setCurrentIndex((prev) => Math.max(0, Math.min(maxIndex, prev + 1)));
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [maxIndex]);
-
-  // Effect para debug
-  useEffect(() => {
-    console.log(
-      "Current index changed:",
-      currentIndex,
-      "Total filters:",
-      filtros.length
-    );
-    console.log("🔍 FilterCarousel - eventosCounts:", eventosCounts);
-    console.log("🔍 FilterCarousel - filtro actual:", filtro);
-  }, [currentIndex, filtros.length, eventosCounts, filtro]);
-
-  const handleFilterSelect = (filterValue) => {
-    console.log("🔍 FilterCarousel - Filtro seleccionado:", filterValue);
-    console.log("🔍 FilterCarousel - Tipo de filtro:", typeof filterValue);
-    setFiltro(filterValue);
-  };
-
-  const handleFilterClick = (filterValue, e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log("🎯 Click directo en filtro:", filterValue);
-    handleFilterSelect(filterValue);
-  };
-
   return (
     <div className="filter-carousel-container">
       {/* Carrusel con deslizamiento */}
       <div className="filter-carousel">
-        {/* Gradientes de desvanecimiento */}
-        <div className="carousel-fade-left" />
-        <div className="carousel-fade-right" />
-
+        {/* Eliminados los gradientes de desvanecimiento */}
+        {/* <div className="carousel-fade-left" /> */}
+        {/* <div className="carousel-fade-right" /> */}
         {/* Indicador de deslizamiento */}
         <div className="swipe-indicator">⇄</div>
 
-        <div
-          ref={trackRef}
-          className={`filter-track ${isDragging ? "dragging" : ""}`}
-          style={{
-            transform: `translateX(${getTransformValue()}%)`,
-            width: `${(filtros.length / itemsPerView) * 100}%`,
-          }}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
+        <div className="filter-track" style={{ minWidth: "fit-content" }}>
           {filtros.map((filter, index) => {
             const count = eventosCounts[filter.value] || 0;
             const isActive = filtro === filter.value;
@@ -253,11 +90,8 @@ const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
             return (
               <div
                 key={`${filter.value}-${index}`}
-                className={`filter-item ${isActive ? "active" : ""} ${
-                  isDragging ? "dragging" : ""
-                }`}
-                onClick={(e) => handleFilterClick(filter.value, e)}
-                onMouseDown={(e) => e.stopPropagation()}
+                className={`filter-item ${isActive ? "active" : ""}`}
+                onClick={() => setFiltro(filter.value)}
                 style={{
                   background: isActive
                     ? `linear-gradient(135deg, ${filter.color}, ${filter.color}dd)`

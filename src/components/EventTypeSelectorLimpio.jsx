@@ -16,6 +16,7 @@ function EventTypeSelector({
 
     return () => clearTimeout(timer);
   }, []);
+
   const eventTypes = [
     {
       id: "personal",
@@ -56,97 +57,15 @@ function EventTypeSelector({
 
   return (
     <div style={{ marginBottom: "0", position: "relative" }}>
-      {/* OPCIÓN 1: POPUP MODAL PEQUEÑO */}
-      {showTipModal && (
-        <div
-          onClick={() => setShowTipModal(false)}
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1000,
-            cursor: "pointer",
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "12px",
-              maxWidth: "400px",
-              margin: "20px",
-              boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)",
-              textAlign: "center",
-              position: "relative",
-              border: "2px solid #593c8f",
-            }}
-          >
-            <button
-              onClick={() => setShowTipModal(false)}
-              style={{
-                position: "absolute",
-                top: "10px",
-                right: "15px",
-                background: "none",
-                border: "none",
-                fontSize: "20px",
-                cursor: "pointer",
-                color: "#999",
-              }}
-            >
-              ×
-            </button>
-            <div style={{ fontSize: "24px", marginBottom: "10px" }}>💡</div>
-            <h4
-              style={{
-                color: "#593c8f",
-                margin: "0 0 10px 0",
-                fontSize: "16px",
-              }}
-            >
-              ¡Tip de Ayuda!
-            </h4>
-            <p
-              style={{
-                color: "#666",
-                fontSize: "14px",
-                margin: "0",
-                lineHeight: "1.4",
-              }}
-            >
-              Selecciona el tipo de evento que mejor se adapte a tu actividad.
-              Los eventos personales y de ayuda son completamente gratuitos.
-            </p>
-            <div
-              style={{
-                fontSize: "12px",
-                color: "#999",
-                marginTop: "10px",
-                fontStyle: "italic",
-              }}
-            >
-              Se cierra automáticamente en 8 segundos
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* OPCIÓN 2: BANNER FIJO ARRIBA */}
+      {/* BANNER DE TIP ARRIBA */}
       {showTipBanner && (
         <div
           style={{
             backgroundColor: "#f8f5ff",
             border: "2px solid #593c8f",
             borderRadius: "8px",
-            padding: "15px",
-            marginBottom: "20px",
+            padding: "12px",
+            marginBottom: "15px",
             textAlign: "center",
             position: "relative",
             boxShadow: "0 2px 8px rgba(89, 60, 143, 0.1)",
@@ -196,24 +115,12 @@ function EventTypeSelector({
         </div>
       )}
 
-      <h3
-        style={{
-          color: "#2c3e50",
-          marginBottom: "15px",
-          textAlign: "center",
-          fontSize: "18px",
-          fontWeight: "600",
-        }}
-      >
-        🎯 Selecciona el tipo de evento
-      </h3>
-
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
-          gap: "15px",
-          maxWidth: "600px",
+          gap: "12px",
+          maxWidth: "480px",
           margin: "0 auto",
         }}
       >
@@ -222,7 +129,7 @@ function EventTypeSelector({
             key={type.id}
             onClick={() => type.available && onTypeChange(type.id)}
             style={{
-              padding: "20px",
+              padding: "15px",
               borderRadius: "12px",
               border: `2px solid ${
                 selectedType === type.id ? "#593c8f" : "#e0e0e0"
@@ -331,8 +238,8 @@ function EventTypeSelector({
         (userType === "empresa" || userType === "pyme") && (
           <div
             style={{
-              marginTop: "15px",
-              padding: "15px",
+              marginTop: "10px",
+              padding: "10px",
               backgroundColor: "#fff3cd",
               border: "1px solid #ffeaa7",
               borderRadius: "8px",
@@ -351,8 +258,8 @@ function EventTypeSelector({
       {selectedType === "premium" && userType === "normal" && (
         <div
           style={{
-            marginTop: "15px",
-            padding: "15px",
+            marginTop: "10px",
+            padding: "10px",
             backgroundColor: "#f8d7da",
             border: "1px solid #f5c6cb",
             borderRadius: "8px",

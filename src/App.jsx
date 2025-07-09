@@ -147,13 +147,12 @@ function App() {
           />
           <Route path="/registro" element={<Registro />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/formulario" element={<EventCategorySelector />} />
+          <Route path="/formulario" element={<Formulario />} />
           <Route path="/perfil" element={<PerfilUsuario />} />
           <Route path="/mapa" element={<Mapa />} />
           <Route path="/chat/:eventoId" element={<ChatEvento />} />
           <Route path="/evento/:eventoId" element={<EventoDetalle />} />
           <Route path="/crear-perfil" element={<CrearPerfil />} />
-          <Route path="/crear-evento" element={<Formulario />} />
           <Route
             path="/crear-evento-ciudadania"
             element={<FormularioCiudadania />}
