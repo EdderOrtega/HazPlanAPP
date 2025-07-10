@@ -5,7 +5,16 @@ import UserMenuNew from "./UserMenuNew";
 import Notificaciones from "./Notificaciones";
 import Mensajes from "./Mensajes";
 import iconoHazPlan from "../assets/iconoHazPlanRedondo.png";
-import { FiBell, FiMessageCircle, FiUser, FiMenu, FiX } from "react-icons/fi";
+import {
+  FiBell,
+  FiMessageCircle,
+  FiUser,
+  FiMenu,
+  FiX,
+  FiChevronDown,
+  FiLogOut,
+} from "react-icons/fi";
+import { useNotificaciones } from "../hooks/useNotificaciones";
 import "../styles/navbar.css";
 
 function Navbar({ user, onShowComingSoon }) {
@@ -15,6 +24,7 @@ function Navbar({ user, onShowComingSoon }) {
   const [showMessages, setShowMessages] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const { notificacionesNoLeidas, mensajesNoLeidos } = useNotificaciones();
 
   const handleLogoClick = () => {
     navigate("/");
@@ -63,9 +73,19 @@ function Navbar({ user, onShowComingSoon }) {
                     setShowMessages(false);
                     setShowUserMenu(false);
                   }}
+                  style={{ position: "relative" }}
                 >
                   <FiBell size={20} />
+                  {notificacionesNoLeidas > 0 && (
+                    <span className="navbar-notification-badge">
+                      {notificacionesNoLeidas}
+                    </span>
+                  )}
                   <span className="navbar-label">Notificaciones</span>
+                  <FiChevronDown
+                    size={18}
+                    style={{ marginLeft: 6, color: "#fff" }}
+                  />
                 </button>
                 {showNotifications && (
                   <div className="navbar-dropdown">
@@ -83,9 +103,19 @@ function Navbar({ user, onShowComingSoon }) {
                     setShowNotifications(false);
                     setShowUserMenu(false);
                   }}
+                  style={{ position: "relative" }}
                 >
                   <FiMessageCircle size={20} />
+                  {mensajesNoLeidos > 0 && (
+                    <span className="navbar-notification-badge">
+                      {mensajesNoLeidos}
+                    </span>
+                  )}
                   <span className="navbar-label">Mensajes</span>
+                  <FiChevronDown
+                    size={18}
+                    style={{ marginLeft: 6, color: "#fff" }}
+                  />
                 </button>
                 {showMessages && (
                   <div className="navbar-dropdown">
@@ -174,9 +204,23 @@ function Navbar({ user, onShowComingSoon }) {
                   setShowMessages(false);
                   setShowUserMenu(false);
                 }}
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                  gap: 10,
+                  textAlign: "right",
+                }}
               >
-                <FiBell size={20} />
+                {notificacionesNoLeidas > 0 && (
+                  <span className="navbar-notification-badge">
+                    {notificacionesNoLeidas}
+                  </span>
+                )}
                 <span>Notificaciones</span>
+                <FiChevronDown size={18} style={{ color: "#fff" }} />
               </button>
               {showNotifications && (
                 <div className="mobile-dropdown">
@@ -193,9 +237,23 @@ function Navbar({ user, onShowComingSoon }) {
                   setShowNotifications(false);
                   setShowUserMenu(false);
                 }}
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                  gap: 10,
+                  textAlign: "right",
+                }}
               >
-                <FiMessageCircle size={20} />
+                {mensajesNoLeidos > 0 && (
+                  <span className="navbar-notification-badge">
+                    {mensajesNoLeidos}
+                  </span>
+                )}
                 <span>Mensajes</span>
+                <FiChevronDown size={18} style={{ color: "#fff" }} />
               </button>
               {showMessages && (
                 <div className="mobile-dropdown">
@@ -204,30 +262,26 @@ function Navbar({ user, onShowComingSoon }) {
               )}
             </div>
 
+            {/* Botón cerrar sesión en menú móvil */}
             <div className="mobile-menu-item">
               <button
-                className="mobile-menu-link"
-                onClick={() => {
-                  setShowUserMenu(!showUserMenu);
-                  setShowNotifications(false);
-                  setShowMessages(false);
+                className="mobile-menu-link btn-logout"
+                onClick={handleLogout}
+                style={{
+                  background: "#e53935",
+                  color: "#fff",
+                  fontWeight: 700,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                  width: "100%",
+                  gap: 10,
+                  textAlign: "right",
                 }}
               >
-                <FiUser size={20} />
-                <span>Perfil</span>
+                <span>Cerrar sesión</span>
+                <FiLogOut size={20} style={{ color: "#fff" }} />
               </button>
-              {showUserMenu && (
-                <div className="mobile-dropdown">
-                  <UserMenuNew
-                    user={user}
-                    onLogout={handleLogout}
-                    onNavigate={(path) => {
-                      navigate(path);
-                      closeAllMenus();
-                    }}
-                  />
-                </div>
-              )}
             </div>
           </div>
         )}

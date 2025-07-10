@@ -76,7 +76,7 @@ function Formulario() {
           coordenadas: [resultado.lat, resultado.lon],
         });
 
-        setStep(4);
+        setStep(5); // Avanzar al siguiente paso correctamente
       } else {
         setError(
           `No se encontró "${form.ubicacion}" en Monterrey. Intenta con una dirección más específica como "Av. Constitución 400, Centro" o lugares conocidos.`
@@ -196,26 +196,38 @@ function Formulario() {
   return (
     <div className="formulario-container">
       <div className="formulario-card">
-        {/* Indicador de pasos */}
-        <div className="step-indicator">
-          {[1, 2, 3, 4, 5, 6].map((stepNumber) => (
-            <div
-              key={stepNumber}
-              className={`step-dot ${
-                stepNumber === step
-                  ? "active"
-                  : stepNumber < step
-                  ? "completed"
-                  : ""
-              }`}
-            />
-          ))}
+        {/* Indicador de pasos y título SIEMPRE visibles arriba */}
+        <div className="form-header">
+          <div className="step-indicator">
+            {[1, 2, 3, 4, 5, 6].map((stepNumber) => (
+              <div
+                key={stepNumber}
+                className={`step-dot ${
+                  stepNumber === step
+                    ? "active"
+                    : stepNumber < step
+                    ? "completed"
+                    : ""
+                }`}
+              />
+            ))}
+          </div>
+          <h2 className="step-title">
+            {step === 1 && "¿Qué tipo de evento quieres crear?"}
+            {step === 2 &&
+              form.tipo === "personal" &&
+              "¿A qué categoría pertenece tu evento?"}
+            {step === 3 && "¿Cómo se llama tu evento?"}
+            {step === 4 && "¿Dónde será tu evento?"}
+            {step === 5 && "¿Cuándo termina tu evento?"}
+            {step === 6 && "Cuéntanos más sobre tu evento"}
+          </h2>
         </div>
 
         <form onSubmit={handleSubmit}>
+          {/* Paso 1: Tipo de evento */}
           {step === 1 && (
             <div className="step-content">
-              <h2 className="step-title">¿Qué tipo de evento quieres crear?</h2>
               <div className="event-type-container">
                 <EventTypeSelector
                   selectedType={form.tipo}
@@ -236,17 +248,14 @@ function Formulario() {
             </div>
           )}
 
-          {/* NUEVO: Paso de categoría solo si es evento personal */}
+          {/* Paso 2: Categoría solo si es evento personal */}
           {step === 2 && form.tipo === "personal" && (
             <div className="step-content">
-              <h2 className="step-title">
-                ¿A qué categoría pertenece tu evento?
-              </h2>
               <div
                 style={{
                   display: "grid",
                   gridTemplateColumns: "repeat(2, 1fr)",
-                  gap: "16px",
+                  gap: 18,
                   margin: "24px 0",
                 }}
               >
@@ -259,16 +268,16 @@ function Formulario() {
                         form.categoria === cat.value
                           ? "2px solid #593c8f"
                           : "2px solid #e0e0e0",
-                      borderRadius: 12,
-                      padding: 16,
+                      borderRadius: 16,
+                      padding: 24,
                       textAlign: "center",
                       cursor: "pointer",
                       background:
                         form.categoria === cat.value ? "#f8f5ff" : "white",
                       boxShadow:
                         form.categoria === cat.value
-                          ? "0 4px 12px rgba(89,60,143,0.15)"
-                          : "0 2px 8px rgba(0,0,0,0.05)",
+                          ? "0 6px 18px rgba(89,60,143,0.18)"
+                          : "0 2px 8px rgba(0,0,0,0.07)",
                       transition: "all 0.2s",
                     }}
                   >
@@ -276,13 +285,25 @@ function Formulario() {
                       src={cat.icon}
                       alt={cat.label}
                       style={{
-                        width: 48,
-                        height: 48,
-                        marginBottom: 8,
+                        width: 72,
+                        height: 72,
+                        marginBottom: 12,
                         borderRadius: 40,
+                        boxShadow:
+                          form.categoria === cat.value
+                            ? "0 2px 12px #a18be6"
+                            : "none",
+                        background: "#fff",
+                        objectFit: "cover",
                       }}
                     />
-                    <div style={{ fontWeight: 600, color: "#2c3e50" }}>
+                    <div
+                      style={{
+                        fontWeight: 700,
+                        color: "#2c3e50",
+                        fontSize: 18,
+                      }}
+                    >
                       {cat.label}
                     </div>
                   </div>
@@ -308,11 +329,9 @@ function Formulario() {
             </div>
           )}
 
-          {/* Ajustar los pasos siguientes para que el step avance correctamente */}
-          {((step === 2 && form.tipo !== "personal") ||
-            (step === 3 && form.tipo === "personal")) && (
+          {/* Paso 3: Nombre del evento, para ambos tipos */}
+          {step === 3 && (
             <div className="step-content">
-              <h2 className="step-title">¿Cómo se llama tu evento?</h2>
               <div className="form-group">
                 <label className="form-label">🏷️ Nombre del evento</label>
                 <input
@@ -337,7 +356,7 @@ function Formulario() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setStep(form.tipo === "personal" ? 4 : 3)}
+                  onClick={() => setStep(4)}
                   disabled={!form.nombreEvento}
                   className="btn-form btn-primary"
                 >
@@ -347,9 +366,8 @@ function Formulario() {
             </div>
           )}
 
-          {step === 3 && (
+          {step === 4 && (
             <div className="step-content">
-              <h2 className="step-title">¿Dónde será tu evento?</h2>
               <div className="form-group">
                 <label className="form-label">📍 Ubicación</label>
                 <input
@@ -389,54 +407,18 @@ function Formulario() {
             </div>
           )}
 
-          {step === 4 && (
-            <div className="step-content">
-              <h2 className="step-title">¿Cuándo será tu evento?</h2>
-              <CalendarioEvento
-                fechaInicio={form.fecha}
-                setFechaInicio={(fecha) => setForm({ ...form, fecha })}
-                fechaFin={form.fecha_fin}
-                setFechaFin={(fecha) => setForm({ ...form, fecha_fin: fecha })}
-              />
-              <div className="form-buttons">
-                <button
-                  type="button"
-                  onClick={prev}
-                  className="btn-form btn-secondary"
-                >
-                  Atrás
-                </button>
-                <button
-                  type="button"
-                  onClick={next}
-                  disabled={!form.fecha || !form.fecha_fin}
-                  className="btn-form btn-primary"
-                >
-                  Siguiente
-                </button>
-              </div>
-            </div>
-          )}
-
           {step === 5 && (
             <div className="step-content">
-              <h2 className="step-title">
-                ¿Cuántas personas pueden participar?
-              </h2>
               <div className="form-group">
-                <label className="form-label">
-                  👥 Cantidad de personas o cupo
-                </label>
-                <input
-                  type="number"
-                  name="cupo"
-                  value={form.cupo}
-                  onChange={(e) => setForm({ ...form, cupo: e.target.value })}
-                  className="form-input"
-                  min={1}
-                  max={30}
-                  placeholder="Ej: 15"
-                  required
+                <label className="form-label">Fecha de fin</label>
+                <CalendarioEvento
+                  fechaInicio={form.fecha}
+                  setFechaInicio={() => {}}
+                  fechaFin={form.fecha_fin}
+                  setFechaFin={(fecha) =>
+                    setForm({ ...form, fecha_fin: fecha })
+                  }
+                  soloFin={true}
                 />
               </div>
               <div className="form-buttons">
@@ -450,7 +432,7 @@ function Formulario() {
                 <button
                   type="button"
                   onClick={next}
-                  disabled={!form.cupo}
+                  disabled={!form.fecha_fin}
                   className="btn-form btn-primary"
                 >
                   Siguiente
@@ -461,7 +443,6 @@ function Formulario() {
 
           {step === 6 && (
             <div className="step-content">
-              <h2 className="step-title">Cuéntanos más sobre tu evento</h2>
               <div className="form-group">
                 <label className="form-label">📝 Descripción del evento</label>
                 <textarea

@@ -261,3 +261,36 @@
   border-width: 4px !important;
   background-size: 85% 85% !important;
 }
+
+/* Popup evento HazPlan: botón de cierre grande */
+.leaflet-popup-content-wrapper.evento-popup-custom,
+.leaflet-popup-content.evento-popup-custom {
+  /* Asegura que el wrapper use la clase personalizada */
+}
+.leaflet-popup-close-button {
+  font-size: 2.2rem !important;
+  color: #593c8f !important;
+  top: 8px !important;
+  right: 12px !important;
+  width: 36px !important;
+  height: 36px !important;
+  line-height: 36px !important;
+  opacity: 0.95 !important;
+  text-shadow: 0 2px 8px #e8deff;
+  z-index: 9999;
+  background: #fff !important;
+  border-radius: 50% !important;
+  border: 2px solid #b39ddb !important;
+  box-shadow: 0 2px 8px #e8deff44;
+  transition: border 0.2s, color 0.2s;
+}
+.leaflet-popup-close-button:hover {
+  color: #fff !important;
+  background: linear-gradient(135deg, #7c4dff, #593c8f) !important;
+  border: 2px solid #7c4dff !important;
+  opacity: 1 !important;
+}
+
+.leaflet-popup-content {
+  margin: 13px 20px 13px 20px !important;
+}

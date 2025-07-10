@@ -161,20 +161,6 @@ function Mensajes() {
     return fechaMensaje.toLocaleDateString();
   };
 
-  const getIconoTipo = (tipo) => {
-    const iconos = {
-      reforestacion: "🌱",
-      salud: "🏥",
-      mascotas: "🐕",
-      fandom: "⭐",
-      arte: "🎨",
-      club: "📚",
-      juegos: "🎮",
-      actividad: "🏃‍♂️",
-    };
-    return iconos[tipo] || "📅";
-  };
-
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -186,7 +172,6 @@ function Mensajes() {
   return (
     <div className="max-w-6xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6 flex items-center gap-2">
-        <FiMessageCircle className="text-blue-500" />
         Mensajes
       </h1>
 
@@ -199,7 +184,6 @@ function Mensajes() {
           <div className="overflow-y-auto h-80">
             {conversaciones.length === 0 ? (
               <div className="p-4 text-center text-gray-500">
-                <FiMessageCircle className="mx-auto text-3xl mb-2" />
                 <p className="text-sm">No tienes conversaciones</p>
               </div>
             ) : (
@@ -214,9 +198,6 @@ function Mensajes() {
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-lg" role="img">
-                      {getIconoTipo(evento.tipo)}
-                    </span>
                     <div className="flex-1 min-w-0">
                       <h3 className="font-medium text-sm truncate">
                         {evento.nombre}
@@ -239,9 +220,6 @@ function Mensajes() {
               {/* Header del chat */}
               <div className="bg-gray-50 p-3 border-b">
                 <div className="flex items-center gap-2">
-                  <span className="text-lg" role="img">
-                    {getIconoTipo(conversacionActiva.tipo)}
-                  </span>
                   <div>
                     <h2 className="font-semibold">
                       {conversacionActiva.nombre}
@@ -257,7 +235,6 @@ function Mensajes() {
               <div className="flex-1 overflow-y-auto p-3 space-y-3 h-64">
                 {mensajes.length === 0 ? (
                   <div className="text-center text-gray-500 py-8">
-                    <FiMessageCircle className="mx-auto text-3xl mb-2" />
                     <p>No hay mensajes aún</p>
                     <p className="text-sm">¡Sé el primero en escribir!</p>
                   </div>
@@ -324,7 +301,6 @@ function Mensajes() {
           ) : (
             <div className="flex-1 flex items-center justify-center text-gray-500">
               <div className="text-center">
-                <FiMessageCircle className="mx-auto text-4xl mb-4" />
                 <p>Selecciona una conversación para comenzar</p>
               </div>
             </div>

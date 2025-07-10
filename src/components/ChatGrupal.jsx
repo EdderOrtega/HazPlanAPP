@@ -148,8 +148,11 @@ function ChatGrupal({ eventoId }) {
   }
 
   return (
-    <div className="chat-grupal">
-      <div className="mensajes-container" ref={mensajesRef}>
+    <div className="chat-grupal evento-chat-tab">
+      <div
+        className="mensajes-container evento-chat-mensajes"
+        ref={mensajesRef}
+      >
         {mensajes.length === 0 ? (
           <p className="no-mensajes">
             No hay mensajes aún. ¡Sé el primero en escribir!
@@ -158,9 +161,11 @@ function ChatGrupal({ eventoId }) {
           mensajes.map((mensaje) => (
             <div
               key={mensaje.id}
-              className={`mensaje ${
-                mensaje.user_id === user?.id ? "mensaje-propio" : "mensaje-otro"
-              }`}
+              className={
+                mensaje.user_id === user?.id
+                  ? "mensaje-usuario"
+                  : "mensaje-otro"
+              }
             >
               {mensaje.user_id !== user?.id && (
                 <div className="mensaje-avatar">
@@ -175,7 +180,6 @@ function ChatGrupal({ eventoId }) {
                   )}
                 </div>
               )}
-
               <div className="mensaje-contenido">
                 {mensaje.user_id !== user?.id && (
                   <span className="mensaje-autor">
@@ -194,8 +198,7 @@ function ChatGrupal({ eventoId }) {
           ))
         )}
       </div>
-
-      <form onSubmit={enviarMensaje} className="form-mensaje">
+      <form onSubmit={enviarMensaje} className="evento-chat-input-row">
         <input
           type="text"
           value={nuevoMensaje}
@@ -204,7 +207,7 @@ function ChatGrupal({ eventoId }) {
           disabled={!user}
         />
         <button type="submit" disabled={!nuevoMensaje.trim() || !user}>
-          Enviar
+          <span className="icon-send"></span>
         </button>
       </form>
     </div>

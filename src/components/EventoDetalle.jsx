@@ -58,7 +58,7 @@ function EventoDetalle() {
           alignItems: "center",
           height: "100vh",
           paddingTop: "60px",
-          background: "#593c8f",
+          background: "linear-gradient(135deg, #e3d8f8 0%, #f0ebff 50%, #e8deff 100%)",
         }}
       >
         <Loader />
@@ -67,68 +67,87 @@ function EventoDetalle() {
   }
 
   return (
-    <div className="evento-detalle">
-      <h2>{evento.nombre}</h2>
+    <div
+      className={`evento-detalle nuevo-estilo-evento-detalle fondo-perfil-usuario fondo-categoria-${evento.tipo ? evento.tipo.toLowerCase().replace(/\s/g, "-") : "default"}`}
+    >
+      <h2
+        className="evento-titulo anim-fadein evento-titulo-borde"
+        style={{ marginTop: "100px" }}
+      >
+        {evento.nombre}
+      </h2>
 
-      <div className="evento-navegacion">
+      <div className="evento-navegacion-tabs anim-fadein-delay">
         <button
-          className={seccionActiva === "detalles" ? "activo" : ""}
+          className={
+            (seccionActiva === "detalles" ? "tab-activo " : "") + "evento-tab-borde"
+          }
           onClick={() => setSeccionActiva("detalles")}
         >
-          Detalles
+          <span role="img" aria-label="info">ℹ️</span> Detalles
         </button>
         <button
-          className={seccionActiva === "participantes" ? "activo" : ""}
+          className={
+            (seccionActiva === "participantes" ? "tab-activo " : "") + "evento-tab-borde"
+          }
           onClick={() => setSeccionActiva("participantes")}
         >
-          Participantes
+          <span role="img" aria-label="personas">👥</span> Participantes
         </button>
         <button
-          className={seccionActiva === "chat" ? "activo" : ""}
+          className={
+            (seccionActiva === "chat" ? "tab-activo " : "") + "evento-tab-borde"
+          }
           onClick={() => setSeccionActiva("chat")}
         >
-          Chat
+          <span role="img" aria-label="chat">💬</span> Chat
         </button>
       </div>
 
       <div className="evento-contenido">
         {seccionActiva === "detalles" && (
-          <div className="evento-detalles">
-            <p>
-              <strong>Descripción:</strong>{" "}
-              {evento.descripcion || "Sin descripción disponible"}
-            </p>
-            <p>
-              <strong>Ubicación:</strong>{" "}
-              {evento.ubicacion || "Ubicación no especificada"}
-            </p>
-            <p>
-              <strong>Fecha:</strong>{" "}
-              {new Date(evento.fecha).toLocaleDateString("es-ES", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
-            <p>
-              <strong>Tipo:</strong> {evento.tipo || "Sin categoría"}
-            </p>
-
-            {creador && (
-              <div className="evento-creador">
-                <h4>Organizado por:</h4>
-                <p>{creador.nombre || "Usuario"}</p>
-              </div>
-            )}
+          <div className="evento-detalles-card anim-slidein">
+            <div className="evento-detalles-header">
+              <span className={`evento-tipo-badge evento-tipo-badge-${evento.tipo ? evento.tipo.toLowerCase().replace(/\s/g, "-") : "default"}`}>
+                {evento.tipo || "Sin categoría"}
+              </span>
+              <span className="evento-fecha">
+                {new Date(evento.fecha).toLocaleDateString("es-ES", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
+            </div>
+            <div className="evento-detalles-body">
+              <p className="evento-descripcion fondo-blanco-suave">
+                <strong>Descripción:</strong> {evento.descripcion || "Sin descripción disponible"}
+              </p>
+              <p className="evento-ubicacion fondo-blanco-suave">
+                <strong>Ubicación:</strong> {evento.ubicacion || "Ubicación no especificada"}
+              </p>
+              {creador && (
+                <div className="evento-creador-card fondo-morado-suave">
+                  <span className="evento-creador-label">Organizado por:</span>
+                  <span className="evento-creador-nombre">{creador.nombre || "Usuario"}</span>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
         {seccionActiva === "participantes" && (
-          <ListaParticipantes eventoId={evento.id} />
+          <div className="evento-participantes-tab fondo-blanco-suave anim-slidein">
+            <ListaParticipantes eventoId={evento.id} />
+          </div>
         )}
 
-        {seccionActiva === "chat" && <ChatGrupal eventoId={evento.id} />}
+        {seccionActiva === "chat" && (
+          <div className="evento-chat-tab fondo-morado-chat anim-slidein">
+            <ChatGrupal eventoId={evento.id} />
+          </div>
+        )}
       </div>
     </div>
   );

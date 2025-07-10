@@ -8,14 +8,14 @@ function EventTypeSelector({
   // Estado para controlar el tip de ayuda
   const [showTipBanner, setShowTipBanner] = useState(true);
 
-  // Auto-cerrar el banner después de 8 segundos
+  // Auto-cerrar el banner después de 20 segundos
   useEffect(() => {
+    if (!showTipBanner) return;
     const timer = setTimeout(() => {
       setShowTipBanner(false);
-    }, 8000);
-
+    }, 20000); // 20 segundos
     return () => clearTimeout(timer);
-  }, []);
+  }, [showTipBanner]);
 
   const eventTypes = [
     {
@@ -64,25 +64,39 @@ function EventTypeSelector({
             backgroundColor: "#f8f5ff",
             border: "2px solid #593c8f",
             borderRadius: "8px",
-            padding: "12px",
+            padding: "12px 32px 12px 16px",
             marginBottom: "15px",
             textAlign: "center",
             position: "relative",
             boxShadow: "0 2px 8px rgba(89, 60, 143, 0.1)",
+            minHeight: "56px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <button
             onClick={() => setShowTipBanner(false)}
             style={{
               position: "absolute",
-              top: "8px",
-              right: "12px",
-              background: "none",
-              border: "none",
+              top: "10px",
+              right: "10px",
+              background: "#fff",
+              border: "1px solid #593c8f",
               fontSize: "18px",
               cursor: "pointer",
-              color: "#999",
+              color: "#593c8f",
+              borderRadius: "50%",
+              width: "28px",
+              height: "28px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 1px 4px rgba(89,60,143,0.08)",
+              zIndex: 2,
+              padding: 0,
             }}
+            aria-label="Cerrar tip"
           >
             ×
           </button>
@@ -92,10 +106,11 @@ function EventTypeSelector({
               alignItems: "center",
               justifyContent: "center",
               gap: "10px",
+              width: "100%",
             }}
           >
             <span style={{ fontSize: "20px" }}>💡</span>
-            <div>
+            <div style={{ textAlign: "left" }}>
               <strong style={{ color: "#593c8f", fontSize: "14px" }}>
                 ¡Tip de Ayuda!
               </strong>
@@ -105,6 +120,7 @@ function EventTypeSelector({
                   fontSize: "13px",
                   margin: "5px 0 0 0",
                   lineHeight: "1.3",
+                  maxWidth: 320,
                 }}
               >
                 Elige entre eventos personales gratuitos, ayuda ciudadana, apoyo

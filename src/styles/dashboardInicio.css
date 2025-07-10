@@ -1,15 +1,24 @@
 /* Dashboard Inicio - Usuarios logueados con Animaciones Premium */
 
 .dashboard-inicio {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  padding-top: 80px;
-  padding-bottom: 100px;
+  max-width: 100vw;
+  margin: 0;
+  padding: 0;
   background: linear-gradient(135deg, #e3d8f8 0%, #f0ebff 50%, #e8deff 100%);
-  min-height: calc(100vh - 80px);
+  min-height: 100vh;
   position: relative;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-inicio-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 20px 0 20px;
+  flex: 1 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Efectos de fondo animados */
@@ -251,6 +260,93 @@
   font-weight: 600;
   letter-spacing: 0.5px;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* Estadísticas simples en 3 columnas como cards separadas */
+.stats-grid-simple {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
+  background: none;
+  box-shadow: none;
+}
+.stat-simple {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(89, 60, 143, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 18px 14px 18px; /* Más padding lateral */
+  margin: 0 2px;
+  transition: box-shadow 0.2s, transform 0.2s;
+  min-width: 0;
+  word-break: break-word;
+}
+.stat-simple:hover {
+  box-shadow: 0 8px 32px #7b5fb033;
+  transform: translateY(-4px) scale(1.03);
+}
+.stat-simple .stat-icon {
+  font-size: 2.3rem;
+  color: #7b5fb0;
+  margin-bottom: 10px;
+  display: block;
+  min-height: 2.3rem;
+}
+.stat-simple .stat-number {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #593c8f;
+  margin-bottom: 4px;
+  line-height: 1;
+  word-break: break-all;
+}
+.stat-simple .stat-label {
+  font-size: 1.05rem;
+  color: #7b5fb0;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.2;
+  max-width: 100%;
+}
+.stat-simple.animate-statcard {
+  animation: fadeInStatCard 0.7s cubic-bezier(0.4, 2, 0.3, 1);
+}
+@keyframes fadeInStatCard {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@media (max-width: 700px) {
+  .stats-grid-simple {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  .stat-simple {
+    padding: 12px 6px 8px 6px;
+    border-radius: 12px;
+  }
+  .stat-simple .stat-icon {
+    font-size: 1.5rem;
+    min-height: 1.5rem;
+  }
+  .stat-simple .stat-number {
+    font-size: 1.1rem;
+  }
+  .stat-simple .stat-label {
+    font-size: 0.95rem;
+  }
 }
 
 /* Acciones rápidas con efectos modernos */
@@ -578,67 +674,782 @@
   background: #5a6fd8;
 }
 
-/* Animaciones stagger para elementos dinámicos */
-.stagger-item-animate {
-  animation: slideInUp 0.6s ease-out both;
+/* HERO visual con overlay y animación */
+.dashboard-hero {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  margin-top: 50px;
+  border-radius: 28px;
+  overflow: hidden;
+  margin-bottom: 40px;
+  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(2px) brightness(0.7);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  transition: transform 0.7s cubic-bezier(0.4, 2, 0.3, 1);
+}
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #593c8f99 0%, #7b5fb099 100%);
+  z-index: 2;
+}
+.hero-content {
+  position: relative;
+  z-index: 3;
+  color: #fff;
+  text-align: center;
+  padding: 0 24px;
+  animation: fadeInHero 1.2s cubic-bezier(0.4, 2, 0.3, 1);
+}
+.hero-content h1 {
+  font-size: 2.6rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+  text-shadow: 0 4px 24px #593c8f99;
+}
+.hero-content p {
+  font-size: 1.2rem;
+  font-weight: 400;
+  opacity: 0.95;
+  margin-bottom: 0;
+}
+@keyframes fadeInHero {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
-/* Responsive improvements */
-@media (max-width: 768px) {
-  .dashboard-header {
-    transform: perspective(1000px) rotateX(0deg);
-    margin-top: 50px;
-    padding: 20px;
+/* Highlights cards */
+.dashboard-highlights {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.highlight-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(89, 60, 143, 0.1);
+  padding: 24px 18px 18px 18px;
+  min-width: 180px;
+  max-width: 220px;
+  text-align: center;
+  transition: transform 0.3s cubic-bezier(0.4, 2, 0.3, 1), box-shadow 0.3s;
+  animation: slideUpHighlight 0.7s cubic-bezier(0.4, 2, 0.3, 1);
+}
+.highlight-card img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 12px;
+}
+.highlight-card h3 {
+  color: #593c8f;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.highlight-card p {
+  color: #7b5fb0;
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+.highlight-card:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 8px 32px #7b5fb033;
+}
+@keyframes slideUpHighlight {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
   }
-
-  .dashboard-header h1 {
-    font-size: 2rem;
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
+}
 
-  .stats-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
+/* Galería animada */
+.dashboard-gallery {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0 40px 0;
+  flex-wrap: wrap;
+}
+.gallery-img {
+  width: 90px;
+  height: 90px;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 2px 12px #593c8f22;
+  opacity: 0;
+  animation: fadeInGallery 1s forwards;
+}
+.gallery-img:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.gallery-img:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.gallery-img:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.gallery-img:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.gallery-img:nth-child(5) {
+  animation-delay: 0.5s;
+}
+@keyframes fadeInGallery {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
   }
-
-  .stat-card {
-    padding: 20px;
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
+}
 
-  .quick-actions {
-    flex-direction: column;
-    gap: 15px;
+/* Parallax/inspiración */
+.dashboard-inspiration {
+  background: linear-gradient(135deg, #e3d8f8 0%, #f0ebff 100%);
+  border-radius: 18px;
+  padding: 32px 18px;
+  margin-bottom: 40px;
+  text-align: center;
+  color: #593c8f;
+  font-size: 1.3rem;
+  font-weight: 700;
+  box-shadow: 0 2px 12px #593c8f11;
+  animation: parallaxIn 1.2s cubic-bezier(0.4, 2, 0.3, 1);
+}
+@keyframes parallaxIn {
+  from {
+    opacity: 0;
+    transform: translateY(60px) scale(0.98);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
-  .action-btn {
-    min-width: auto;
-    padding: 14px 20px;
+/* Animaciones utilitarias */
+.animate-fadein {
+  animation: fadeInHero 1.2s cubic-bezier(0.4, 2, 0.3, 1);
+}
+.animate-slideup {
+  animation: slideUpHighlight 0.7s cubic-bezier(0.4, 2, 0.3, 1);
+}
+.animate-parallax {
+  animation: parallaxIn 1.2s cubic-bezier(0.4, 2, 0.3, 1);
+}
+
+/* Hero cards con imagen de fondo, overlay y texto encima */
+.dashboard-hero-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
+  margin-bottom: 48px;
+}
+.hero-card {
+  position: relative;
+  width: 340px;
+  height: 180px;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 6px 32px #593c8f22;
+  display: flex;
+  align-items: flex-end;
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 0;
+  transition: transform 0.35s cubic-bezier(0.4, 2, 0.3, 1), box-shadow 0.35s;
+  cursor: pointer;
+}
+.hero-card:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 16px 48px #7b5fb044;
+}
+.hero-card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #593c8fcc 0%, #7b5fb0cc 100%);
+  opacity: 0.82;
+  z-index: 1;
+}
+.hero-card-content {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  padding: 24px 22px 18px 22px;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.hero-card-content h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 2px 0;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 12px #593c8f99;
+}
+.hero-card-content p {
+  font-size: 1.01rem;
+  font-weight: 400;
+  margin: 0 0 2px 0;
+  opacity: 0.97;
+  text-shadow: 0 1px 6px #593c8f55;
+}
+.hero-card-extra {
+  font-size: 0.93rem;
+  color: #e0d7fa;
+  font-weight: 600;
+  margin-top: 2px;
+  text-shadow: 0 1px 4px #593c8f77;
+}
+@media (max-width: 900px) {
+  .dashboard-hero-cards {
+    gap: 18px;
+  }
+  .hero-card {
+    width: 95vw;
+    max-width: 340px;
+    height: 140px;
+  }
+}
+@media (max-width: 600px) {
+  .dashboard-hero-cards {
+    gap: 8px;
+  }
+  .hero-card {
+    width: 98vw;
+    max-width: 99vw;
+    height: 110px;
+    border-radius: 10px;
+  }
+  .hero-card-content {
+    padding: 10px 10px 8px 10px;
+  }
+  .hero-card-content h3 {
+    font-size: 1.01rem;
+  }
+  .hero-card-content p,
+  .hero-card-extra {
+    font-size: 0.85rem;
+  }
+}
+
+/* Modern highlight cards con fondo dinámico y animaciones tipo GTA6 */
+.modern-highlight-card.animate-gta6-img {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  min-height: 180px;
+  display: flex;
+  align-items: flex-end;
+  box-shadow: 0 10px 40px #593c8f33, 0 2px 12px #7b5fb033;
+  animation: gta6ImgIn 1.2s cubic-bezier(0.4, 2, 0.3, 1) both;
+}
+.modern-highlight-card.animate-gta6-img .gta6-img-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #593c8faa 0%, #7b5fb0bb 100%);
+  z-index: 2;
+}
+.modern-highlight-card.animate-gta6-img .modern-card-content.gta6-img-text {
+  position: relative;
+  z-index: 3;
+  color: #fff;
+  text-align: left;
+  padding: 24px 22px 18px 22px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: gta6TextIn 1.2s cubic-bezier(0.4, 2, 0.3, 1) both;
+}
+.modern-highlight-card.animate-gta6-img:hover {
+  transform: translateY(-10px) scale(1.05) rotate(-2deg);
+  box-shadow: 0 20px 60px #7b5fb077, 0 2px 12px #593c8f33;
+}
+@media (max-width: 900px) {
+  .modern-highlight-card.animate-gta6-img {
+    min-height: 120px;
+  }
+  .modern-highlight-card.animate-gta6-img .modern-card-content.gta6-img-text {
+    padding: 10px 10px 8px 10px;
+  }
+}
+@media (max-width: 600px) {
+  .modern-highlight-card.animate-gta6-img {
+    min-height: 80px;
+    border-radius: 10px;
+  }
+  .modern-highlight-card.animate-gta6-img
+    .modern-card-content.gta6-img-text
+    h3 {
+    font-size: 1.01rem;
+  }
+  .modern-highlight-card.animate-gta6-img .modern-card-content.gta6-img-text p,
+  .modern-card-extra {
+    font-size: 0.85rem;
+  }
+}
+
+/* Animaciones dinámicas tipo GTA6 con imágenes de amigos */
+.dashboard-gta6-animaciones {
+  display: flex;
+  gap: 36px;
+  justify-content: center;
+  align-items: stretch;
+  margin: 48px 0 48px 0;
+  flex-wrap: wrap;
+}
+.gta6-img-card {
+  position: relative;
+  width: 340px;
+  height: 210px;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px #593c8f33, 0 2px 12px #7b5fb033;
+  display: flex;
+  align-items: flex-end;
+  background: #fff;
+  margin-bottom: 0;
+  transition: transform 0.35s cubic-bezier(0.4, 2, 0.3, 1), box-shadow 0.35s;
+  cursor: pointer;
+  animation: gta6ImgIn 1.2s cubic-bezier(0.4, 2, 0.3, 1) both;
+}
+.gta6-img-card:hover {
+  transform: translateY(-10px) scale(1.05) rotate(-2deg);
+  box-shadow: 0 20px 60px #7b5fb077, 0 2px 12px #593c8f33;
+}
+.gta6-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  filter: brightness(0.85) blur(0.5px);
+  transition: filter 0.3s;
+}
+.gta6-img-card:hover .gta6-img {
+  filter: brightness(1) blur(0);
+}
+.gta6-img-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #593c8faa 0%, #7b5fb0bb 100%);
+  z-index: 2;
+}
+.gta6-img-text {
+  position: relative;
+  z-index: 3;
+  color: #fff;
+  text-align: left;
+  padding: 24px 22px 18px 22px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: gta6TextIn 1.2s cubic-bezier(0.4, 2, 0.3, 1) both;
+}
+.gta6-img-text h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 2px 0;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 12px #593c8f99;
+}
+.gta6-img-text p {
+  font-size: 1.01rem;
+  font-weight: 400;
+  margin: 0 0 2px 0;
+  opacity: 0.97;
+  text-shadow: 0 1px 6px #593c8f55;
+}
+@keyframes gta6ImgIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.97) translateY(60px) rotate(-3deg);
+    filter: blur(2px) brightness(0.8);
+  }
+  60% {
+    opacity: 0.7;
+    transform: scale(1.03) translateY(-8px) rotate(2deg);
+    filter: blur(0.5px) brightness(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0) rotate(0);
+    filter: none;
+  }
+}
+@keyframes gta6TextIn {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@media (max-width: 900px) {
+  .dashboard-gta6-animaciones {
+    gap: 18px;
+  }
+  .gta6-img-card {
+    width: 95vw;
+    max-width: 340px;
+    height: 140px;
+  }
+}
+@media (max-width: 600px) {
+  .dashboard-gta6-animaciones {
+    gap: 8px;
+  }
+  .gta6-img-card {
+    width: 98vw;
+    max-width: 99vw;
+    height: 110px;
+    border-radius: 10px;
+  }
+  .gta6-img-text {
+    padding: 10px 10px 8px 10px;
+  }
+  .gta6-img-text h3 {
+    font-size: 1.01rem;
+  }
+  .gta6-img-text p {
+    font-size: 0.85rem;
+  }
+}
+
+/* Sección informativa para empresas, negocios y ONGs */
+.dashboard-info-empresas {
+  background: linear-gradient(135deg, #f7f6fb 60%, #e6ddfa 100%);
+  border-radius: 22px;
+  box-shadow: 0 4px 24px #7b5fb033;
+  padding: 38px 28px 32px 28px;
+  margin: 48px auto 48px auto;
+  max-width: 700px;
+  text-align: center;
+  color: #593c8f;
+  animation: parallaxIn 1.2s cubic-bezier(0.4, 2, 0.3, 1);
+}
+.dashboard-info-empresas h2 {
+  font-size: 1.7rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: #593c8f;
+}
+.dashboard-info-empresas p {
+  font-size: 1.08rem;
+  margin-bottom: 18px;
+  color: #7b5fb0;
+}
+.info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 22px 0;
+  text-align: left;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.info-list li {
+  font-size: 1.01rem;
+  margin-bottom: 10px;
+  color: #593c8f;
+  padding-left: 0.5em;
+  position: relative;
+}
+.info-list li b {
+  color: #7b5fb0;
+}
+.btn-aliado {
+  background: linear-gradient(90deg, #593c8f, #7b5fb0);
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  padding: 14px 38px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 12px #593c8f22;
+  transition: background 0.3s, transform 0.2s;
+  margin-top: 10px;
+}
+.btn-aliado:hover {
+  background: linear-gradient(90deg, #7b5fb0, #593c8f);
+  transform: translateY(-2px) scale(1.04);
+}
+@media (max-width: 700px) {
+  .dashboard-info-empresas {
+    padding: 18px 8px 18px 8px;
+  }
+  .dashboard-info-empresas h2 {
+    font-size: 1.2rem;
+  }
+  .dashboard-info-empresas p,
+  .info-list li {
+    font-size: 0.95rem;
+  }
+}
+
+/* Card informativa para empresas, negocios y ONGs con animación y estilo destacado */
+.dashboard-info-empresas.animate-empresas-card {
+  position: relative;
+  background: linear-gradient(135deg, #fff 60%, #e6ddfa 100%);
+  border-radius: 28px;
+  box-shadow: 0 8px 40px #7b5fb055, 0 2px 12px #593c8f22;
+  padding: 48px 32px 38px 32px;
+  margin: 48px auto 48px auto;
+  max-width: 700px;
+  text-align: center;
+  color: #593c8f;
+  overflow: hidden;
+  animation: empresasCardIn 1.2s cubic-bezier(0.4, 2, 0.3, 1) both;
+}
+.empresas-bg-glow {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  width: 400px;
+  height: 200px;
+  background: radial-gradient(circle, #a18be6 0%, #fff0 80%);
+  filter: blur(40px) brightness(1.2);
+  opacity: 0.5;
+  z-index: 0;
+  transform: translateX(-50%);
+  pointer-events: none;
+  animation: empresasGlow 3s ease-in-out infinite alternate;
+}
+@keyframes empresasGlow {
+  0% {
+    opacity: 0.4;
+    filter: blur(40px) brightness(1.1);
+  }
+  100% {
+    opacity: 0.7;
+    filter: blur(60px) brightness(1.3);
+  }
+}
+.dashboard-info-empresas.animate-empresas-card h2 {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 16px;
+  color: #593c8f;
+  letter-spacing: 1px;
+  z-index: 1;
+  position: relative;
+}
+.dashboard-info-empresas.animate-empresas-card p {
+  font-size: 1.15rem;
+  margin-bottom: 22px;
+  color: #7b5fb0;
+  z-index: 1;
+  position: relative;
+}
+.dashboard-info-empresas.animate-empresas-card .info-list {
+  z-index: 1;
+  position: relative;
+}
+.dashboard-info-empresas.animate-empresas-card .btn-aliado {
+  background: linear-gradient(90deg, #593c8f, #7b5fb0);
+  color: #fff;
+  border: none;
+  border-radius: 22px;
+  padding: 18px 48px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 18px #593c8f33;
+  transition: background 0.3s, transform 0.2s;
+  margin-top: 18px;
+  z-index: 1;
+  position: relative;
+  letter-spacing: 1px;
+}
+.dashboard-info-empresas.animate-empresas-card .btn-aliado:hover {
+  background: linear-gradient(90deg, #7b5fb0, #593c8f);
+  transform: translateY(-3px) scale(1.06);
+  box-shadow: 0 8px 32px #7b5fb055;
+}
+@keyframes empresasCardIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.97) translateY(60px);
+    filter: blur(2px) brightness(0.8);
+  }
+  60% {
+    opacity: 0.7;
+    transform: scale(1.03) translateY(-8px);
+    filter: blur(0.5px) brightness(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: none;
+  }
+}
+@media (max-width: 700px) {
+  .dashboard-info-empresas.animate-empresas-card {
+    padding: 18px 8px 18px 8px;
+  }
+  .dashboard-info-empresas.animate-empresas-card h2 {
+    font-size: 1.2rem;
+  }
+  .dashboard-info-empresas.animate-empresas-card p,
+  .info-list li {
+    font-size: 0.95rem;
+  }
+  .dashboard-info-empresas.animate-empresas-card .btn-aliado {
     font-size: 1rem;
+    padding: 12px 18px;
   }
 }
 
-@media (max-width: 480px) {
-  .dashboard-header {
-    padding: 15px;
-  }
+/* Footer moderno para HazPlan */
+.dashboard-footer {
+  background: linear-gradient(90deg, #593c8f 60%, #a18be6 100%);
+  color: #fff;
+  padding: 36px 0 16px 0;
+  margin-top: 48px;
+  box-shadow: 0 -4px 24px rgba(89, 60, 143, 0.08);
+  animation: fadeInFooter 1.2s;
+}
+.footer-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 20 24px;
+}
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+.footer-logo img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px #a18be6;
+  background: #fff;
+}
+.footer-links {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.footer-link {
+  color: #fff;
+  opacity: 0.85;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: opacity 0.2s;
+}
+.footer-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+.footer-social {
+  display: flex;
+  gap: 14px;
+  padding-bottom: 18px;
+  margin-bottom: 8px;
+}
+.footer-social-icon {
+  font-size: 1.5rem;
+  color: #fff;
+  opacity: 0.85;
+  transition: transform 0.2s, opacity 0.2s;
+  text-decoration: none;
+}
+.footer-social-icon:hover {
+  opacity: 1;
+  transform: scale(1.15) rotate(-6deg);
+}
+.footer-bottom {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 0.95rem;
+  opacity: 0.8;
+  letter-spacing: 0.02em;
+}
 
-  .dashboard-header h1 {
-    font-size: 1.8rem;
+@keyframes fadeInFooter {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
   }
-
-  .stats-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
-  .stat-card {
-    padding: 15px;
+/* Responsive */
+@media (max-width: 700px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 0 10vw;
   }
-
-  .stat-number {
-    font-size: 1.5rem;
-  }
-
-  .section-title {
-    font-size: 1.3rem;
+  .footer-logo {
+    font-size: 1.1rem;
   }
 }

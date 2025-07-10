@@ -67,7 +67,7 @@
   gap: 8px;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
+  color: #7b5fb0 !important;
   padding: 8px 16px;
   border-radius: 25px;
   cursor: pointer;
@@ -78,14 +78,17 @@
 }
 
 .navbar-button:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #d1c3f7 !important;
+  color: #593c8f !important;
+  border-color: #7b5fb0 !important;
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .navbar-button.active {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.4);
+  background: #e6ddfa !important;
+  color: #593c8f !important;
+  border-color: #7b5fb0 !important;
 }
 
 /* Botón promocional especial */
@@ -155,6 +158,7 @@
 
 .navbar-label {
   font-size: 0.85rem;
+  color: #593c8f !important;
 }
 
 /* Dropdowns */
@@ -162,7 +166,8 @@
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  background: white;
+  background: #fff;
+  color: #593c8f;
   border-radius: 15px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -172,17 +177,90 @@
   overflow-y: auto;
   z-index: 1001;
   animation: dropdownFadeIn 0.3s ease-out;
+  font-size: 1rem;
 }
 
-@keyframes dropdownFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+.navbar-dropdown * {
+  color: #593c8f !important;
+  font-size: 1rem !important;
+  line-height: 1.4 !important;
+}
+
+.navbar-dropdown h1,
+.navbar-dropdown h2,
+.navbar-dropdown h3 {
+  font-size: 1.08rem !important;
+  font-weight: 700 !important;
+  color: #593c8f !important;
+  margin-bottom: 0.5em !important;
+}
+
+.navbar-dropdown p,
+.navbar-dropdown li,
+.navbar-dropdown span {
+  font-size: 0.98rem !important;
+  color: #593c8f !important;
+}
+
+.navbar-dropdown .text-gray-500,
+.navbar-dropdown .text-gray-600,
+.navbar-dropdown .text-gray-400 {
+  color: #7b5fb0 !important;
+}
+
+.navbar-dropdown .text-blue-500 {
+  color: #593c8f !important;
+}
+
+.navbar-dropdown .bg-blue-50 {
+  background: #f7f6fb !important;
+}
+
+.navbar-dropdown .bg-white {
+  background: #fff !important;
+}
+
+/* Ajuste para botones de acción */
+.navbar-dropdown button,
+.navbar-dropdown .text-green-600,
+.navbar-dropdown .text-red-600 {
+  color: #593c8f !important;
+  font-size: 1rem !important;
+}
+
+/* Badge de notificación */
+.navbar-notification-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #e53935;
+  color: #fff;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  z-index: 2;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+/* Eliminar icono grande de notificaciones/mensajes en el dropdown */
+.navbar-dropdown .text-2xl,
+.mobile-dropdown .text-2xl {
+  display: none !important;
+}
+
+/* Eliminar iconos duplicados: solo el badge debe ser pequeño y el icono principal normal */
+.navbar-dropdown .navbar-notification-badge,
+.mobile-dropdown .navbar-notification-badge {
+  font-size: 0.75rem !important;
+  width: 15px !important;
+  height: 15px !important;
+  top: 0.2em !important;
+  right: 0.2em !important;
 }
 
 /* Mobile Menu */
@@ -243,7 +321,7 @@
   gap: 12px;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
+  color: #7b5fb0 !important;
   padding: 12px 16px;
   border-radius: 12px;
   cursor: pointer;
@@ -254,7 +332,9 @@
 }
 
 .mobile-menu-link:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #d1c3f7 !important;
+  color: #593c8f !important;
+  border-color: #7b5fb0 !important;
 }
 
 .mobile-dropdown {
@@ -396,4 +476,109 @@
 .navbar-dropdown::-webkit-scrollbar-thumb:hover,
 .mobile-dropdown::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.3);
+}
+
+/* --- REVERTIR a estilos originales de navbar y menú --- */
+
+/* Botones de navbar y mobile menú: color blanco y bordes grises */
+.navbar-button,
+.mobile-menu-link {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.navbar-button.active,
+.mobile-menu-link:active {
+  background: rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.navbar-button svg,
+.mobile-menu-link svg {
+  color: white !important;
+  stroke: white !important;
+}
+
+.navbar-label,
+.mobile-menu-link span {
+  color: white !important;
+}
+
+.navbar-mobile-menu,
+.navbar-dropdown {
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.navbar-button:hover,
+.mobile-menu-link:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* --- FIX: Contraste para dropdowns en mobile y desktop --- */
+.navbar-dropdown,
+.mobile-dropdown {
+  background: #fff !important;
+  color: #593c8f !important;
+}
+
+.navbar-dropdown *,
+.mobile-dropdown * {
+  color: #593c8f !important;
+}
+
+.navbar-dropdown h1,
+.navbar-dropdown h2,
+.navbar-dropdown h3,
+.mobile-dropdown h1,
+.mobile-dropdown h2,
+.mobile-dropdown h3 {
+  color: #593c8f !important;
+}
+
+.navbar-dropdown p,
+.navbar-dropdown li,
+.navbar-dropdown span,
+.mobile-dropdown p,
+.mobile-dropdown li,
+.mobile-dropdown span {
+  color: #593c8f !important;
+}
+
+.navbar-dropdown .text-gray-500,
+.navbar-dropdown .text-gray-600,
+.navbar-dropdown .text-gray-400,
+.mobile-dropdown .text-gray-500,
+.mobile-dropdown .text-gray-600,
+.mobile-dropdown .text-gray-400 {
+  color: #7b5fb0 !important;
+}
+
+.navbar-dropdown .bg-blue-50,
+.mobile-dropdown .bg-blue-50 {
+  background: #f7f6fb !important;
+}
+
+.navbar-dropdown .bg-white,
+.mobile-dropdown .bg-white {
+  background: #fff !important;
+}
+
+/* Botón cerrar sesión en menú móvil: fondo rojo y texto blanco */
+.btn-logout {
+  background: #e53935 !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(229, 57, 53, 0.08);
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+
+.btn-logout:hover {
+  background: #b71c1c !important;
 }

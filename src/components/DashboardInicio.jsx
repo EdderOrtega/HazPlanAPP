@@ -1,57 +1,47 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../supabaseClient";
+// import { supabase } from "../supabaseClient";
 import EventoCard from "./EventoCard";
 import "../styles/dashboardInicio.css";
 import "../styles/pageTransitions.css";
 import Loader from "./ui/Loader";
+import { useStaggerAnimation } from "../hooks/useAnimations";
+import heroImg from "../assets/arte.png";
+import comunidadImg from "../assets/comunidad.png";
+import deportesImg from "../assets/deportes.png";
+import fandomsImg from "../assets/fandoms.png";
+import saludImg from "../assets/salud.png";
+import medioambienteImg from "../assets/medioambiente.png";
+import amigos2Img from "../assets/amigos2.jpg";
+import amigos3Img from "../assets/amigos3.jpg";
 import {
-  useScrollAnimation,
-  useStaggerAnimation,
-} from "../hooks/useAnimations";
+  FaInstagram,
+  FaFacebook,
+  FaTiktok,
+  FaYoutube,
+  FaXTwitter,
+  FaEnvelope,
+} from "react-icons/fa6";
+import logoHazPlan from "../assets/iconoHazPlanRedondo.png";
+import StatCard from "./StatCard";
+import {
+  FaCalendarCheck,
+  FaCalendarPlus,
+  FaCalendarDay,
+} from "react-icons/fa6";
+import EventosCarruselRecomendados from "./EventosCarruselRecomendados";
 
-function DashboardInicio({ user, onShowComingSoon }) {
+function DashboardInicio({ user }) {
   const navigate = useNavigate();
-  const [eventosRecomendados, setEventosRecomendados] = useState([]);
-  const [proximosEventos, setProximosEventos] = useState([]);
   const [estadisticas, setEstadisticas] = useState({
     eventosAsistidos: 0,
     eventosCreados: 0,
     proximosEventos: 0,
   });
+  const [gustos, setGustos] = useState([]);
 
   // Hooks para animaciones
   const statsRef = useStaggerAnimation(150);
-  const [eventsRef, eventsVisible] = useScrollAnimation(0.1);
-  const [negociosRecomendados] = useState([
-    {
-      id: 1,
-      nombre: "Café Central",
-      tipo: "Café/Coworking",
-      distancia: "0.5 km",
-      rating: 4.5,
-      imagen: "☕",
-      descripcion: "Perfecto para meetups de estudio",
-    },
-    {
-      id: 2,
-      nombre: "Parque Fundidora",
-      tipo: "Espacio al aire libre",
-      distancia: "1.2 km",
-      rating: 4.8,
-      imagen: "🌳",
-      descripcion: "Ideal para actividades deportivas",
-    },
-    {
-      id: 3,
-      nombre: "Biblioteca Central",
-      tipo: "Espacio cultural",
-      distancia: "0.8 km",
-      rating: 4.3,
-      imagen: "📚",
-      descripcion: "Para clubs de lectura y estudio",
-    },
-  ]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -60,61 +50,18 @@ function DashboardInicio({ user, onShowComingSoon }) {
 
       try {
         setLoading(true);
-
-        // Obtener eventos recomendados (eventos futuros que no ha creado)
-        const { data: eventosData } = await supabase
-          .from("eventos")
-          .select("*")
-          .gte("fecha", new Date().toISOString())
-          .neq("user_id", user.id)
-          .limit(6)
-          .order("fecha", { ascending: true });
-
-        setEventosRecomendados(eventosData || []);
-
-        // Obtener próximos eventos del usuario (eventos a los que se unió)
-        const { data: participacionesData } = await supabase
-          .from("participantes_eventos")
-          .select(
-            `
-            evento_id,
-            eventos (
-              id,
-              nombre,
-              descripcion,
-              fecha,
-              ubicacion,
-              tipo,
-              cupo,
-              lat,
-              lon
-            )
-          `
-          )
-          .eq("user_id", user.id)
-          .gte("eventos.fecha", new Date().toISOString())
-          .limit(5);
-
-        const proximosEventosData =
-          participacionesData?.map((p) => p.eventos).filter(Boolean) || [];
-        setProximosEventos(proximosEventosData);
-
-        // Calcular estadísticas básicas
-        const { count: eventosCreados } = await supabase
-          .from("eventos")
-          .select("*", { count: "exact", head: true })
-          .eq("user_id", user.id);
-
-        const { count: eventosAsistidos } = await supabase
-          .from("participantes_eventos")
-          .select("*", { count: "exact", head: true })
-          .eq("user_id", user.id);
-
+        // Obtener gustos/intereses del usuario
+        // Suponiendo que el campo se llama "gustos" y es string separado por comas
+        // Puedes ajustar el nombre del campo según tu base
+        // Descomenta y ajusta si tienes supabase:
+        // const { data: perfil } = await supabase.from("usuariosRegistrados").select("gustos").eq("user_id", user.id).single();
+        // if (perfil && perfil.gustos) setGustos(perfil.gustos.split(",").map(g => g.trim()));
         setEstadisticas({
-          eventosAsistidos: eventosAsistidos || 0,
-          eventosCreados: eventosCreados || 0,
-          proximosEventos: proximosEventosData.length,
+          eventosAsistidos: 0,
+          eventosCreados: 0,
+          proximosEventos: 0,
         });
+        // Aquí podrías dejar la lógica de supabase si quieres estadísticas reales
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       } finally {
@@ -135,154 +82,353 @@ function DashboardInicio({ user, onShowComingSoon }) {
 
   return (
     <div className="dashboard-inicio page-transition-container">
-      {/* Header personalizado con animación */}
-      <div className="dashboard-header">
-        <h1>¡Hola! 👋</h1>
-        <p>Descubre eventos increíbles cerca de ti</p>
-      </div>
-
-      {/* Estadísticas rápidas con stagger animation */}
-      <div ref={statsRef} className="stats-grid stagger-animation">
-        <div className="stat-card hover-lift">
-          <div className="stat-icon">🎉</div>
-          <div className="stat-number">{estadisticas.eventosAsistidos}</div>
-          <div className="stat-label">Eventos asistidos</div>
+      <div className="dashboard-inicio-inner">
+        {/* HERO visual con overlay y animación */}
+        <div className="dashboard-hero">
+          <img src={heroImg} alt="Hero HazPlan" className="hero-bg-img" />
+          <div className="hero-overlay" />
+          <div className="hero-content animate-fadein">
+            <h1>¡Bienvenido a HazPlan!</h1>
+            <p>
+              Tu espacio para descubrir, conectar y vivir experiencias únicas en
+              tu ciudad.
+            </p>
+          </div>
         </div>
-        <div className="stat-card hover-lift">
-          <div className="stat-icon">📅</div>
-          <div className="stat-number">{estadisticas.eventosCreados}</div>
-          <div className="stat-label">Eventos creados</div>
-        </div>
-        <div className="stat-card hover-lift">
-          <div className="stat-icon">⏰</div>
-          <div className="stat-number">{estadisticas.proximosEventos}</div>
-          <div className="stat-label">Próximos eventos</div>
-        </div>
-      </div>
 
-      {/* Acciones rápidas */}
-      <div className="quick-actions">
-        <button
-          className="action-btn primary"
-          onClick={() => navigate("/crear-evento")}
-        >
-          ➕ Crear evento
-        </button>
-        <button
-          className="action-btn secondary"
-          onClick={() => navigate("/mapa")}
-        >
-          🗺️ Ver mapa
-        </button>
-        <button
-          className="action-btn secondary"
-          onClick={() => navigate("/mis-eventos")}
-        >
-          📋 Mis eventos
-        </button>
-        {/* Botón promocional para el modal Coming Soon */}
-        <button className="action-btn promo" onClick={onShowComingSoon}>
-          🚀 Más ciudades
-        </button>
-      </div>
-
-      {/* Próximos eventos del usuario */}
-      {proximosEventos.length > 0 && (
+        {/* Estadísticas rápidas con animación */}
         <div
-          ref={eventsRef}
-          className={`section ${
-            eventsVisible ? "animate-on-scroll in-view" : "animate-on-scroll"
-          }`}
+          ref={statsRef}
+          className="stats-grid stagger-animation stats-grid-simple"
         >
-          <h2 className="section-title">📅 Tus próximos eventos</h2>
-          <div className="eventos-horizontal stagger-animation">
-            {proximosEventos.map((evento) => (
-              <div
-                key={evento.id}
-                className="evento-card-mini hover-lift glass-effect"
-              >
-                <h4>{evento.nombre}</h4>
-                <p>📍 {evento.ubicacion}</p>
-                <p>📅 {new Date(evento.fecha).toLocaleDateString()}</p>
-                <button
-                  onClick={() => navigate(`/evento/${evento.id}`)}
-                  className="btn-ver-evento"
-                >
-                  Ver detalles
-                </button>
-              </div>
-            ))}
-          </div>
+          <StatCard
+            icon={<FaCalendarCheck />}
+            number={estadisticas.eventosAsistidos}
+            label="Eventos asistidos"
+            duration={1200}
+            delay={0}
+          />
+          <StatCard
+            icon={<FaCalendarPlus />}
+            number={estadisticas.eventosCreados}
+            label="Eventos creados"
+            duration={1200}
+            delay={200}
+          />
+          <StatCard
+            icon={<FaCalendarDay />}
+            number={estadisticas.proximosEventos}
+            label="Próximos eventos"
+            duration={1200}
+            delay={400}
+          />
         </div>
-      )}
+        {/* Scroll de eventos recomendados por intereses (vertical antiguo) */}
+        {/* <EventosScrollRecomendados intereses={gustos} /> */}
 
-      {/* Eventos recomendados */}
-      <div className="section">
-        <h2 className="section-title">🔥 Eventos recomendados para ti</h2>
-        <div className="eventos-grid">
-          {eventosRecomendados.slice(0, 4).map((evento) => (
-            <EventoCard
-              key={evento.id}
-              evento={evento}
-              user={user}
-              onClick={() => navigate(`/evento/${evento.id}`)}
-            />
-          ))}
-        </div>
-        {eventosRecomendados.length > 4 && (
-          <button className="btn-ver-mas" onClick={() => navigate("/mapa")}>
-            Ver todos los eventos →
+        {/* Carrusel horizontal tipo Spotify */}
+        <EventosCarruselRecomendados />
+
+        {/* Card informativa para empresas, negocios y ONGs con animación y estilo destacado */}
+        <section className="dashboard-info-empresas animate-empresas-card">
+          <div className="empresas-bg-glow"></div>
+          <h2>¿Tienes un negocio, empresa u organización?</h2>
+          <p>
+            Únete a HazPlan y crea eventos, talleres, campañas o experiencias
+            para miles de usuarios.
+            <br />
+            <strong>Promociona tu marca</strong>, conecta con tu comunidad y
+            accede a herramientas exclusivas para aliados.
+          </p>
+          <ul className="info-list">
+            <li>
+              ✔️ Publica eventos ilimitados con planes desde <b>$99 MXN/mes</b>
+            </li>
+            <li>
+              ✔️ Acceso a analíticas, promoción y badge de empresa verificada
+            </li>
+            <li>✔️ Alianzas gratuitas para ONGs y proyectos ecológicos</li>
+            <li>
+              ✔️ Suscripciones premium para negocios:{" "}
+              <b>más visibilidad y usuarios</b>
+            </li>
+            <li>✔️ Soporte personalizado y difusión en redes HazPlan</li>
+          </ul>
+          <button
+            className="btn-aliado"
+            onClick={() => window.open("mailto:contacto@hazplan.com", "_blank")}
+          >
+            Quiero ser aliado
           </button>
-        )}
-      </div>
+        </section>
 
-      {/* Negocios recomendados */}
-      <div className="section">
-        <h2 className="section-title">🏪 Lugares recomendados cerca de ti</h2>
-        <div className="negocios-grid">
-          {negociosRecomendados.map((negocio) => (
-            <div key={negocio.id} className="negocio-card">
-              <div className="negocio-icon">{negocio.imagen}</div>
-              <div className="negocio-info">
-                <h4>{negocio.nombre}</h4>
-                <p className="negocio-tipo">{negocio.tipo}</p>
-                <p className="negocio-descripcion">{negocio.descripcion}</p>
-                <div className="negocio-meta">
-                  <span className="rating">⭐ {negocio.rating}</span>
-                  <span className="distancia">📍 {negocio.distancia}</span>
-                </div>
-              </div>
+        {/* Animación de parallax y sección de inspiración */}
+        <div className="dashboard-inspiration animate-parallax">
+          <h2>¿Listo para tu próxima aventura?</h2>
+          <p>
+            Explora eventos, haz nuevos amigos y vive experiencias inolvidables.
+          </p>
+        </div>
+
+        {/* Cards modernas con imagen de fondo y animaciones tipo GTA6 + info de empresas */}
+        <div className="dashboard-hero-cards">
+          <div
+            className="modern-highlight-card animate-gta6-img"
+            style={{
+              backgroundImage: `url(${amigos2Img})`,
+              animationDelay: "0.1s",
+            }}
+          >
+            <div className="gta6-img-overlay" />
+            <div className="modern-card-content gta6-img-text">
+              <h3>Eventos deportivos y más</h3>
+              <p>
+                Empresas y gimnasios pueden crear torneos, clases y retos.
+                ¡Atrae nuevos clientes y fortalece tu marca!
+              </p>
+              <span className="modern-card-extra">
+                Costo para empresas: desde $299 MXN/mes
+              </span>
+              <span className="modern-card-extra">
+                Suscripción premium: incluye promoción y analíticas
+              </span>
             </div>
-          ))}
+          </div>
+          <div
+            className="modern-highlight-card animate-gta6-img"
+            style={{
+              backgroundImage: `url(${amigos3Img})`,
+              animationDelay: "0.2s",
+            }}
+          >
+            <div className="gta6-img-overlay" />
+            <div className="modern-card-content gta6-img-text">
+              <h3>Encuentra tu fandom</h3>
+              <p>
+                Librerías, tiendas y cafés pueden organizar meetups,
+                lanzamientos y clubs. ¡Haz crecer tu comunidad!
+              </p>
+              <span className="modern-card-extra">
+                Negocios aliados: desde $199 MXN/evento
+              </span>
+              <span className="modern-card-extra">
+                Suscripción: eventos ilimitados y visibilidad extra
+              </span>
+            </div>
+          </div>
+          <div
+            className="modern-highlight-card animate-gta6-img"
+            style={{
+              backgroundImage: `url(${deportesImg})`,
+              animationDelay: "0.3s",
+            }}
+          >
+            <div className="gta6-img-overlay" />
+            <div className="modern-card-content gta6-img-text">
+              <h3>Bienestar y salud</h3>
+              <p>
+                Clínicas, spas y nutriólogos pueden ofrecer talleres, consultas
+                y experiencias. ¡Promociona tu servicio!
+              </p>
+              <span className="modern-card-extra">
+                Planes desde $249 MXN/mes
+              </span>
+              <span className="modern-card-extra">
+                Incluye: badge de empresa verificada y acceso a usuarios premium
+              </span>
+            </div>
+          </div>
+          <div
+            className="modern-highlight-card animate-gta6-img"
+            style={{
+              backgroundImage: `url(${fandomsImg})`,
+              animationDelay: "0.4s",
+            }}
+          >
+            <div className="gta6-img-overlay" />
+            <div className="modern-card-content gta6-img-text">
+              <h3>Cuida el planeta</h3>
+              <p>
+                Empresas ecológicas y ONGs pueden lanzar campañas, voluntariados
+                y retos verdes. ¡Haz la diferencia y gana visibilidad!
+              </p>
+              <span className="modern-card-extra">
+                Alianzas gratuitas y planes pro desde $99 MXN/mes
+              </span>
+              <span className="modern-card-extra">
+                Certificados, premios y difusión especial
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Tips y sugerencias */}
-      <div className="section tips-section">
-        <h2 className="section-title">💡 Tips para ti</h2>
-        <div className="tips-grid">
-          <div className="tip-card">
-            <div className="tip-icon">🎯</div>
-            <h4>Completa tu perfil</h4>
-            <p>Agrega tus intereses para recibir mejores recomendaciones</p>
-            <button onClick={() => navigate("/perfil")}>
-              Completar perfil
-            </button>
+        {/* Galería de imágenes animada */}
+        <div className="dashboard-gallery">
+          <img
+            src={comunidadImg}
+            alt="Comunidad"
+            className="gallery-img animate-fadein"
+          />
+          <img
+            src={deportesImg}
+            alt="Deportes"
+            className="gallery-img animate-fadein"
+            style={{ animationDelay: "0.1s" }}
+          />
+          <img
+            src={fandomsImg}
+            alt="Fandoms"
+            className="gallery-img animate-fadein"
+            style={{ animationDelay: "0.2s" }}
+          />
+          <img
+            src={saludImg}
+            alt="Salud"
+            className="gallery-img animate-fadein"
+            style={{ animationDelay: "0.3s" }}
+          />
+          <img
+            src={medioambienteImg}
+            alt="Medioambiente"
+            className="gallery-img animate-fadein"
+            style={{ animationDelay: "0.4s" }}
+          />
+        </div>
+
+        {/* Tips y sugerencias visuales */}
+        <div className="section tips-section">
+          <h2 className="section-title">💡 Tips para ti</h2>
+          <div className="tips-grid">
+            <div className="tip-card">
+              <div className="tip-icon">🎯</div>
+              <h4>Completa tu perfil</h4>
+              <p>Agrega tus intereses para recibir mejores recomendaciones</p>
+              <button onClick={() => navigate("/perfil")}>
+                Completar perfil
+              </button>
+            </div>
+            <div className="tip-card">
+              <div className="tip-icon">👥</div>
+              <h4>Invita amigos</h4>
+              <p>Comparte HazPlan con tus amigos y creen eventos juntos</p>
+              <button onClick={() => {}}>Compartir app</button>
+            </div>
           </div>
-          <div className="tip-card">
-            <div className="tip-icon">👥</div>
-            <h4>Invita amigos</h4>
-            <p>Comparte HazPlan con tus amigos y creen eventos juntos</p>
-            <button
-              onClick={() => {
-                /* Implementar compartir */
-              }}
-            >
-              Compartir app
-            </button>
+        </div>
+
+        {/* Animaciones dinámicas tipo GTA6 con imágenes de amigos */}
+        <div className="dashboard-gta6-animaciones">
+          <div
+            className="gta6-img-card animate-gta6-img"
+            style={{ animationDelay: "0.1s" }}
+          >
+            <img src={amigos2Img} alt="Amigos HazPlan 2" className="gta6-img" />
+            <div className="gta6-img-overlay" />
+            <div className="gta6-img-text">
+              <h3>¡Crea recuerdos con tus amigos!</h3>
+              <p>
+                Organiza eventos, comparte experiencias y haz nuevos lazos en tu
+                ciudad.
+              </p>
+            </div>
+          </div>
+          <div
+            className="gta6-img-card animate-gta6-img"
+            style={{ animationDelay: "0.3s" }}
+          >
+            <img src={amigos3Img} alt="Amigos HazPlan 3" className="gta6-img" />
+            <div className="gta6-img-overlay" />
+            <div className="gta6-img-text">
+              <h3>¡Explora, juega y vive HazPlan!</h3>
+              <p>
+                Descubre actividades, deportes y eventos únicos con la mejor
+                comunidad.
+              </p>
+            </div>
           </div>
         </div>
       </div>
+      <footer className="dashboard-footer">
+        <div className="footer-content">
+          <div className="footer-logo">
+            <img src={logoHazPlan} alt="HazPlan" />
+            <span>HazPlan</span>
+          </div>
+          <div className="footer-links">
+            <a href="/acerca" className="footer-link">
+              Acerca
+            </a>
+            <a href="/faq" className="footer-link">
+              FAQ
+            </a>
+            <a href="/contacto" className="footer-link">
+              Contacto
+            </a>
+            <a href="/terminos" className="footer-link">
+              Términos
+            </a>
+          </div>
+          <div className="footer-social">
+            <a
+              href="https://instagram.com/hazplan"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-social-icon"
+              aria-label="Instagram"
+            >
+              <FaInstagram />
+            </a>
+            <a
+              href="https://facebook.com/hazplan"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-social-icon"
+              aria-label="Facebook"
+            >
+              <FaFacebook />
+            </a>
+            <a
+              href="https://www.tiktok.com/@hazplan"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-social-icon"
+              aria-label="TikTok"
+            >
+              <FaTiktok />
+            </a>
+            <a
+              href="https://youtube.com/@hazplan"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-social-icon"
+              aria-label="YouTube"
+            >
+              <FaYoutube />
+            </a>
+            <a
+              href="https://x.com/hazplan"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-social-icon"
+              aria-label="X"
+            >
+              <FaXTwitter />
+            </a>
+            <a
+              href="mailto:contacto@hazplan.com"
+              className="footer-social-icon"
+              aria-label="Email"
+            >
+              <FaEnvelope />
+            </a>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <span>
+            © {new Date().getFullYear()} HazPlan. Todos los derechos reservados.
+          </span>
+        </div>
+      </footer>
     </div>
   );
 }

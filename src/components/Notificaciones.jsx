@@ -122,17 +122,6 @@ function Notificaciones() {
     return fechaNotif.toLocaleDateString();
   };
 
-  const getIconoTipo = (tipo) => {
-    switch (tipo) {
-      case "nuevo_participante":
-        return "👥";
-      case "mensaje_evento":
-        return "💬";
-      default:
-        return "🔔";
-    }
-  };
-
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -145,7 +134,6 @@ function Notificaciones() {
     <div className="max-w-4xl mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold flex items-center gap-2">
-          <FiBell className="text-blue-500" />
           Notificaciones
         </h1>
         {notificaciones.some((n) => !n.leida) && (
@@ -160,7 +148,6 @@ function Notificaciones() {
 
       {notificaciones.length === 0 ? (
         <div className="text-center py-12">
-          <FiBell className="mx-auto text-gray-400 text-4xl mb-4" />
           <p className="text-gray-500">No tienes notificaciones</p>
         </div>
       ) : (
@@ -176,9 +163,6 @@ function Notificaciones() {
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-3 flex-1">
-                  <span className="text-2xl" role="img" aria-label="icono">
-                    {getIconoTipo(notificacion.tipo)}
-                  </span>
                   <div className="flex-1">
                     <h3 className="font-semibold text-gray-900">
                       {notificacion.titulo}

@@ -3,11 +3,80 @@ import { supabase } from "../supabaseClient";
 import { useNavigate } from "react-router-dom";
 import ModalPerfilCreado from "./ui/ModalPerfilCreado";
 
+const INTERESES_LISTA = [
+  "Deportes",
+  "Música",
+  "Arte",
+  "Tecnología",
+  "Voluntariado",
+  "Viajes",
+  "Cine",
+  "Lectura",
+  "Gaming",
+  "Fitness",
+  "Mascotas",
+  "Naturaleza",
+  "Cocina",
+  "Fotografía",
+  "Moda",
+  "Ciencia",
+  "Emprendimiento",
+  "Networking",
+  "Baile",
+  "Meditación",
+  "Kpop",
+  "Anime",
+  "Series",
+  "Comedia",
+  "Podcast",
+  "Idiomas",
+  "Política",
+  "Finanzas",
+  "Cómics",
+  "Manualidades",
+  "Salud mental",
+];
+
+// Relación interés-categoría
+const INTERESES_CATEGORIAS = {
+  Deportes: "Salud y Bienestar",
+  Música: "Arte y Cultura",
+  Arte: "Arte y Cultura",
+  Tecnología: "Tecnología",
+  Voluntariado: "Social",
+  Viajes: "Aventura",
+  Cine: "Arte y Cultura",
+  Lectura: "Arte y Cultura",
+  Gaming: "Tecnología",
+  Fitness: "Salud y Bienestar",
+  Mascotas: "Mascotas",
+  Naturaleza: "Aventura",
+  Cocina: "Gastronomía",
+  Fotografía: "Arte y Cultura",
+  Moda: "Arte y Cultura",
+  Ciencia: "Ciencia",
+  Emprendimiento: "Negocios",
+  Networking: "Negocios",
+  Baile: "Arte y Cultura",
+  Meditación: "Salud y Bienestar",
+  Kpop: "Arte y Cultura",
+  Anime: "Arte y Cultura",
+  Series: "Arte y Cultura",
+  Comedia: "Arte y Cultura",
+  Podcast: "Arte y Cultura",
+  Idiomas: "Educación",
+  Política: "Actualidad",
+  Finanzas: "Negocios",
+  Cómics: "Arte y Cultura",
+  Manualidades: "Arte y Cultura",
+  "Salud mental": "Salud y Bienestar",
+};
+
 function CrearPerfil() {
   const [step, setStep] = useState(1);
   const [nombre, setNombre] = useState("");
   const [edad, setEdad] = useState("");
-  const [gustos, setGustos] = useState("");
+  const [gustosSeleccionados, setGustosSeleccionados] = useState([]);
   const [fotoPerfil, setFotoPerfil] = useState(null);
   const [fotosEventos, setFotosEventos] = useState([]);
   const [bio, setBio] = useState("");
@@ -66,6 +135,7 @@ function CrearPerfil() {
         setError("Debes iniciar sesión para subir imágenes.");
         return;
       }
+      const gustos = gustosSeleccionados.join(", ");
       const { error: insertError } = await supabase
         .from("usuariosRegistrados")
         .insert([
@@ -172,16 +242,77 @@ function CrearPerfil() {
 
         {step === 4 && (
           <div>
-            <label>Gustos e intereses (separados por coma):</label>
-            <input
-              type="text"
-              value={gustos}
-              onChange={(e) => setGustos(e.target.value)}
-            />
+            <label>Selecciona tus intereses:</label>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "10px",
+                margin: "16px 0",
+              }}
+            >
+              {INTERESES_LISTA.map((interes) => (
+                <button
+                  type="button"
+                  key={interes}
+                  onClick={() => {
+                    setGustosSeleccionados((prev) =>
+                      prev.includes(interes)
+                        ? prev.filter((g) => g !== interes)
+                        : [...prev, interes]
+                    );
+                  }}
+                  style={{
+                    padding: "8px 16px 8px 12px",
+                    borderRadius: "20px",
+                    border: gustosSeleccionados.includes(interes)
+                      ? "2px solid #593c8f"
+                      : "1px solid #ccc",
+                    background: gustosSeleccionados.includes(interes)
+                      ? "#e8deff"
+                      : "#fff",
+                    color: gustosSeleccionados.includes(interes)
+                      ? "#593c8f"
+                      : "#444",
+                    fontWeight: gustosSeleccionados.includes(interes)
+                      ? 700
+                      : 400,
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    boxShadow: gustosSeleccionados.includes(interes)
+                      ? "0 2px 8px #e8deff"
+                      : "none",
+                  }}
+                >
+                  <span>{interes}</span>
+                  <span
+                    style={{
+                      background: "#f3eaff",
+                      color: "#7c4dff",
+                      fontSize: "12px",
+                      borderRadius: "10px",
+                      padding: "2px 8px",
+                      marginLeft: "4px",
+                      fontWeight: 500,
+                      border: "1px solid #e0d7fa",
+                    }}
+                  >
+                    {INTERESES_CATEGORIAS[interes] || "Otro"}
+                  </span>
+                </button>
+              ))}
+            </div>
             <button type="button" onClick={() => setStep(3)}>
               Atrás
             </button>
-            <button type="button" onClick={() => setStep(5)}>
+            <button
+              type="button"
+              onClick={() => setStep(5)}
+              disabled={gustosSeleccionados.length === 0}
+            >
               Siguiente
             </button>
           </div>

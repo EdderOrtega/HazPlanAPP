@@ -1,35 +1,56 @@
 /* Estilos modernos para el formulario de eventos */
 .formulario-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  min-height: 100vh;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  background: #e3d8f8;
-  padding: 20px;
-  overflow: hidden; /* Evita scroll */
+  align-items: center;
+  background: #f7f6fb;
+  padding: 0;
+  box-sizing: border-box;
 }
+
 .formulario-container form {
   align-items: center;
 }
+
 .formulario-container form input {
   color: #2c3e50;
   margin: 0;
 }
+
 .formulario-card {
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
-  padding: 30px 25px;
-  max-width: 600px;
   width: 100%;
-  max-height: 85vh; /* Limita la altura máxima */
-  overflow-y: auto; /* Solo scroll interno si es necesario */
-  text-align: center;
+  max-width: 430px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(89, 60, 143, 0.1);
+  padding: 0 18px 32px 18px;
   position: relative;
+  min-height: 540px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 30px 0 50px 0;
+  box-sizing: border-box;
+}
+
+/* Header del formulario */
+.form-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 20;
+  background: #fff;
+  padding-top: 24px;
+  padding-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(89, 60, 143, 0.04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
 }
 
 /* Indicador de pasos */
@@ -37,39 +58,82 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
   gap: 10px;
+  margin-bottom: 6px;
 }
 
 .step-dot {
-  width: 12px;
-  height: 12px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: #e0e0e0;
-  transition: all 0.3s ease;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 6px rgba(89, 60, 143, 0.1);
 }
 
 .step-dot.active {
   background: #593c8f;
-  transform: scale(1.2);
+  box-shadow: 0 0 0 4px #e6ddfa;
 }
 
 .step-dot.completed {
-  background: #4caf50;
+  background: #a18be6;
 }
 
 /* Título del paso */
 .step-title {
-  color: #2c3e50;
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 15px;
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #593c8f;
   text-align: center;
+  margin: 0 0 2px 0;
+  line-height: 1.2;
+  padding: 0 8px;
 }
 
 /* Contenido del paso */
 .step-content {
-  margin-bottom: 20px;
+  margin-top: 30px;
+  margin-bottom: 50px;
+  overflow-y: visible;
+}
+
+/* Solo permitir scroll en pasos con mucho contenido (ej: categorías) */
+@media (max-width: 600px) {
+  .formulario-container {
+    padding-top: 30px;
+    padding-bottom: 50px;
+  }
+  .formulario-card {
+    max-width: 100vw;
+    min-height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0 2vw 32px 2vw;
+    margin: 0;
+  }
+  .form-header {
+    padding-top: 18px;
+    padding-bottom: 8px;
+    border-radius: 0;
+  }
+  .step-title {
+    font-size: 1.01rem;
+    padding: 0 2vw;
+  }
+  .step-content {
+    margin-top: 18px;
+    margin-bottom: 32px;
+  }
+}
+
+/* Scroll solo para el grid de categorías */
+@media (max-width: 600px) {
+  .step-content .categorias-scroll {
+    max-height: 45vh;
+    overflow-y: auto;
+    margin-bottom: 12px;
+  }
 }
 
 /* Labels y inputs */
@@ -250,14 +314,40 @@
   }
 }
 
-@media (max-width: 480px) {
-  .formulario-card {
-    padding: 15px 10px;
-    max-height: 95vh;
+@media (max-width: 600px) {
+  .formulario-container {
+    padding-top: 30px;
+    padding-bottom: 50px;
   }
-
+  .formulario-card {
+    max-width: 100vw;
+    min-height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0 2vw 32px 2vw;
+    margin: 0;
+  }
+  .form-header {
+    padding-top: 18px;
+    padding-bottom: 8px;
+    border-radius: 0;
+  }
   .step-title {
-    font-size: 16px;
+    font-size: 1.01rem;
+    padding: 0 2vw;
+  }
+  .step-content {
+    margin-top: 18px;
+    margin-bottom: 32px;
+  }
+}
+
+/* Scroll solo para el grid de categorías */
+@media (max-width: 600px) {
+  .step-content .categorias-scroll {
+    max-height: 45vh;
+    overflow-y: auto;
+    margin-bottom: 12px;
   }
 }
 
