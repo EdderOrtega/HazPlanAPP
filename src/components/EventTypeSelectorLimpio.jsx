@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-
+import iconCiudadano from "../assets/capiHeroe.png";
+import iconONG from "../assets/capicapitan.png";
+import iconPersonal from "../assets/capilentes.png";
+import iconEmpresas from "../assets/capiVIP.png";
 function EventTypeSelector({
   selectedType,
   onTypeChange,
@@ -21,7 +24,7 @@ function EventTypeSelector({
     {
       id: "personal",
       name: "Evento Personal",
-      icon: "👥",
+      icon: iconPersonal,
       description: "Eventos sociales, reuniones y actividades personales",
       available: true,
       price: "Gratis",
@@ -29,7 +32,7 @@ function EventTypeSelector({
     {
       id: "ciudadania",
       name: "Ayuda Ciudadana",
-      icon: "🤝",
+      icon: iconCiudadano,
       description: "Limpieza de espacios, voluntariado comunitario",
       available: true,
       price: "Gratis",
@@ -37,7 +40,7 @@ function EventTypeSelector({
     {
       id: "ongs",
       name: "Ayuda ONGs",
-      icon: "🐾",
+      icon: iconONG,
       description: "Emergencias con animales, asistencia social",
       available: true,
       price: "Gratis",
@@ -45,7 +48,7 @@ function EventTypeSelector({
     {
       id: "premium",
       name: "Evento Premium",
-      icon: "⭐",
+      icon: iconEmpresas,
       description: "Eventos empresariales y PyMEs promocionales",
       available: userType === "empresa" || userType === "pyme",
       price:
@@ -167,8 +170,28 @@ function EventTypeSelector({
                   : "0 2px 8px rgba(0,0,0,0.1)",
             }}
           >
-            <div style={{ fontSize: "32px", marginBottom: "8px" }}>
-              {type.icon}
+            <div
+              style={{
+                marginBottom: "8px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <img
+                src={type.icon}
+                alt={type.name}
+                style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: "50%",
+                  objectFit: "contain",
+                  boxShadow:
+                    selectedType === type.id ? "0 2px 12px #a18be6" : "none",
+                  background: "#fff",
+                  padding: 8,
+                  border: "2px solid #e0e0e0",
+                }}
+              />
             </div>
 
             <h4

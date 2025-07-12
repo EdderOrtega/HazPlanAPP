@@ -186,46 +186,83 @@ function CrearPerfil() {
 
       <form onSubmit={handleSubmit}>
         {step === 1 && (
-          <div>
-            <label>Nombre completo:</label>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "320px",
+            }}
+          >
+            <label style={{ color: "#593c8f" }}>Nombre completo:</label>
             <input
               type="text"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
               required
+              style={{ color: "#222" }}
             />
-            <button type="button" onClick={() => setStep(2)} disabled={!nombre}>
+            <button
+              type="button"
+              onClick={() => setStep(2)}
+              disabled={!nombre}
+              style={{ marginLeft: "10px" }}
+            >
               Siguiente
             </button>
           </div>
         )}
 
         {step === 2 && (
-          <div>
-            <label>Edad:</label>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "320px",
+            }}
+          >
+            <label style={{ color: "#593c8f" }}>Edad:</label>
             <input
               type="number"
               value={edad}
               onChange={(e) => setEdad(e.target.value)}
               required
+              style={{ color: "#222" }}
             />
             <button type="button" onClick={() => setStep(1)}>
               Atrás
             </button>
-            <button type="button" onClick={() => setStep(3)} disabled={!edad}>
+            <button
+              type="button"
+              onClick={() => setStep(3)}
+              disabled={!edad}
+              style={{ marginLeft: "10px" }}
+            >
               Siguiente
             </button>
           </div>
         )}
 
         {step === 3 && (
-          <div>
-            <label>Foto de perfil:</label>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "320px",
+            }}
+          >
+            <label style={{ color: "#593c8f" }}>Foto de perfil:</label>
             <input
               type="file"
               accept="image/*"
               onChange={(e) => setFotoPerfil(e.target.files[0])}
               required
+              style={{ color: "#222" }}
             />
             <button type="button" onClick={() => setStep(2)}>
               Atrás
@@ -234,6 +271,7 @@ function CrearPerfil() {
               type="button"
               onClick={() => setStep(4)}
               disabled={!fotoPerfil}
+              style={{ marginLeft: "10px" }}
             >
               Siguiente
             </button>
@@ -241,8 +279,18 @@ function CrearPerfil() {
         )}
 
         {step === 4 && (
-          <div>
-            <label>Selecciona tus intereses:</label>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "320px",
+            }}
+          >
+            <label style={{ color: "#593c8f" }}>
+              Selecciona tus intereses:
+            </label>
             <div
               style={{
                 display: "flex",
@@ -312,6 +360,7 @@ function CrearPerfil() {
               type="button"
               onClick={() => setStep(5)}
               disabled={gustosSeleccionados.length === 0}
+              style={{ marginLeft: "10px" }}
             >
               Siguiente
             </button>
@@ -319,43 +368,97 @@ function CrearPerfil() {
         )}
 
         {step === 5 && (
-          <div>
-            <label>Ubicación (ciudad o colonia):</label>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "320px",
+            }}
+          >
+            <label style={{ color: "#593c8f" }}>
+              Ubicación (ciudad o colonia):
+            </label>
             <input
               type="text"
               value={ubicacion}
               onChange={(e) => setUbicacion(e.target.value)}
+              style={{ color: "#222" }}
             />
             <button type="button" onClick={() => setStep(4)}>
               Atrás
             </button>
-            <button type="button" onClick={() => setStep(6)}>
+            <button
+              type="button"
+              onClick={() => setStep(6)}
+              style={{ marginLeft: "10px" }}
+            >
               Siguiente
             </button>
           </div>
         )}
 
         {step === 6 && (
-          <div>
-            <label>Biografía o descripción corta:</label>
-            <textarea value={bio} onChange={(e) => setBio(e.target.value)} />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "320px",
+            }}
+          >
+            <label style={{ color: "#593c8f" }}>
+              Biografía o descripción corta:
+            </label>
+            <textarea
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              style={{
+                color: "#593c8f",
+                background: "#fff",
+                border: "1px solid #ccc",
+                borderRadius: "6px",
+                padding: "8px",
+                fontSize: "16px",
+                width: "100%",
+                minHeight: "80px",
+                boxSizing: "border-box",
+              }}
+            />
             <button type="button" onClick={() => setStep(5)}>
               Atrás
             </button>
-            <button type="button" onClick={() => setStep(7)}>
+            <button
+              type="button"
+              onClick={() => setStep(7)}
+              style={{ marginLeft: "10px" }}
+            >
               Siguiente
             </button>
           </div>
         )}
 
         {step === 7 && (
-          <div>
-            <label>Fotos de eventos (máx. 4):</label>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "320px",
+            }}
+          >
+            <label style={{ color: "#593c8f" }}>
+              Fotos de eventos (máx. 4):
+            </label>
             <input
               type="file"
               accept="image/*"
               multiple
               onChange={handleFotosEventos}
+              style={{ color: "#222" }}
             />
             <button type="button" onClick={() => setStep(6)}>
               Atrás

@@ -239,9 +239,15 @@ function Formulario() {
               <div className="form-buttons">
                 <button
                   type="button"
-                  onClick={() => setStep(2)}
                   disabled={!form.tipo}
                   className="btn-form btn-primary"
+                  onClick={() => {
+                    if (form.tipo === "personal") {
+                      setStep(2);
+                    } else {
+                      setStep(3);
+                    }
+                  }}
                 >
                   Siguiente
                 </button>

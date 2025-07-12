@@ -3,6 +3,7 @@ import { supabase } from "../supabaseClient";
 import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
 import logoHazPlan from "../assets/iconoHazPlanRedondo.png";
+import Loader from "./ui/Loader";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -94,7 +95,7 @@ function Login() {
             >
               {loading ? (
                 <>
-                  <div className="spinner"></div>
+                  <Loader />
                   <span>Iniciando sesión...</span>
                 </>
               ) : (
@@ -106,7 +107,18 @@ function Login() {
           {/* Footer del formulario */}
           <div className="login-footer">
             <p>
-              ¿No tienes cuenta? <a href="/registro">Regístrate aquí</a>
+              ¿No tienes cuenta?{" "}
+              <span
+                className="login-link"
+                style={{
+                  color: "#7c4dff",
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                }}
+                onClick={() => navigate("/registro")}
+              >
+                Regístrate aquí
+              </span>
             </p>
           </div>
         </div>

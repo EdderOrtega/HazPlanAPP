@@ -145,7 +145,7 @@ function Registro() {
             >
               {loading ? (
                 <>
-                  <div className="spinner"></div>
+                  <Loader />
                   <span>Creando cuenta...</span>
                 </>
               ) : (
@@ -157,7 +157,18 @@ function Registro() {
           {/* Footer del formulario */}
           <div className="registro-footer">
             <p>
-              ¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a>
+              ¿Ya tienes cuenta?{" "}
+              <span
+                className="registro-link"
+                style={{
+                  color: "#7c4dff",
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                }}
+                onClick={() => navigate("/login")}
+              >
+                Inicia sesión aquí
+              </span>
             </p>
           </div>
         </div>
