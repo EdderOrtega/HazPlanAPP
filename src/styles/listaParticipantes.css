@@ -8,3 +8,8 @@
   background: #f0f0f0;
   margin-right: 10px;
 }
+
+.participante-item span {
+  color: #593c8f;
+  font-weight: bold;
+}

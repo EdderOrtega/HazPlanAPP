@@ -7,10 +7,88 @@ function UserMenu({ user }) {
   const [perfil, setPerfil] = useState(null);
   const [fotoPerfilUrl, setFotoPerfilUrl] = useState("");
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [notificacionesNoLeidas] = useState(0);
-  const [mensajesNoLeidos] = useState(0);
+  const [notificacionesNoLeidas, setNotificacionesNoLeidas] = useState(0);
+  const [mensajesNoLeidos, setMensajesNoLeidos] = useState(0);
+  const [eventosUsuario, setEventosUsuario] = useState([]);
+  const canalesRef = useRef([]); // Para limpiar canales correctamente
   const navigate = useNavigate();
   const menuRef = useRef();
+
+  // Obtener eventos donde participa el usuario
+  useEffect(() => {
+    if (!user) return;
+    let cancelado = false;
+    const fetchEventos = async () => {
+      const { data, error } = await supabase
+        .from("participantes_eventos")
+        .select("evento_id")
+        .eq("user_id", user.id);
+      if (!error && data && !cancelado) {
+        setEventosUsuario(data.map((d) => d.evento_id));
+      }
+    };
+    fetchEventos();
+    return () => {
+      cancelado = true;
+    };
+  }, [user]);
+
+  // Suscripción realtime global para mensajes y participantes
+  useEffect(() => {
+    if (!user) return;
+    // Limpiar canales previos
+    canalesRef.current.forEach((ch) => supabase.removeChannel(ch));
+    canalesRef.current = [];
+    // Mensajes global
+    const mensajesChannel = supabase
+      .channel("mensajes_eventos_global")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "mensajes_eventos",
+        },
+        (payload) => {
+          // Solo notificar si el mensaje es de un evento donde participa el usuario y no es suyo
+          if (
+            payload.new &&
+            eventosUsuario.includes(payload.new.evento_id) &&
+            payload.new.user_id !== user.id
+          ) {
+            setMensajesNoLeidos((prev) => prev + 1);
+          }
+        }
+      )
+      .subscribe();
+    canalesRef.current.push(mensajesChannel);
+    // Participantes global
+    const participantesChannel = supabase
+      .channel("participantes_eventos_global")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "participantes_eventos",
+        },
+        (payload) => {
+          if (
+            payload.new &&
+            eventosUsuario.includes(payload.new.evento_id) &&
+            payload.new.user_id !== user.id
+          ) {
+            setNotificacionesNoLeidas((prev) => prev + 1);
+          }
+        }
+      )
+      .subscribe();
+    canalesRef.current.push(participantesChannel);
+    return () => {
+      canalesRef.current.forEach((ch) => supabase.removeChannel(ch));
+      canalesRef.current = [];
+    };
+  }, [user, eventosUsuario]);
 
   useEffect(() => {
     if (!user) return;
@@ -54,6 +132,16 @@ function UserMenu({ user }) {
     navigate("/login");
   };
 
+  // Resetear contadores al entrar a la sección
+  const handleNavigateMensajes = () => {
+    setMensajesNoLeidos(0);
+    navigate("/mensajes");
+  };
+  const handleNavigateNotificaciones = () => {
+    setNotificacionesNoLeidas(0);
+    navigate("/notificaciones");
+  };
+
   if (!perfil) return null;
 
   return (
@@ -80,7 +168,7 @@ function UserMenu({ user }) {
           border: "2px solid #ddd",
           position: "relative",
         }}
-        onClick={() => navigate("/notificaciones")}
+        onClick={handleNavigateNotificaciones}
       >
         <FiBell size={20} color="white" />
         {/* Badge de notificaciones */}
@@ -119,7 +207,7 @@ function UserMenu({ user }) {
           border: "2px solid #ddd",
           position: "relative",
         }}
-        onClick={() => navigate("/mensajes")}
+        onClick={handleNavigateMensajes}
       >
         <FiMail size={20} color="white" />
         {/* Badge de mensajes */}

@@ -143,11 +143,11 @@ function Formulario() {
       .insert({
         nombre: nombreEvento,
         descripcion,
-        tipo,
+        tipo, // tipo es string (categoría)
         ubicacion,
-        fecha,
-        fecha_fin,
-        cupo,
+        fecha: fecha === "" ? null : fecha,
+        fecha_fin: fecha_fin === "" ? null : fecha_fin,
+        cupo: cupo === "" ? null : Number(cupo), // cupo como int4 o null
         user_id: userId,
         lat: coordenadas.lat,
         lon: coordenadas.lon,
@@ -199,7 +199,7 @@ function Formulario() {
         {/* Indicador de pasos y título SIEMPRE visibles arriba */}
         <div className="form-header">
           <div className="step-indicator">
-            {[1, 2, 3, 4, 5, 6].map((stepNumber) => (
+            {[1, 2, 3, 4, 5, 6, 7].map((stepNumber) => (
               <div
                 key={stepNumber}
                 className={`step-dot ${
@@ -219,8 +219,9 @@ function Formulario() {
               "¿A qué categoría pertenece tu evento?"}
             {step === 3 && "¿Cómo se llama tu evento?"}
             {step === 4 && "¿Dónde será tu evento?"}
-            {step === 5 && "¿Cuándo termina tu evento?"}
+            {step === 5 && "¿Cuándo inicia y termina tu evento?"}
             {step === 6 && "Cuéntanos más sobre tu evento"}
+            {step === 7 && "¿Cuál es el cupo máximo de participantes?"}
           </h2>
         </div>
 
@@ -410,6 +411,38 @@ function Formulario() {
           {step === 5 && (
             <div className="step-content">
               <div className="form-group">
+                <label className="form-label">📅 Fecha de inicio</label>
+                <CalendarioEvento
+                  fechaInicio={form.fecha}
+                  setFechaInicio={(fecha) => setForm({ ...form, fecha })}
+                  fechaFin={form.fecha_fin}
+                  setFechaFin={() => {}}
+                  soloFin={false}
+                />
+              </div>
+              <div className="form-buttons">
+                <button
+                  type="button"
+                  onClick={prev}
+                  className="btn-form btn-secondary"
+                >
+                  Atrás
+                </button>
+                <button
+                  type="button"
+                  onClick={next}
+                  disabled={!form.fecha}
+                  className="btn-form btn-primary"
+                >
+                  Siguiente
+                </button>
+              </div>
+            </div>
+          )}
+
+          {step === 6 && (
+            <div className="step-content">
+              <div className="form-group">
                 <label className="form-label">Fecha de fin</label>
                 <CalendarioEvento
                   fechaInicio={form.fecha}
@@ -441,7 +474,49 @@ function Formulario() {
             </div>
           )}
 
-          {step === 6 && (
+          {step === 7 && (
+            <div className="step-content">
+              <div className="form-group">
+                <label className="form-label">
+                  👥 Cupo máximo de participantes
+                </label>
+                <input
+                  type="number"
+                  name="cupo"
+                  min={1}
+                  value={form.cupo}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      cupo: e.target.value.replace(/[^0-9]/g, ""),
+                    })
+                  }
+                  className="form-input"
+                  placeholder="Ej: 20"
+                  required
+                />
+              </div>
+              <div className="form-buttons">
+                <button
+                  type="button"
+                  onClick={prev}
+                  className="btn-form btn-secondary"
+                >
+                  Atrás
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setStep(8)}
+                  disabled={!form.cupo || Number(form.cupo) < 1}
+                  className="btn-form btn-primary"
+                >
+                  Siguiente
+                </button>
+              </div>
+            </div>
+          )}
+
+          {step === 8 && (
             <div className="step-content">
               <div className="form-group">
                 <label className="form-label">📝 Descripción del evento</label>

@@ -1,4 +1,3 @@
-// Crear nuevo archivo ChatGrupal.jsx
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "../supabaseClient";
 import "../styles/chatGrupal.css";
@@ -8,117 +7,67 @@ function ChatGrupal({ eventoId }) {
   const [nuevoMensaje, setNuevoMensaje] = useState("");
   const [user, setUser] = useState(null);
   const [perfilesUsuarios, setPerfilesUsuarios] = useState({});
-  const [cargando, setCargando] = useState(true);
   const mensajesRef = useRef(null);
 
-  // Asegura que eventoId sea número
   const eventoIdNum = Number(eventoId);
 
-  // Obtener usuario actual y mensajes
+  // Obtener usuario actual y mensajes iniciales + polling cada minuto
   useEffect(() => {
-    let ignore = false;
+    let isMounted = true;
+    let intervalId;
 
-    const getUserAndMensajes = async () => {
-      setCargando(true);
-
-      // Usuario actual
+    const fetchData = async () => {
       const { data: userData } = await supabase.auth.getUser();
-      if (!ignore) setUser(userData.user);
+      if (isMounted) setUser(userData.user);
 
-      // Mensajes
-      const { data: mensajesData } = await supabase
-        .from("mensajes_chat")
-        .select("*")
-        .eq("evento_id", eventoIdNum)
-        .order("created_at", { ascending: true });
+      if (userData.user && eventoIdNum) {
+        // Traer solo mensajes de usuarios registrados
+        const { data: mensajesData } = await supabase
+          .from("mensajes_chat")
+          .select("*")
+          .eq("evento_id", eventoIdNum)
+          .order("created_at", { ascending: true });
 
-      if (!ignore && mensajesData) {
-        setMensajes(mensajesData);
+        // Obtener todos los user_id registrados
+        const { data: usuariosRegistrados } = await supabase
+          .from("usuariosRegistrados")
+          .select("user_id, nombre, foto_perfil");
+        const userIdsRegistrados = new Set(
+          (usuariosRegistrados || []).map((u) => u.user_id)
+        );
 
-        // Perfiles únicos
-        const userIds = [...new Set(mensajesData.map((m) => m.user_id))];
-        const nuevosPerfiles = { ...perfilesUsuarios };
+        // Filtrar mensajes solo de usuarios registrados
+        const mensajesFiltrados = (mensajesData || []).filter((m) =>
+          userIdsRegistrados.has(m.user_id)
+        );
+        setMensajes(mensajesFiltrados);
 
-        for (const userId of userIds) {
-          if (!nuevosPerfiles[userId]) {
-            const { data: perfil } = await supabase
-              .from("usuariosRegistrados")
-              .select("nombre, foto_perfil")
-              .eq("user_id", userId)
-              .single();
-
-            if (perfil && perfil.foto_perfil) {
-              const { data: urlData } = await supabase.storage
-                .from("hazplanimagenes")
-                .createSignedUrl(perfil.foto_perfil, 3600);
-              perfil.foto_perfil_url = urlData?.signedUrl || "";
-            }
-
-            nuevosPerfiles[userId] = perfil || {
-              nombre: "Usuario",
-              foto_perfil_url: "",
-            };
+        // Cargar perfiles únicos
+        const perfilesTemp = {};
+        for (const u of usuariosRegistrados || []) {
+          let foto_perfil_url = "";
+          if (u.foto_perfil) {
+            const { data: urlData } = await supabase.storage
+              .from("hazplanimagenes")
+              .createSignedUrl(u.foto_perfil, 3600);
+            foto_perfil_url = urlData?.signedUrl || "";
           }
+          perfilesTemp[u.user_id] = {
+            nombre: u.nombre || "Usuario",
+            foto_perfil_url,
+          };
         }
-        setPerfilesUsuarios(nuevosPerfiles);
+        setPerfilesUsuarios(perfilesTemp);
       }
-
-      setCargando(false);
     };
 
-    getUserAndMensajes();
-
-    // Suscripción a nuevos mensajes
-    const subscription = supabase
-      .channel("public:mensajes_chat")
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "mensajes_chat",
-          filter: `evento_id=eq.${eventoIdNum}`,
-        },
-        (payload) => {
-          setMensajes((mensajes) => {
-            // Evita duplicados
-            if (mensajes.some((m) => m.id === payload.new.id)) return mensajes;
-            return [...mensajes, payload.new];
-          });
-
-          // Si es un usuario nuevo, obtener su perfil
-          if (!perfilesUsuarios[payload.new.user_id]) {
-            const fetchPerfil = async () => {
-              const { data: perfil } = await supabase
-                .from("usuariosRegistrados")
-                .select("nombre, foto_perfil")
-                .eq("user_id", payload.new.user_id)
-                .single();
-              if (perfil && perfil.foto_perfil) {
-                const { data: urlData } = await supabase.storage
-                  .from("hazplanimagenes")
-                  .createSignedUrl(perfil.foto_perfil, 3600);
-                perfil.foto_perfil_url = urlData?.signedUrl || "";
-              }
-              setPerfilesUsuarios((prev) => ({
-                ...prev,
-                [payload.new.user_id]: perfil || {
-                  nombre: "Usuario",
-                  foto_perfil_url: "",
-                },
-              }));
-            };
-            fetchPerfil();
-          }
-        }
-      )
-      .subscribe();
+    fetchData();
+    intervalId = setInterval(fetchData, 15000); // cada 15 segundos
 
     return () => {
-      ignore = true;
-      subscription.unsubscribe();
+      isMounted = false;
+      if (intervalId) clearInterval(intervalId);
     };
-    // eslint-disable-next-line
   }, [eventoIdNum]);
 
   // Scroll automático al último mensaje
@@ -132,20 +81,40 @@ function ChatGrupal({ eventoId }) {
     e.preventDefault();
     if (!nuevoMensaje.trim() || !user) return;
 
+    const texto = nuevoMensaje.trim();
+
     const { error } = await supabase.from("mensajes_chat").insert({
       evento_id: eventoIdNum,
       user_id: user.id,
-      contenido: nuevoMensaje.trim(),
+      contenido: texto,
     });
 
-    if (!error) {
+    if (error) {
+      console.error("❌ Error enviando mensaje:", error);
+    } else {
       setNuevoMensaje("");
+      // Fetch inmediato tras enviar mensaje
+      // (No espera al polling ni a realtime)
+      const fetchData = async () => {
+        const { data: mensajesData } = await supabase
+          .from("mensajes_chat")
+          .select("*")
+          .eq("evento_id", eventoIdNum)
+          .order("created_at", { ascending: true });
+        const { data: usuariosRegistrados } = await supabase
+          .from("usuariosRegistrados")
+          .select("user_id, nombre, foto_perfil");
+        const userIdsRegistrados = new Set(
+          (usuariosRegistrados || []).map((u) => u.user_id)
+        );
+        const mensajesFiltrados = (mensajesData || []).filter((m) =>
+          userIdsRegistrados.has(m.user_id)
+        );
+        setMensajes(mensajesFiltrados);
+      };
+      fetchData();
     }
   };
-
-  if (cargando) {
-    return <div>Cargando chat...</div>;
-  }
 
   return (
     <div className="chat-grupal evento-chat-tab">
@@ -167,22 +136,18 @@ function ChatGrupal({ eventoId }) {
                   : "mensaje-otro"
               }
             >
-              {mensaje.user_id !== user?.id && (
-                <div className="mensaje-avatar">
-                  {perfilesUsuarios[mensaje.user_id]?.foto_perfil_url ? (
-                    <img
-                      src={perfilesUsuarios[mensaje.user_id].foto_perfil_url}
-                      alt="Avatar"
-                      className="avatar-participante"
-                    />
-                  ) : (
-                    <div className="avatar-placeholder"></div>
-                  )}
-                </div>
-              )}
               <div className="mensaje-contenido">
                 {mensaje.user_id !== user?.id && (
                   <span className="mensaje-autor">
+                    {perfilesUsuarios[mensaje.user_id]?.foto_perfil_url ? (
+                      <img
+                        src={perfilesUsuarios[mensaje.user_id].foto_perfil_url}
+                        alt="Avatar"
+                        className="avatar-participante"
+                      />
+                    ) : (
+                      <div className="avatar-participante avatar-placeholder"></div>
+                    )}
                     {perfilesUsuarios[mensaje.user_id]?.nombre || "Usuario"}
                   </span>
                 )}
@@ -198,6 +163,7 @@ function ChatGrupal({ eventoId }) {
           ))
         )}
       </div>
+
       <form onSubmit={enviarMensaje} className="evento-chat-input-row">
         <input
           type="text"
@@ -205,6 +171,7 @@ function ChatGrupal({ eventoId }) {
           onChange={(e) => setNuevoMensaje(e.target.value)}
           placeholder="Escribe un mensaje..."
           disabled={!user}
+          autoComplete="off"
         />
         <button type="submit" disabled={!nuevoMensaje.trim() || !user}>
           <span className="icon-send"></span>

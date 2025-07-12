@@ -1,6 +1,19 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 
+// Filtrar eventos expirados (solo mostrar eventos cuya fecha_fin es hoy o futura)
+const filtrarEventosActivos = (eventos) => {
+  const ahora = new Date();
+  return (eventos || []).filter((e) => {
+    if (!e.fecha_fin) return true; // Si no tiene fecha_fin, mostrarlo
+    try {
+      return new Date(e.fecha_fin) >= ahora;
+    } catch {
+      return true;
+    }
+  });
+};
+
 export const useMapEvents = () => {
   const [eventos, setEventos] = useState([]);
   const [isLoadingEventos, setIsLoadingEventos] = useState(false);
@@ -14,7 +27,7 @@ export const useMapEvents = () => {
       .order("fecha", { ascending: true });
 
     if (!error) {
-      setEventos(data || []);
+      setEventos(filtrarEventosActivos(data || []));
       console.log(`📋 Eventos cargados: ${data?.length || 0}`);
     } else {
       console.error("❌ Error al cargar eventos:", error);
@@ -44,25 +57,22 @@ export const useMapEvents = () => {
 
           if (payload.eventType === "INSERT") {
             console.log("➕ Insertando nuevo evento en mapa:", payload.new);
-            setEventos((prev) => {
-              const newEventos = [...prev, payload.new];
-              console.log(
-                "📊 Total eventos después de insertar:",
-                newEventos.length
-              );
-              return newEventos;
-            });
+            setEventos((prev) => filtrarEventosActivos([...prev, payload.new]));
           } else if (payload.eventType === "UPDATE") {
             console.log("✏️ Actualizando evento en mapa:", payload.new);
             setEventos((prev) =>
-              prev.map((evento) =>
-                evento.id === payload.new.id ? payload.new : evento
+              filtrarEventosActivos(
+                prev.map((evento) =>
+                  evento.id === payload.new.id ? payload.new : evento
+                )
               )
             );
           } else if (payload.eventType === "DELETE") {
             console.log("🗑️ Eliminando evento del mapa:", payload.old);
             setEventos((prev) =>
-              prev.filter((evento) => evento.id !== payload.old.id)
+              filtrarEventosActivos(
+                prev.filter((evento) => evento.id !== payload.old.id)
+              )
             );
           }
         }

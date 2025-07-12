@@ -1,13 +1,75 @@
+import { useState, useEffect } from "react";
 import { Marker, Popup } from "react-leaflet";
 import { createCategoryIcon } from "../utils/mapUtils";
+import { supabase } from "../supabaseClient";
+import { useNavigate } from "react-router-dom";
 
-function EventoMarker({ evento, user, onUnirseEvento, onNavigateToLogin }) {
+function EventoMarker({ evento, user, onNavigateToLogin }) {
   const lat = Number(evento.lat);
   const lon = Number(evento.lon);
+
+  const [yaUnido, setYaUnido] = useState(false);
+  const [cargando, setCargando] = useState(false);
+  const navigate = useNavigate();
 
   if (isNaN(lat) || isNaN(lon)) return null;
 
   const eventoIcon = createCategoryIcon(evento.tipo, 40);
+
+  // Verificar si el usuario ya está unido al evento
+  useEffect(() => {
+    const checkParticipacion = async () => {
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("participantes_eventos")
+        .select("id")
+        .eq("evento_id", evento.id)
+        .eq("user_id", user.id)
+        .single();
+
+      if (data) {
+        console.log("✅ Usuario ya está unido al evento");
+        setYaUnido(true);
+      } else if (error && error.code !== "PGRST116") {
+        console.error("❌ Error al verificar participación:", error);
+      }
+    };
+
+    checkParticipacion();
+  }, [user, evento.id]);
+
+  const unirseEvento = async () => {
+    if (!user) {
+      console.warn("⚠️ Usuario no autenticado");
+      onNavigateToLogin();
+      return;
+    }
+
+    setCargando(true);
+
+    try {
+      // Insertar participante
+      const { error } = await supabase.from("participantes_eventos").insert({
+        evento_id: evento.id,
+        user_id: user.id,
+      });
+
+      if (error) {
+        console.error("❌ Error al unirse al evento:", error);
+        alert("No se pudo unir al evento. Intenta de nuevo.");
+      } else {
+        console.log("🎉 Usuario unido al evento");
+        setYaUnido(true);
+        navigate(`/evento/${evento.id}`);
+      }
+    } catch (err) {
+      console.error("❌ Error inesperado:", err);
+      alert("Error inesperado. Intenta de nuevo.");
+    } finally {
+      setCargando(false);
+    }
+  };
 
   return (
     <Marker
@@ -75,10 +137,7 @@ function EventoMarker({ evento, user, onUnirseEvento, onNavigateToLogin }) {
                   boxShadow: "0 1px 4px #e8deff",
                 }}
               >
-                <span role="img" aria-label="ubicación">
-                  📍
-                </span>{" "}
-                {evento.ubicacion || "Sin ubicación"}
+                📍 {evento.ubicacion || "Sin ubicación"}
               </span>
               <span
                 style={{
@@ -94,10 +153,7 @@ function EventoMarker({ evento, user, onUnirseEvento, onNavigateToLogin }) {
                   boxShadow: "0 1px 4px #e8deff",
                 }}
               >
-                <span role="img" aria-label="tipo">
-                  🎯
-                </span>{" "}
-                {evento.tipo || "Sin tipo"}
+                🎯 {evento.tipo || "Sin tipo"}
               </span>
               <span
                 style={{
@@ -113,9 +169,7 @@ function EventoMarker({ evento, user, onUnirseEvento, onNavigateToLogin }) {
                   boxShadow: "0 1px 4px #e8deff",
                 }}
               >
-                <span role="img" aria-label="fecha">
-                  🗓️
-                </span>{" "}
+                🗓️{" "}
                 {evento.fecha
                   ? new Date(evento.fecha).toLocaleDateString()
                   : "Sin fecha"}
@@ -134,10 +188,7 @@ function EventoMarker({ evento, user, onUnirseEvento, onNavigateToLogin }) {
                   boxShadow: "0 1px 4px #e8deff",
                 }}
               >
-                <span role="img" aria-label="cupo">
-                  👥
-                </span>{" "}
-                Cupo: {evento.cupo || "Sin límite"} personas
+                👥 Cupo: {evento.cupo || "Sin límite"} personas
               </span>
             </div>
 
@@ -177,31 +228,54 @@ function EventoMarker({ evento, user, onUnirseEvento, onNavigateToLogin }) {
             }}
           >
             {user ? (
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onUnirseEvento(evento);
-                }}
-                style={{
-                  padding: "12px 24px",
-                  background: "linear-gradient(135deg, #7c4dff, #593c8f)",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                  transition: "all 0.3s ease",
-                  boxShadow: "0 4px 15px #7c4dff33",
-                  width: "90%",
-                  maxWidth: "200px",
-                  margin: "0 auto",
-                  display: "block",
-                }}
-              >
-                Unirme
-              </button>
+              yaUnido ? (
+                <button
+                  onClick={() => navigate(`/evento/${evento.id}`)}
+                  style={{
+                    padding: "12px 24px",
+                    background: "linear-gradient(135deg, #7c4dff, #593c8f)",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                    width: "90%",
+                    maxWidth: "200px",
+                    margin: "0 auto",
+                    display: "block",
+                  }}
+                >
+                  Ir a detalles
+                </button>
+              ) : (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    unirseEvento();
+                  }}
+                  disabled={cargando}
+                  style={{
+                    padding: "12px 24px",
+                    background: "linear-gradient(135deg, #7c4dff, #593c8f)",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "8px",
+                    cursor: cargando ? "wait" : "pointer",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                    transition: "all 0.3s ease",
+                    boxShadow: "0 4px 15px #7c4dff33",
+                    width: "90%",
+                    maxWidth: "200px",
+                    margin: "0 auto",
+                    display: "block",
+                  }}
+                >
+                  {cargando ? "Uniendo..." : "Unirme"}
+                </button>
+              )
             ) : (
               <button
                 onClick={onNavigateToLogin}

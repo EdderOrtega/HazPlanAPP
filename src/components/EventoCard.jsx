@@ -68,7 +68,9 @@ function EventoCard({ evento, user }) {
       if (!error) {
         console.log("✅ Inscripción exitosa, redirigiendo a evento");
         setParticipando(true);
-        navigate(`/evento/${evento.id}`); // Redirige al detalle del evento
+        // Forzar recarga de la página de detalle del evento para que los invitados se actualicen
+        navigate(0); // recarga la página actual
+        // Alternativa: navigate(`/evento/${evento.id}`); // si quieres solo navegar
       } else {
         console.error("❌ Error al unirse al evento:", error);
         alert("Error al unirse al evento. Inténtalo de nuevo.");
