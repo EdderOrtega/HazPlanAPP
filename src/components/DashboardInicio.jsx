@@ -5,7 +5,6 @@ import EventoCard from "./EventoCard";
 import "../styles/dashboardInicio.css";
 import "../styles/pageTransitions.css";
 import Loader from "./ui/Loader";
-import { useStaggerAnimation } from "../hooks/useAnimations";
 import heroImg from "../assets/arte.png";
 import comunidadImg from "../assets/comunidad.png";
 import deportesImg from "../assets/deportes.png";
@@ -31,6 +30,11 @@ import {
 } from "react-icons/fa6";
 import EventosCarruselRecomendados from "./EventosCarruselRecomendados";
 
+import { useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
+
 function DashboardInicio({ user }) {
   const navigate = useNavigate();
   const [estadisticas, setEstadisticas] = useState({
@@ -38,11 +42,206 @@ function DashboardInicio({ user }) {
     eventosCreados: 0,
     proximosEventos: 0,
   });
-  const [gustos, setGustos] = useState([]);
-
-  // Hooks para animaciones
-  const statsRef = useStaggerAnimation(150);
   const [loading, setLoading] = useState(true);
+
+  // Refs para animaciones GSAP
+  const heroRef = useRef();
+  const statsRef = useRef();
+  const carruselRef = useRef();
+  const empresasRef = useRef();
+  const inspiracionRef = useRef();
+  const heroCardsRef = useRef();
+  const galleryRef = useRef();
+  const tipsRef = useRef();
+  const gta6Ref = useRef();
+  const footerRef = useRef();
+
+  useEffect(() => {
+    if (loading) return;
+    // Limpiar triggers previos para evitar duplicados y bugs
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+
+    // Hero animación de entrada
+    if (heroRef.current) {
+      gsap.fromTo(
+        heroRef.current,
+        { opacity: 0, y: 80 },
+        { opacity: 1, y: 0, duration: 1, ease: "expo.out" }
+      );
+      const heroContent = heroRef.current.querySelector(".hero-content");
+      if (heroContent) {
+        gsap.fromTo(
+          heroContent,
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, duration: 1, delay: 0.2, ease: "expo.out" }
+        );
+      }
+    }
+    // Stats: stagger animado (trigger en el contenedor padre)
+    if (statsRef.current) {
+      const cards = statsRef.current.querySelectorAll(".stat-card, .StatCard");
+      gsap.fromTo(
+        cards,
+        { opacity: 0, y: 40, scale: 0.9 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.7,
+          stagger: 0.12,
+          ease: "expo.out",
+          scrollTrigger: {
+            trigger: statsRef.current,
+            start: "top 90%",
+            toggleActions: "play none none none",
+            once: true,
+          },
+        }
+      );
+    }
+    // Carrusel recomendado
+    if (carruselRef.current) {
+      gsap.fromTo(
+        carruselRef.current,
+        { opacity: 0, y: 60 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "expo.out",
+          scrollTrigger: { trigger: carruselRef.current, start: "top 90%" },
+        }
+      );
+    }
+    // Empresas card
+    if (empresasRef.current) {
+      gsap.fromTo(
+        empresasRef.current,
+        { opacity: 0, scale: 0.93 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: { trigger: empresasRef.current, start: "top 90%" },
+        }
+      );
+    }
+    // Inspiración parallax
+    if (inspiracionRef.current) {
+      gsap.fromTo(
+        inspiracionRef.current,
+        { opacity: 0, y: 60 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "expo.out",
+          scrollTrigger: { trigger: inspiracionRef.current, start: "top 90%" },
+        }
+      );
+    }
+    // Hero cards tipo GTA6 (trigger en el contenedor padre)
+    if (heroCardsRef.current) {
+      const cards = heroCardsRef.current.querySelectorAll(
+        ".modern-highlight-card"
+      );
+      gsap.fromTo(
+        cards,
+        { opacity: 0, y: 60, scale: 0.92 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.7,
+          stagger: 0.1,
+          ease: "expo.out",
+          scrollTrigger: {
+            trigger: heroCardsRef.current,
+            start: "top 90%",
+            toggleActions: "play none none none",
+            once: true,
+          },
+        }
+      );
+    }
+    // Galería
+    if (galleryRef.current) {
+      const imgs = galleryRef.current.querySelectorAll(".gallery-img");
+      gsap.fromTo(
+        imgs,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: { trigger: galleryRef.current, start: "top 95%" },
+        }
+      );
+    }
+    // Tips
+    if (tipsRef.current) {
+      const tipCards = tipsRef.current.querySelectorAll(".tip-card");
+      gsap.fromTo(
+        tipCards,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          stagger: 0.1,
+          ease: "power2.out",
+          scrollTrigger: { trigger: tipsRef.current, start: "top 95%" },
+        }
+      );
+    }
+    // GTA6 animaciones (trigger en el contenedor padre)
+    if (gta6Ref.current) {
+      const gta6Cards = gta6Ref.current.querySelectorAll(".gta6-img-card");
+      gsap.fromTo(
+        gta6Cards,
+        { opacity: 0, y: 40, scale: 0.92 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.7,
+          stagger: 0.1,
+          ease: "expo.out",
+          scrollTrigger: {
+            trigger: gta6Ref.current,
+            start: "top 95%",
+            toggleActions: "play none none none",
+            once: true,
+          },
+        }
+      );
+    }
+    // Footer
+    if (footerRef.current) {
+      gsap.fromTo(
+        footerRef.current,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: { trigger: footerRef.current, start: "top 98%" },
+        }
+      );
+    }
+    // Refrescar triggers después de un pequeño delay para asegurar layout
+    setTimeout(() => {
+      if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+    }, 100);
+    // Limpieza de triggers al desmontar
+    return () => {
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+    };
+  }, [loading]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,10 +280,13 @@ function DashboardInicio({ user }) {
   }
 
   return (
-    <div className="dashboard-inicio page-transition-container">
+    <div
+      className="dashboard-inicio page-transition-container"
+      style={{ overflowX: "hidden" }}
+    >
       <div className="dashboard-inicio-inner">
         {/* HERO visual con overlay y animación */}
-        <div className="dashboard-hero">
+        <div className="dashboard-hero" ref={heroRef}>
           <img src={heroImg} alt="Hero HazPlan" className="hero-bg-img" />
           <div className="hero-overlay" />
           <div className="hero-content animate-fadein">
@@ -123,14 +325,16 @@ function DashboardInicio({ user }) {
             delay={400}
           />
         </div>
-        {/* Scroll de eventos recomendados por intereses (vertical antiguo) */}
-        {/* <EventosScrollRecomendados intereses={gustos} /> */}
-
         {/* Carrusel horizontal tipo Spotify */}
-        <EventosCarruselRecomendados />
+        <div ref={carruselRef}>
+          <EventosCarruselRecomendados />
+        </div>
 
         {/* Card informativa para empresas, negocios y ONGs con animación y estilo destacado */}
-        <section className="dashboard-info-empresas animate-empresas-card">
+        <section
+          className="dashboard-info-empresas animate-empresas-card"
+          ref={empresasRef}
+        >
           <div className="empresas-bg-glow"></div>
           <h2>¿Tienes un negocio, empresa u organización?</h2>
           <p>
@@ -163,7 +367,10 @@ function DashboardInicio({ user }) {
         </section>
 
         {/* Animación de parallax y sección de inspiración */}
-        <div className="dashboard-inspiration animate-parallax">
+        <div
+          className="dashboard-inspiration animate-parallax"
+          ref={inspiracionRef}
+        >
           <h2>¿Listo para tu próxima aventura?</h2>
           <p>
             Explora eventos, haz nuevos amigos y vive experiencias inolvidables.
@@ -171,7 +378,7 @@ function DashboardInicio({ user }) {
         </div>
 
         {/* Cards modernas con imagen de fondo y animaciones tipo GTA6 + info de empresas */}
-        <div className="dashboard-hero-cards">
+        <div className="dashboard-hero-cards" ref={heroCardsRef}>
           <div
             className="modern-highlight-card animate-gta6-img"
             style={{
@@ -263,7 +470,7 @@ function DashboardInicio({ user }) {
         </div>
 
         {/* Galería de imágenes animada */}
-        <div className="dashboard-gallery">
+        <div className="dashboard-gallery" ref={galleryRef}>
           <img
             src={comunidadImg}
             alt="Comunidad"
@@ -296,7 +503,7 @@ function DashboardInicio({ user }) {
         </div>
 
         {/* Tips y sugerencias visuales */}
-        <div className="section tips-section">
+        <div className="section tips-section" ref={tipsRef}>
           <h2 className="section-title">💡 Tips para ti</h2>
           <div className="tips-grid">
             <div className="tip-card">
@@ -317,7 +524,7 @@ function DashboardInicio({ user }) {
         </div>
 
         {/* Animaciones dinámicas tipo GTA6 con imágenes de amigos */}
-        <div className="dashboard-gta6-animaciones">
+        <div className="dashboard-gta6-animaciones" ref={gta6Ref}>
           <div
             className="gta6-img-card animate-gta6-img"
             style={{ animationDelay: "0.1s" }}
@@ -348,7 +555,7 @@ function DashboardInicio({ user }) {
           </div>
         </div>
       </div>
-      <footer className="dashboard-footer">
+      <footer className="dashboard-footer" ref={footerRef}>
         <div className="footer-content">
           <div className="footer-logo">
             <img src={logoHazPlan} alt="HazPlan" />
