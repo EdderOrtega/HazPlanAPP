@@ -327,7 +327,7 @@
     border-radius: 0;
     box-shadow: none;
     padding: 0 2vw 32px 2vw;
-    margin: 0;
+    margin-bottom: 100px;
   }
   .form-header {
     padding-top: 18px;

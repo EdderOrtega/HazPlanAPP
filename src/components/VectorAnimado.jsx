@@ -1,15 +1,15 @@
 import React, { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import ciudadVideo from "../assets/HazPlanMapaVideo.mp4";
+import ciudadVideo from "/public/videos/HazPlanMapaVideo.mp4";
 // Importar iconos de categorías
-import arteIcon from "../assets/arte.png";
-import deportesIcon from "../assets/deportes.png";
-import comunidadIcon from "../assets/comunidad.png";
-import mascotasIcon from "../assets/mascotas.png";
-import medioambienteIcon from "../assets/medioambiente.png";
-import saludIcon from "../assets/salud.png";
-import inclusionIcon from "../assets/inclusion.png";
-import fandomsIcon from "../assets/fandoms.png";
+import arteIcon from "/public/images/arte.png";
+import deportesIcon from "/public/images/deportes.png";
+import comunidadIcon from "/public/images/comunidad.png";
+import mascotasIcon from "/public/images/mascotas.png";
+import medioambienteIcon from "/public/images/medioambiente.png";
+import saludIcon from "/public/images/salud.png";
+import inclusionIcon from "/public/images/inclusion.png";
+import fandomsIcon from "/public/images/fandoms.png";
 import "../styles/vectorAnimado.css";
 
 function AnimatedText({ text, delay = 0 }) {

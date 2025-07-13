@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
+import Loader from "./ui/Loader";
 
 function Perfil() {
   const [user, setUser] = useState(null);
@@ -17,14 +18,14 @@ function Perfil() {
         .select("*")
         .eq("id", user.id)
         .single()
-        .then(({ data, error }) => {
+        .then(({ data }) => {
           setPerfil(data);
           setLoading(false);
         });
     }
   }, [user]);
 
-  if (loading) return <div>Cargando...</div>;
+  if (loading) return <Loader />;
 
   if (!perfil) {
     // Si no hay perfil, muestra opción para crearlo o editarlo

@@ -4,14 +4,14 @@ import CalendarioEvento from "../components/events/CalendarioEvento";
 import ModalEventoCreadoExistosamente from "../components/ui/ModalEventoCreadoExistosamente";
 import EventTypeSelector from "./EventTypeSelectorLimpio";
 import "../styles/formulario.css";
-import mascotasIcon from "../assets/mascotas.png";
-import medioambienteIcon from "../assets/medioambiente.png";
-import fandomsIcon from "../assets/fandoms.png";
-import arteIcon from "../assets/arte.png";
-import deportesIcon from "../assets/deportes.png";
-import saludIcon from "../assets/salud.png";
-import comunidadIcon from "../assets/comunidad.png";
-import inclusionIcon from "../assets/inclusion.png";
+import mascotasIcon from "/public/images/mascotas.png";
+import medioambienteIcon from "/public/images/medioambiente.png";
+import fandomsIcon from "/public/images/fandoms.png";
+import arteIcon from "/public/images/arte.png";
+import deportesIcon from "/public/images/deportes.png";
+import saludIcon from "/public/images/salud.png";
+import comunidadIcon from "/public/images/comunidad.png";
+import inclusionIcon from "/public/images/inclusion.png";
 
 function Formulario() {
   const [step, setStep] = useState(1);

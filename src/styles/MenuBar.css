@@ -5,7 +5,7 @@
   left: 0;
   right: 0;
   height: 64px;
-  background: #fff;
+  background: #593c8f;
   border-top: 1px solid #eee;
   display: flex;
   justify-content: space-around;
@@ -14,7 +14,7 @@
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
 }
 .bottom-nav a {
-  color: #888;
+  color: #fff8f8;
   font-size: 1.8rem;
   text-decoration: none;
   flex: 1;
@@ -27,7 +27,7 @@
 }
 .bottom-nav a.active,
 .bottom-nav a.crear-evento {
-  color: #2e7d32;
+  color: #e252ff;
 }
 .bottom-nav a.crear-evento {
   position: relative;
@@ -41,7 +41,7 @@
   align-items: center;
   justify-content: center;
   font-size: 2.2rem;
-  border: 2px solid #2e7d32;
+  border: 2px solid #a62dbb;
 }
 .bottom-nav span {
   font-size: 0.8rem;

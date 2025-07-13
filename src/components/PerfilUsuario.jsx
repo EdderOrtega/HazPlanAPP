@@ -52,9 +52,25 @@ function PerfilUsuario() {
     fetchPerfil();
   }, [navigate]);
 
+  // Referencia para el input file
+  const inputFileRef = React.useRef(null);
+
   const handleAgregarImagen = () => {
-    // TODO: Implementar función para agregar imagen
-    console.log("Agregar imagen");
+    if (inputFileRef.current) {
+      inputFileRef.current.value = null; // Limpiar selección previa
+      inputFileRef.current.click();
+    }
+  };
+
+  // Manejar selección de archivo
+  const handleArchivoSeleccionado = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      // Aquí puedes subir la imagen a Supabase Storage o mostrar preview
+      // Por ahora solo muestra el nombre
+      alert(`Imagen seleccionada: ${file.name}`);
+      // TODO: subir imagen y actualizar galería
+    }
   };
 
   if (loading)
@@ -104,8 +120,39 @@ function PerfilUsuario() {
           <button
             className="btn-editar-foto"
             onClick={() => navigate("/crear-perfil")}
+            style={{
+              position: "absolute",
+              bottom: 0,
+              right: 0,
+              background: "#7c4dff",
+              border: "2px solid #fff",
+              borderRadius: "50%",
+              width: 36,
+              height: 36,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 2px 8px rgba(89,60,143,0.18)",
+              cursor: "pointer",
+              zIndex: 2,
+              padding: 0,
+              transition: "box-shadow 0.2s",
+            }}
+            aria-label="Editar foto de perfil"
           >
-            <FiEdit3 />
+            {/* SVG lápiz blanco */}
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M14.7 2.29a1 1 0 0 1 1.42 0l1.59 1.59a1 1 0 0 1 0 1.42l-9.34 9.34-2.83.71.71-2.83 9.34-9.34zM3 17h14v2H3v-2z"
+                fill="#fff"
+              />
+            </svg>
           </button>
         </div>
 
@@ -157,13 +204,22 @@ function PerfilUsuario() {
               <div
                 key={`empty-${index}`}
                 className="galeria-item galeria-vacia"
-                onClick={() => handleAgregarImagen()}
+                onClick={handleAgregarImagen}
+                style={{ cursor: "pointer" }}
               >
                 <FiPlus className="icono-plus" />
                 <span>Agregar foto</span>
               </div>
             )
           )}
+          {/* Input file oculto para subir imagen */}
+          <input
+            type="file"
+            accept="image/*"
+            ref={inputFileRef}
+            style={{ display: "none" }}
+            onChange={handleArchivoSeleccionado}
+          />
         </div>
       </div>
     </div>

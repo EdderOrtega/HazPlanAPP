@@ -1,5 +1,5 @@
 import "../../styles/modalRegistroExitoso.css";
-import capibara from "../../assets/capibaraMascota.png";
+import capibara from "/public/images/capibaraMascota.png";
 
 function ModalRegistroExitoso({ onClose }) {
   return (

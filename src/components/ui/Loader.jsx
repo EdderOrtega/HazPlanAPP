@@ -1,5 +1,5 @@
 import "../../styles/loader.css"; // Asegúrate de tener el archivo CSS en esta ruta
-import capibara from "../../assets/capibaraMascota.png"; // Asegúrate de tener la imagen en esta ruta
+import capibara from "/public/images/capibaraMascota.png"; // Asegúrate de tener la imagen en esta ruta
 
 function Loader() {
   return (

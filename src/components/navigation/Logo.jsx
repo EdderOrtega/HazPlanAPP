@@ -1,5 +1,5 @@
 import React from "react";
-import iconoHazPlan from "../../assets/iconoHazPlanRedondo.png";
+import iconoHazPlan from "/public/images/iconoHazPlanRedondo.png";
 
 const Logo = () => {
   return (

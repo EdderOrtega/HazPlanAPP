@@ -1,6 +1,6 @@
 import { useState } from "react";
-import capibara from "../../assets/capibaraMascota.png";
-import vehiculo from "../../assets/capiCamion.png";
+import capibara from "/public/images/capibaraMascota.png";
+import vehiculo from "/public/images/capiCamion.png";
 
 function ModalEventoSorpresa({ isOpen, onClose, recorridoActivo = false }) {
   const [showDetails, setShowDetails] = useState(false);

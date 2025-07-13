@@ -3,15 +3,15 @@ import "../../styles/filterCarousel.css";
 import "../../styles/contrastImprovements.css";
 
 // Importar las imágenes de assets
-import arte from "../../assets/arte.png";
-import comunidad from "../../assets/comunidad.png";
-import deportes from "../../assets/deportes.png";
-import fandoms from "../../assets/fandoms.png";
-import inclusion from "../../assets/inclusion.png";
-import mascotas from "../../assets/mascotas.png";
-import medioambiente from "../../assets/medioambiente.png";
-import salud from "../../assets/salud.png";
-import iconoHazPlanRedondo from "../../assets/iconoHazPlanRedondo.png";
+import arte from "/public/images/arte.png";
+import comunidad from "/public/images/comunidad.png";
+import deportes from "/public/images/deportes.png";
+import fandoms from "/public/images/fandoms.png";
+import inclusion from "/public/images/inclusion.png";
+import mascotas from "/public/images/mascotas.png";
+import medioambiente from "/public/images/medioambiente.png";
+import salud from "/public/images/salud.png";
+import iconoHazPlanRedondo from "/public/images/iconoHazPlanRedondo.png";
 
 const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
   // Definir filtros con iconos de imágenes

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { supabase } from "../supabaseClient";
 import { useNavigate } from "react-router-dom";
 import ModalRegistroExitoso from "./ui/ModalRegistroExitoso";
-import iconoHazPlan from "../assets/iconoHazPlanRedondo.png";
+import iconoHazPlan from "/public/images/iconoHazPlanRedondo.png";
 import "../styles/registro.css";
 
 function Registro() {
@@ -146,7 +146,6 @@ function Registro() {
               {loading ? (
                 <>
                   <Loader />
-                  <span>Creando cuenta...</span>
                 </>
               ) : (
                 <span>Crear cuenta</span>

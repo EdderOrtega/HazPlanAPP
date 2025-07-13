@@ -4,6 +4,7 @@ import InfoSection from "./home/InfoSection";
 import CTASection from "./home/CTASection";
 import DashboardInicio from "./DashboardInicio";
 import BusinessPromoSection from "./BusinessPromoSection"; // Nueva sección para empresas
+import ONGsPromoSection from "./ONGsPromoSection";
 import useGTAScrollAnimations from "../hooks/useGTAScrollAnimations";
 
 function Home({ user, onShowComingSoon }) {
@@ -39,6 +40,9 @@ function Home({ user, onShowComingSoon }) {
       <div style={{ padding: "0 20px", maxWidth: "1200px", margin: "0 auto" }}>
         <BusinessPromoSection />
       </div>
+
+      {/* Nueva sección de ONGs aliadas con videos tipo TikTok */}
+      <ONGsPromoSection />
 
       {/* Más InfoSections fuera del contenedor */}
       <InfoSection sectionKey="section2" />

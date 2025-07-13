@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { supabase } from "../supabaseClient";
 import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
-import logoHazPlan from "../assets/iconoHazPlanRedondo.png";
+import logoHazPlan from "/public/images/iconoHazPlanRedondo.png";
 import Loader from "./ui/Loader";
 
 function Login() {

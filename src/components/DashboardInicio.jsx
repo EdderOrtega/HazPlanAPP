@@ -1,3 +1,4 @@
+import ONGsPromoSection from "./ONGsPromoSection";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // import { supabase } from "../supabaseClient";
@@ -5,14 +6,14 @@ import EventoCard from "./EventoCard";
 import "../styles/dashboardInicio.css";
 import "../styles/pageTransitions.css";
 import Loader from "./ui/Loader";
-import heroImg from "../assets/arte.png";
-import comunidadImg from "../assets/comunidad.png";
-import deportesImg from "../assets/deportes.png";
-import fandomsImg from "../assets/fandoms.png";
-import saludImg from "../assets/salud.png";
-import medioambienteImg from "../assets/medioambiente.png";
-import amigos2Img from "../assets/amigos2.jpg";
-import amigos3Img from "../assets/amigos3.jpg";
+import heroImg from "/public/images/arte.png";
+import comunidadImg from "/public/images/comunidad.png";
+import deportesImg from "/public/images/deportes.png";
+import fandomsImg from "/public/images/fandoms.png";
+import saludImg from "/public/images/salud.png";
+import medioambienteImg from "/public/images/medioambiente.png";
+import amigos2Img from "/public/images/amigos2.jpg";
+import amigos3Img from "/public/images/amigos3.jpg";
 import {
   FaInstagram,
   FaFacebook,
@@ -21,7 +22,7 @@ import {
   FaXTwitter,
   FaEnvelope,
 } from "react-icons/fa6";
-import logoHazPlan from "../assets/iconoHazPlanRedondo.png";
+import logoHazPlan from "/public/images/iconoHazPlanRedondo.png";
 import StatCard from "./StatCard";
 import {
   FaCalendarCheck,
@@ -79,7 +80,7 @@ function DashboardInicio({ user }) {
     }
     // Stats: stagger animado (trigger en el contenedor padre)
     if (statsRef.current) {
-      const cards = statsRef.current.querySelectorAll(".stat-card, .StatCard");
+      const cards = statsRef.current.querySelectorAll(".stat-simple");
       gsap.fromTo(
         cards,
         { opacity: 0, y: 40, scale: 0.9 },
@@ -376,6 +377,9 @@ function DashboardInicio({ user }) {
             Explora eventos, haz nuevos amigos y vive experiencias inolvidables.
           </p>
         </div>
+
+        {/* Sección de ONGs aliadas con videos tipo TikTok */}
+        <ONGsPromoSection />
 
         {/* Cards modernas con imagen de fondo y animaciones tipo GTA6 + info de empresas */}
         <div className="dashboard-hero-cards" ref={heroCardsRef}>

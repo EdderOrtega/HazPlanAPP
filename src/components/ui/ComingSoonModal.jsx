@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import ciudadVideo from "../../assets/HazPlanCiudades.mp4";
-import iconoHazPlan from "../../assets/iconoHazPlanRedondo.png";
+import ciudadVideo from "/public/videos/HazPlanCiudades.mp4";
+import iconoHazPlan from "/public/images/iconoHazPlanRedondo.png";
 import "../../styles/comingSoonModal.css";
 
 const ComingSoonModal = ({ isOpen, onClose }) => {
@@ -9,6 +9,7 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
   const [logoAnimation, setLogoAnimation] = useState(false);
   const [currentText, setCurrentText] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
+  const [videoEnded, setVideoEnded] = useState(false);
   const videoRef = useRef(null);
 
   const texts = [
@@ -36,51 +37,62 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (isOpen) {
-      // Reset de estados
       setShowContent(false);
       setShowLogo(false);
       setLogoAnimation(false);
+      setVideoEnded(false);
 
-      // Secuencia cinematográfica inspirada en IntroScreen
       const sequence = [
-        // 1. Mostrar logo inmediatamente al iniciar el video
         { time: 100, action: () => setShowLogo(true) },
         { time: 200, action: () => setLogoAnimation(true) },
-        // 2. Quitar logo después de 3 segundos completos de animación (200ms + 3000ms)
         { time: 3200, action: () => setShowLogo(false) },
-        // 3. Mostrar contenido principal después de que se quite el logo
         { time: 3700, action: () => setShowContent(true) },
       ];
 
-      // Ejecutar secuencia
-      const timers = sequence.map(({ time, action }) =>
-        setTimeout(action, time)
-      );
+      let timers = [];
+      if (!videoEnded) {
+        timers = sequence.map(({ time, action }) => setTimeout(action, time));
+      }
 
-      // Iniciar video automáticamente cuando se abra el modal
       if (videoRef.current) {
         videoRef.current.currentTime = 0;
-        videoRef.current.muted = false; // Asegurar que el audio esté activado
-        videoRef.current.play().catch((e) => {
-          console.log("Video autoplay prevented:", e);
-          // Si falla el autoplay con sonido, intentar con muted
+        videoRef.current.muted = false;
+        videoRef.current.play().catch(() => {
           videoRef.current.muted = true;
           setIsMuted(true);
-          videoRef.current.play().catch(console.log);
+          videoRef.current.play().catch(() => {});
         });
       }
 
-      // Cambiar textos cada 7 segundos
-      const textInterval = setInterval(() => {
-        setCurrentText((prev) => (prev + 1) % texts.length);
-      }, 7000);
+      let textInterval;
+      if (!videoEnded) {
+        textInterval = setInterval(() => {
+          setCurrentText((prev) => (prev + 1) % texts.length);
+        }, 7000);
+      }
 
       return () => {
         timers.forEach(clearTimeout);
         clearInterval(textInterval);
       };
     }
-  }, [isOpen, texts.length]);
+  }, [isOpen, texts.length, videoEnded]);
+
+  const handleVideoEnd = () => {
+    setVideoEnded(true);
+    setShowContent(false);
+    setShowLogo(false);
+    setLogoAnimation(false);
+  };
+
+  const handleReplay = () => {
+    setVideoEnded(false);
+    setCurrentText(0);
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play();
+    }
+  };
 
   const handleClose = () => {
     setShowContent(false);
@@ -114,10 +126,10 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
         <video
           ref={videoRef}
           className="modal-video"
-          loop
           playsInline
-          preload="none" // No cargar hasta que se abra el modal
+          preload="auto"
           poster=""
+          onEnded={handleVideoEnd}
           style={{
             imageRendering: "-webkit-optimize-contrast",
           }}
@@ -183,8 +195,49 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
         </button>
 
         {/* Contenido */}
-        <div className={`modal-content ${showContent ? "show" : ""}`}>
+        <div
+          className={`modal-content ${
+            showContent && !videoEnded ? "show" : ""
+          }`}
+        >
           {/* Logo HazPlan en la parte superior */}
+          {/* Botón "Ver de nuevo" cuando termina el video */}
+          {videoEnded && (
+            <div
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                zIndex: 20,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <button
+                onClick={handleReplay}
+                style={{
+                  background: "#7c4dff",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "24px",
+                  padding: "18px 38px",
+                  fontSize: "1.3rem",
+                  fontWeight: 700,
+                  boxShadow: "0 4px 24px #7c4dff55",
+                  cursor: "pointer",
+                  marginBottom: "18px",
+                  transition: "all 0.2s",
+                }}
+              >
+                Ver de nuevo
+              </button>
+              <span style={{ color: "#fff", fontWeight: 500 }}>
+                El video ha terminado
+              </span>
+            </div>
+          )}
           <div className="modal-header">
             <h1 className="hazplan-logo">HazPlan</h1>
           </div>

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import iconCiudadano from "../assets/capiHeroe.png";
-import iconONG from "../assets/capicapitan.png";
-import iconPersonal from "../assets/capilentes.png";
-import iconEmpresas from "../assets/capiVIP.png";
+import iconCiudadano from "/public/images/capiHeroe.png";
+import iconONG from "/public/images/capicapitan.png";
+import iconPersonal from "/public/images/capilentes.png";
+import iconEmpresas from "/public/images/capiVIP.png";
 function EventTypeSelector({
   selectedType,
   onTypeChange,

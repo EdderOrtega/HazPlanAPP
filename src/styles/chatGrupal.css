@@ -25,7 +25,9 @@
   gap: 10px;
   background: transparent !important;
 }
-
+.chat-grupal {
+  border: none !important;
+}
 .mensaje {
   display: flex;
   align-items: flex-end;
@@ -240,8 +242,9 @@
 
 .evento-chat-tab .mensaje-usuario {
   padding: 0px;
+  border-radius: 30px 30px 0px 30px !important;
   border: none !important;
-  background-color: transparent !important;
+  background-color: #d1c3ec !important;
 }
 
 .evento-chat-tab .mensaje-usuario .mensaje-contenido p {

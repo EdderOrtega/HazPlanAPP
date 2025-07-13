@@ -4,7 +4,7 @@ import { supabase } from "../supabaseClient";
 import UserMenuNew from "./UserMenuNew";
 import Notificaciones from "./Notificaciones";
 import Mensajes from "./Mensajes";
-import iconoHazPlan from "../assets/iconoHazPlanRedondo.png";
+import iconoHazPlan from "/public/images/iconoHazPlanRedondo.png";
 import {
   FiBell,
   FiMessageCircle,

@@ -190,6 +190,7 @@ function CrearPerfil() {
             style={{
               display: "flex",
               flexDirection: "column",
+              alignSelf: "center ",
               alignItems: "center",
               justifyContent: "center",
               minHeight: "320px",
@@ -219,6 +220,7 @@ function CrearPerfil() {
             style={{
               display: "flex",
               flexDirection: "column",
+              alignSelf: "center ",
               alignItems: "center",
               justifyContent: "center",
               minHeight: "320px",
@@ -232,17 +234,25 @@ function CrearPerfil() {
               required
               style={{ color: "#222" }}
             />
-            <button type="button" onClick={() => setStep(1)}>
-              Atrás
-            </button>
-            <button
-              type="button"
-              onClick={() => setStep(3)}
-              disabled={!edad}
-              style={{ marginLeft: "10px" }}
+            <div
+              style={{
+                display: "flex",
+                marginTop: "10px",
+                textAlign: "center",
+              }}
             >
-              Siguiente
-            </button>
+              <button type="button" onClick={() => setStep(1)}>
+                Atrás
+              </button>
+              <button
+                type="button"
+                onClick={() => setStep(3)}
+                disabled={!edad}
+                style={{ marginLeft: "10px" }}
+              >
+                Siguiente
+              </button>
+            </div>
           </div>
         )}
 
@@ -251,6 +261,7 @@ function CrearPerfil() {
             style={{
               display: "flex",
               flexDirection: "column",
+              alignSelf: "center ",
               alignItems: "center",
               justifyContent: "center",
               minHeight: "320px",
@@ -264,17 +275,25 @@ function CrearPerfil() {
               required
               style={{ color: "#222" }}
             />
-            <button type="button" onClick={() => setStep(2)}>
-              Atrás
-            </button>
-            <button
-              type="button"
-              onClick={() => setStep(4)}
-              disabled={!fotoPerfil}
-              style={{ marginLeft: "10px" }}
+            <div
+              style={{
+                display: "flex",
+                marginTop: "10px",
+                textAlign: "center",
+              }}
             >
-              Siguiente
-            </button>
+              <button type="button" onClick={() => setStep(2)}>
+                Atrás
+              </button>
+              <button
+                type="button"
+                onClick={() => setStep(4)}
+                disabled={!fotoPerfil}
+                style={{ marginLeft: "10px" }}
+              >
+                Siguiente
+              </button>
+            </div>
           </div>
         )}
 
@@ -283,6 +302,7 @@ function CrearPerfil() {
             style={{
               display: "flex",
               flexDirection: "column",
+              alignSelf: "center ",
               alignItems: "center",
               justifyContent: "center",
               minHeight: "320px",
@@ -353,17 +373,25 @@ function CrearPerfil() {
                 </button>
               ))}
             </div>
-            <button type="button" onClick={() => setStep(3)}>
-              Atrás
-            </button>
-            <button
-              type="button"
-              onClick={() => setStep(5)}
-              disabled={gustosSeleccionados.length === 0}
-              style={{ marginLeft: "10px" }}
+            <div
+              style={{
+                display: "flex",
+                marginTop: "10px",
+                textAlign: "center",
+              }}
             >
-              Siguiente
-            </button>
+              <button type="button" onClick={() => setStep(3)}>
+                Atrás
+              </button>
+              <button
+                type="button"
+                onClick={() => setStep(5)}
+                disabled={gustosSeleccionados.length === 0}
+                style={{ marginLeft: "10px" }}
+              >
+                Siguiente
+              </button>
+            </div>
           </div>
         )}
 
@@ -372,6 +400,7 @@ function CrearPerfil() {
             style={{
               display: "flex",
               flexDirection: "column",
+              alignSelf: "center ",
               alignItems: "center",
               justifyContent: "center",
               minHeight: "320px",
@@ -386,16 +415,24 @@ function CrearPerfil() {
               onChange={(e) => setUbicacion(e.target.value)}
               style={{ color: "#222" }}
             />
-            <button type="button" onClick={() => setStep(4)}>
-              Atrás
-            </button>
-            <button
-              type="button"
-              onClick={() => setStep(6)}
-              style={{ marginLeft: "10px" }}
+            <div
+              style={{
+                display: "flex",
+                marginTop: "10px",
+                textAlign: "center",
+              }}
             >
-              Siguiente
-            </button>
+              <button type="button" onClick={() => setStep(4)}>
+                Atrás
+              </button>
+              <button
+                type="button"
+                onClick={() => setStep(6)}
+                style={{ marginLeft: "10px" }}
+              >
+                Siguiente
+              </button>
+            </div>
           </div>
         )}
 
@@ -404,6 +441,7 @@ function CrearPerfil() {
             style={{
               display: "flex",
               flexDirection: "column",
+              alignSelf: "center ",
               alignItems: "center",
               justifyContent: "center",
               minHeight: "320px",
@@ -427,16 +465,24 @@ function CrearPerfil() {
                 boxSizing: "border-box",
               }}
             />
-            <button type="button" onClick={() => setStep(5)}>
-              Atrás
-            </button>
-            <button
-              type="button"
-              onClick={() => setStep(7)}
-              style={{ marginLeft: "10px" }}
+            <div
+              style={{
+                display: "flex",
+                marginTop: "10px",
+                textAlign: "center",
+              }}
             >
-              Siguiente
-            </button>
+              <button type="button" onClick={() => setStep(5)}>
+                Atrás
+              </button>
+              <button
+                type="button"
+                onClick={() => setStep(7)}
+                style={{ marginLeft: "10px" }}
+              >
+                Siguiente
+              </button>
+            </div>
           </div>
         )}
 
@@ -445,6 +491,7 @@ function CrearPerfil() {
             style={{
               display: "flex",
               flexDirection: "column",
+              alignSelf: "center ",
               alignItems: "center",
               justifyContent: "center",
               minHeight: "320px",
@@ -460,10 +507,18 @@ function CrearPerfil() {
               onChange={handleFotosEventos}
               style={{ color: "#222" }}
             />
-            <button type="button" onClick={() => setStep(6)}>
-              Atrás
-            </button>
-            <button type="submit">Finalizar y guardar perfil</button>
+            <div
+              style={{
+                display: "flex",
+                marginTop: "10px",
+                textAlign: "center",
+              }}
+            >
+              <button type="button" onClick={() => setStep(6)}>
+                Atrás
+              </button>
+              <button type="submit">Finalizar y guardar perfil</button>
+            </div>
           </div>
         )}
       </form>

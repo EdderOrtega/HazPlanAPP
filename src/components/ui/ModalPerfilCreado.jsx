@@ -1,5 +1,5 @@
 import "../../styles/modalPerfilCreado.css";
-import capibara from "../../assets/capibaraMascota.png";
+import capibara from "/public/images/capibaraMascota.png";
 
 function ModalPerfilCreado({ onVerPerfil }) {
   return (

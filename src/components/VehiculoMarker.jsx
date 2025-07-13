@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
-import vehiculoIcono from "../assets/capiCamion.png";
+import vehiculoIcono from "/public/images/capiCamion.png";
 import { formatTime } from "../utils/mapUtils";
 
 function VehiculoMarker({ position, rutaInfo, progreso, tiempoRestante }) {

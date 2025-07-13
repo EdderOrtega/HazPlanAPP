@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "../../styles/modalPerfilCreado.css";
-import capibara from "../../assets/capibaraMascota.png";
+import capibara from "/public/images/capibaraMascota.png";
 
 const ModalEventoCreadoExistosamente = ({ onClose }) => {
   const navigate = useNavigate();
