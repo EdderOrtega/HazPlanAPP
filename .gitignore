@@ -1,3 +1,5 @@
+# Ignorar archivos de configuración local y cache
+src/cache-buster.js
 # Logs
 logs
 *.log
@@ -37,7 +39,6 @@ src/firebase.js
 geocode.js
 src/.env
 src/.Env
-src/supabaseClient.js
 # Documentation files (privados)
 *.md
 !README.md
