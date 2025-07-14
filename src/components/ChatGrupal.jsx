@@ -11,62 +11,50 @@ function ChatGrupal({ eventoId }) {
 
   const eventoIdNum = Number(eventoId);
 
-  // Obtener usuario actual y mensajes iniciales + polling cada minuto
+  // Cargar usuario y mensajes iniciales
   useEffect(() => {
     let isMounted = true;
-    let intervalId;
 
-    const fetchData = async () => {
+    async function cargarDatos() {
       const { data: userData } = await supabase.auth.getUser();
-      if (isMounted) setUser(userData.user);
+      if (!isMounted) return;
+      setUser(userData.user);
 
-      if (userData.user && eventoIdNum) {
-        // Traer solo mensajes de usuarios registrados
-        const { data: mensajesData } = await supabase
-          .from("mensajes_chat")
-          .select("*")
-          .eq("evento_id", eventoIdNum)
-          .order("created_at", { ascending: true });
+      const { data: mensajesData } = await supabase
+        .from("mensajes_chat")
+        .select("*")
+        .eq("evento_id", eventoIdNum)
+        .order("created_at", { ascending: true });
+      if (!isMounted) return;
+      setMensajes(mensajesData || []);
 
-        // Obtener todos los user_id registrados
-        const { data: usuariosRegistrados } = await supabase
-          .from("usuariosRegistrados")
-          .select("user_id, nombre, foto_perfil");
-        const userIdsRegistrados = new Set(
-          (usuariosRegistrados || []).map((u) => u.user_id)
-        );
+      // Cargar perfiles
+      const { data: usuarios } = await supabase
+        .from("usuariosRegistrados")
+        .select("user_id, nombre, foto_perfil");
+      if (!isMounted) return;
 
-        // Filtrar mensajes solo de usuarios registrados
-        const mensajesFiltrados = (mensajesData || []).filter((m) =>
-          userIdsRegistrados.has(m.user_id)
-        );
-        setMensajes(mensajesFiltrados);
-
-        // Cargar perfiles únicos
-        const perfilesTemp = {};
-        for (const u of usuariosRegistrados || []) {
-          let foto_perfil_url = "";
-          if (u.foto_perfil) {
-            const { data: urlData } = await supabase.storage
-              .from("hazplanimagenes")
-              .createSignedUrl(u.foto_perfil, 3600);
-            foto_perfil_url = urlData?.signedUrl || "";
-          }
-          perfilesTemp[u.user_id] = {
-            nombre: u.nombre || "Usuario",
-            foto_perfil_url,
-          };
+      const perfilesTemp = {};
+      for (const u of usuarios || []) {
+        let foto_perfil_url = "";
+        if (u.foto_perfil) {
+          const { data: urlData } = await supabase.storage
+            .from("hazplanimagenes")
+            .createSignedUrl(u.foto_perfil, 3600);
+          foto_perfil_url = urlData?.signedUrl || "";
         }
-        setPerfilesUsuarios(perfilesTemp);
+        perfilesTemp[u.user_id] = {
+          nombre: u.nombre || "Usuario",
+          foto_perfil_url,
+        };
       }
-    };
+      setPerfilesUsuarios(perfilesTemp);
+    }
 
-    fetchData();
-    intervalId = setInterval(fetchData, 15000); // cada 15 segundos
+    cargarDatos();
 
     return () => {
       isMounted = false;
-      if (intervalId) clearInterval(intervalId);
     };
   }, [eventoIdNum]);
 
@@ -77,6 +65,17 @@ function ChatGrupal({ eventoId }) {
     }
   }, [mensajes]);
 
+  // Función para traer mensajes (polling puntual)
+  const fetchMensajes = async () => {
+    const { data } = await supabase
+      .from("mensajes_chat")
+      .select("*")
+      .eq("evento_id", eventoIdNum)
+      .order("created_at", { ascending: true });
+    setMensajes(data || []);
+  };
+
+  // Enviar mensaje y refrescar mensajes
   const enviarMensaje = async (e) => {
     e.preventDefault();
     if (!nuevoMensaje.trim() || !user) return;
@@ -90,29 +89,11 @@ function ChatGrupal({ eventoId }) {
     });
 
     if (error) {
-      console.error("❌ Error enviando mensaje:", error);
+      console.error("❌ Error al enviar mensaje:", error);
     } else {
       setNuevoMensaje("");
-      // Fetch inmediato tras enviar mensaje
-      // (No espera al polling ni a realtime)
-      const fetchData = async () => {
-        const { data: mensajesData } = await supabase
-          .from("mensajes_chat")
-          .select("*")
-          .eq("evento_id", eventoIdNum)
-          .order("created_at", { ascending: true });
-        const { data: usuariosRegistrados } = await supabase
-          .from("usuariosRegistrados")
-          .select("user_id, nombre, foto_perfil");
-        const userIdsRegistrados = new Set(
-          (usuariosRegistrados || []).map((u) => u.user_id)
-        );
-        const mensajesFiltrados = (mensajesData || []).filter((m) =>
-          userIdsRegistrados.has(m.user_id)
-        );
-        setMensajes(mensajesFiltrados);
-      };
-      fetchData();
+      // Polling puntual para actualizar mensajes después de enviar
+      fetchMensajes();
     }
   };
 

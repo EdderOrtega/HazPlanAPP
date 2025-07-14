@@ -7,7 +7,7 @@ import mascotasIcon from "/public/images/mascotas.png";
 import medioambienteIcon from "/public/images/medioambiente.png";
 import saludIcon from "/public/images/salud.png";
 import inclusionIcon from "/public/images/inclusion.png";
-import todosIcon from "/public/images/todos.png";
+import todosIcon from "/public/images/iconoHazPlanRedondo.png";
 
 // Rutas predefinidas para el vehículo capicamión
 export const rutasVehiculo = {

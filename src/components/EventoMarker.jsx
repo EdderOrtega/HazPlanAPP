@@ -14,7 +14,7 @@ function EventoMarker({ evento, user, onNavigateToLogin }) {
 
   if (isNaN(lat) || isNaN(lon)) return null;
 
-  const eventoIcon = createCategoryIcon(evento.tipo, 40);
+  const eventoIcon = createCategoryIcon(evento, 40);
 
   // Verificar si el usuario ya está unido al evento
   useEffect(() => {

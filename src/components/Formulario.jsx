@@ -143,7 +143,8 @@ function Formulario() {
       .insert({
         nombre: nombreEvento,
         descripcion,
-        tipo, // tipo es string (categoría)
+        tipo, // tipo es string (categoría principal: "personal" o "publico")
+        categoria: tipo === "personal" ? form.categoria : null, // Guardar subcategoría si es personal
         ubicacion,
         fecha: fecha === "" ? null : fecha,
         fecha_fin: fecha_fin === "" ? null : fecha_fin,

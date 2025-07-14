@@ -1,20 +1,25 @@
 import L from "leaflet";
 import { categoryIcons, mapConfig } from "../data/mapData";
+import iconoHazPlanRedondo from "/public/images/iconoHazPlanRedondo.png";
 
 // Función para crear iconos personalizados según la categoría
-export const createCategoryIcon = (categoria, size = 40) => {
+// Recibe el evento completo para poder distinguir entre tipo y categoria
+export const createCategoryIcon = (evento, size = 40) => {
+  // Si tiene subcategoría (evento.categoria), usarla; si no, usar tipo
+  const categoria = evento?.categoria || evento?.tipo;
   const normalizedCategoria = categoria
     ? categoria.toLowerCase().trim().replace(/\s+/g, "")
-    : "todos";
-
-  const iconUrl = categoryIcons[normalizedCategoria] || categoryIcons.todos;
-
+    : null;
+  const iconUrl =
+    normalizedCategoria && categoryIcons[normalizedCategoria]
+      ? categoryIcons[normalizedCategoria]
+      : iconoHazPlanRedondo;
   return new L.Icon({
     iconUrl: iconUrl,
     iconSize: [size, size],
-    iconAnchor: [size / 2, size + 8], // Ajustado para el pico triangular
-    popupAnchor: [0, -(size + 8)], // Popup aparece arriba del pin completo
-    className: `category-icon category-${normalizedCategoria}`,
+    iconAnchor: [size / 2, size + 8],
+    popupAnchor: [0, -(size + 8)],
+    className: `category-icon category-${normalizedCategoria || "default"}`,
     shadowUrl: null,
     shadowSize: null,
     shadowAnchor: null,
@@ -84,7 +89,11 @@ export const filterValidEvents = (eventos, filtro = "") => {
   return (eventos || [])
     .filter(isValidEvent)
     .filter(isInMonterrey)
-    .filter((e) => (filtro ? e.tipo === filtro : true));
+    .filter((e) => {
+      if (!filtro) return true;
+      // Mostrar si coincide con tipo o con categoria (para eventos personales)
+      return e.tipo === filtro || e.categoria === filtro;
+    });
 };
 
 // Función para contar eventos por categoría
