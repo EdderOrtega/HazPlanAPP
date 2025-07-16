@@ -8,15 +8,13 @@ import Loader from "./ui/Loader";
 function PerfilUsuario() {
   const [perfil, setPerfil] = useState(null);
   const [fotoPerfilUrl, setFotoPerfilUrl] = useState("");
-  const [imagenesGaleria, _setImagenesGaleria] = useState([]);
+  const [imagenesGaleria, setImagenesGaleria] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // ...existing code...
-
   useEffect(() => {
     const fetchPerfil = async () => {
-      // Obtén el usuario autenticado
+      // ✅ Obtén el usuario autenticado
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -25,7 +23,7 @@ function PerfilUsuario() {
         return;
       }
 
-      // Busca el perfil en la base de datos
+      // ✅ Busca el perfil en la base de datos
       const { data, error } = await supabase
         .from("usuariosRegistrados")
         .select("*")
@@ -33,26 +31,46 @@ function PerfilUsuario() {
         .single();
 
       if (error || !data) {
+        console.error("❌ Error al obtener perfil:", error);
         setPerfil(null);
         setLoading(false);
         return;
       }
+
       setPerfil(data);
 
-      // Obtén la URL firmada de la foto de perfil
-      if (data.foto_perfil) {
-        const { data: urlData } = await supabase.storage
-          .from("hazplanimagenes")
-          .createSignedUrl(data.foto_perfil, 3600);
-        setFotoPerfilUrl(urlData?.signedUrl || "");
+      // Usar URL pública del bucket para foto de perfil
+      if (data.foto_perfil && data.foto_perfil !== "null") {
+        const SUPABASE_URL = supabase.supabaseUrl;
+        const BUCKET = "hazplanimagenperfil";
+        const path = data.foto_perfil.startsWith("/")
+          ? data.foto_perfil.slice(1)
+          : data.foto_perfil;
+        const url = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`;
+        setFotoPerfilUrl(url);
+      } else {
+        setFotoPerfilUrl("");
       }
+
+      // Galería: cargar imágenes si existen
+      if (data.fotos_eventos && Array.isArray(data.fotos_eventos)) {
+        const SUPABASE_URL = supabase.supabaseUrl;
+        const BUCKET = "hazplanimagenperfil";
+        const galeria = data.fotos_eventos.map((path) => ({
+          url: `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`,
+          path,
+        }));
+        setImagenesGaleria(galeria);
+      } else {
+        setImagenesGaleria([]);
+      }
+
       setLoading(false);
     };
 
     fetchPerfil();
   }, [navigate]);
 
-  // Referencia para el input file
   const inputFileRef = React.useRef(null);
 
   const handleAgregarImagen = () => {
@@ -62,23 +80,49 @@ function PerfilUsuario() {
     }
   };
 
-  // Manejar selección de archivo
-  const handleArchivoSeleccionado = (e) => {
+  // Subir imagen a galería y actualizar en BD
+  const handleArchivoSeleccionado = async (e) => {
     const file = e.target.files && e.target.files[0];
-    if (file) {
-      // Aquí puedes subir la imagen a Supabase Storage o mostrar preview
-      // Por ahora solo muestra el nombre
-      alert(`Imagen seleccionada: ${file.name}`);
-      // TODO: subir imagen y actualizar galería
+    if (!file || !perfil) return;
+    try {
+      const nombreArchivo = `galeria/${Date.now()}_${file.name}`;
+      const { error: uploadError } = await supabase.storage
+        .from("hazplanimagenperfil")
+        .upload(nombreArchivo, file, { upsert: false });
+      if (uploadError) throw uploadError;
+
+      // Actualizar en la base de datos (agregar a fotos_eventos)
+      const nuevasFotos = Array.isArray(perfil.fotos_eventos)
+        ? [...perfil.fotos_eventos, nombreArchivo]
+        : [nombreArchivo];
+      const { error: updateError } = await supabase
+        .from("usuariosRegistrados")
+        .update({ fotos_eventos: nuevasFotos })
+        .eq("user_id", perfil.user_id);
+      if (updateError) throw updateError;
+
+      // Actualizar galería en UI
+      const SUPABASE_URL = supabase.supabaseUrl;
+      setImagenesGaleria((prev) => [
+        ...prev,
+        {
+          url: `${SUPABASE_URL}/storage/v1/object/public/hazplanimagenperfil/${nombreArchivo}`,
+          path: nombreArchivo,
+        },
+      ]);
+    } catch (err) {
+      alert("Error al subir la imagen de galería");
+      console.error(err);
     }
   };
 
-  if (loading)
+  if (loading) {
     return (
       <div className="perfil-loading">
         <Loader />
       </div>
     );
+  }
 
   if (!perfil) {
     return (
@@ -140,7 +184,6 @@ function PerfilUsuario() {
             }}
             aria-label="Editar foto de perfil"
           >
-            {/* SVG lápiz blanco */}
             <svg
               width="20"
               height="20"
@@ -212,7 +255,6 @@ function PerfilUsuario() {
               </div>
             )
           )}
-          {/* Input file oculto para subir imagen */}
           <input
             type="file"
             accept="image/*"

@@ -6,12 +6,12 @@ function ChatGrupal({ eventoId }) {
   const [mensajes, setMensajes] = useState([]);
   const [nuevoMensaje, setNuevoMensaje] = useState("");
   const [user, setUser] = useState(null);
-  const [perfilesUsuarios, setPerfilesUsuarios] = useState({});
+  const [nombresUsuarios, setNombresUsuarios] = useState({});
   const mensajesRef = useRef(null);
 
   const eventoIdNum = Number(eventoId);
 
-  // Cargar usuario y mensajes iniciales
+  // 👉 Cargar usuario actual y mensajes
   useEffect(() => {
     let isMounted = true;
 
@@ -20,6 +20,7 @@ function ChatGrupal({ eventoId }) {
       if (!isMounted) return;
       setUser(userData.user);
 
+      // Traer mensajes
       const { data: mensajesData } = await supabase
         .from("mensajes_chat")
         .select("*")
@@ -28,27 +29,17 @@ function ChatGrupal({ eventoId }) {
       if (!isMounted) return;
       setMensajes(mensajesData || []);
 
-      // Cargar perfiles
+      // Traer nombres de usuarios (sin fotos)
       const { data: usuarios } = await supabase
         .from("usuariosRegistrados")
-        .select("user_id, nombre, foto_perfil");
+        .select("user_id, nombre");
       if (!isMounted) return;
 
-      const perfilesTemp = {};
+      const nombresTemp = {};
       for (const u of usuarios || []) {
-        let foto_perfil_url = "";
-        if (u.foto_perfil) {
-          const { data: urlData } = await supabase.storage
-            .from("hazplanimagenes")
-            .createSignedUrl(u.foto_perfil, 3600);
-          foto_perfil_url = urlData?.signedUrl || "";
-        }
-        perfilesTemp[u.user_id] = {
-          nombre: u.nombre || "Usuario",
-          foto_perfil_url,
-        };
+        nombresTemp[u.user_id] = u.nombre || "Usuario";
       }
-      setPerfilesUsuarios(perfilesTemp);
+      setNombresUsuarios(nombresTemp);
     }
 
     cargarDatos();
@@ -58,14 +49,14 @@ function ChatGrupal({ eventoId }) {
     };
   }, [eventoIdNum]);
 
-  // Scroll automático al último mensaje
+  // 👇 Scroll automático al último mensaje
   useEffect(() => {
     if (mensajesRef.current) {
       mensajesRef.current.scrollTop = mensajesRef.current.scrollHeight;
     }
   }, [mensajes]);
 
-  // Función para traer mensajes (polling puntual)
+  // Función para actualizar mensajes
   const fetchMensajes = async () => {
     const { data } = await supabase
       .from("mensajes_chat")
@@ -75,7 +66,7 @@ function ChatGrupal({ eventoId }) {
     setMensajes(data || []);
   };
 
-  // Enviar mensaje y refrescar mensajes
+  // 👉 Enviar mensaje
   const enviarMensaje = async (e) => {
     e.preventDefault();
     if (!nuevoMensaje.trim() || !user) return;
@@ -92,8 +83,7 @@ function ChatGrupal({ eventoId }) {
       console.error("❌ Error al enviar mensaje:", error);
     } else {
       setNuevoMensaje("");
-      // Polling puntual para actualizar mensajes después de enviar
-      fetchMensajes();
+      fetchMensajes(); // Refresca los mensajes después de enviar
     }
   };
 
@@ -120,16 +110,7 @@ function ChatGrupal({ eventoId }) {
               <div className="mensaje-contenido">
                 {mensaje.user_id !== user?.id && (
                   <span className="mensaje-autor">
-                    {perfilesUsuarios[mensaje.user_id]?.foto_perfil_url ? (
-                      <img
-                        src={perfilesUsuarios[mensaje.user_id].foto_perfil_url}
-                        alt="Avatar"
-                        className="avatar-participante"
-                      />
-                    ) : (
-                      <div className="avatar-participante avatar-placeholder"></div>
-                    )}
-                    {perfilesUsuarios[mensaje.user_id]?.nombre || "Usuario"}
+                    {nombresUsuarios[mensaje.user_id] || "Usuario"}
                   </span>
                 )}
                 <p>{mensaje.contenido}</p>

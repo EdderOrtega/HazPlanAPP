@@ -40,6 +40,39 @@ function Login() {
       <div className="login-background"></div>
       <div className="login-container">
         <div className="login-card">
+          {/* Enlace para regresar al inicio con ícono */}
+          <a
+            href="/"
+            className="login-back-link"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              width: "fit-content",
+              margin: "20px 0 10px 0",
+              color: "#7c4dff",
+              fontSize: 20,
+              textDecoration: "none",
+              fontWeight: "bold",
+            }}
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15 19L8 12L15 5"
+                stroke="#7c4dff"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span style={{ fontSize: 16 }}>Volver al inicio</span>
+          </a>
           {/* Logo */}
           <div className="login-logo">
             <img src={logoHazPlan} alt="HazPlan Logo" />

@@ -3,6 +3,8 @@ import ciudadVideo from "/public/videos/HazPlanCiudades.mp4";
 import iconoHazPlan from "/public/images/iconoHazPlanRedondo.png";
 import "../../styles/comingSoonModal.css";
 
+let autoShowTimeout = null;
+let userClosed = false;
 const ComingSoonModal = ({ isOpen, onClose }) => {
   const [showContent, setShowContent] = useState(false);
   const [showLogo, setShowLogo] = useState(false);
@@ -37,6 +39,7 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (isOpen) {
+      userClosed = false;
       setShowContent(false);
       setShowLogo(false);
       setLogoAnimation(false);
@@ -68,15 +71,27 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
       if (!videoEnded) {
         textInterval = setInterval(() => {
           setCurrentText((prev) => (prev + 1) % texts.length);
-        }, 7000);
+        }, 40000);
       }
+
+      // Solo reabrir automáticamente si el usuario NO lo cerró
+      if (autoShowTimeout) clearTimeout(autoShowTimeout);
+      autoShowTimeout = setTimeout(() => {
+        if (!userClosed && isOpen && typeof onClose === "function") {
+          onClose();
+          setTimeout(() => {
+            if (!userClosed && typeof onClose === "function") onClose(true); // true para indicar auto
+          }, 3000);
+        }
+      }, 40000);
 
       return () => {
         timers.forEach(clearTimeout);
         clearInterval(textInterval);
+        if (autoShowTimeout) clearTimeout(autoShowTimeout);
       };
     }
-  }, [isOpen, texts.length, videoEnded]);
+  }, [isOpen, texts.length, videoEnded, onClose]);
 
   const handleVideoEnd = () => {
     setVideoEnded(true);
@@ -95,6 +110,7 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
   };
 
   const handleClose = () => {
+    userClosed = true;
     setShowContent(false);
     setShowLogo(false);
     setLogoAnimation(false);
@@ -106,6 +122,7 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
+      userClosed = true;
       handleClose();
     }
   };

@@ -1,9 +1,9 @@
-// Crear nuevo archivo ListaParticipantes.jsx
 import { useState, useEffect } from "react";
 import { supabase } from "../supabaseClient";
 import "../styles/listaParticipantes.css";
 import { Link } from "react-router-dom";
 import Loader from "./ui/Loader";
+
 function ListaParticipantes({ eventoId }) {
   const [participantes, setParticipantes] = useState([]);
   const [perfiles, setPerfiles] = useState({});
@@ -12,53 +12,83 @@ function ListaParticipantes({ eventoId }) {
   useEffect(() => {
     const fetchParticipantes = async () => {
       setCargando(true);
-      console.log("📋 Cargando participantes para evento:", eventoId);
 
-      // 1. Trae los participantes
-      const { data, error } = await supabase
-        .from("participantes_eventos")
-        .select("*")
-        .eq("evento_id", eventoId);
+      // 1. Traer participantes del evento
+      const { data: participantesData, error: participantesError } =
+        await supabase
+          .from("participantes_eventos")
+          .select("user_id")
+          .eq("evento_id", eventoId);
 
-      if (!error && data) {
-        console.log("✅ Participantes cargados:", data.length);
-        setParticipantes(data);
+      if (participantesError) {
+        console.error("❌ Error al cargar participantes:", participantesError);
+        setCargando(false);
+        return;
+      }
 
-        // 2. Trae los perfiles de usuario
-        const perfilesTemp = {};
-        for (const p of data) {
-          if (!perfilesTemp[p.user_id]) {
-            const { data: perfil } = await supabase
-              .from("usuariosRegistrados")
-              .select("nombre, foto_perfil")
-              .eq("user_id", p.user_id)
-              .single();
-            // Después de obtener el perfil:
-            if (perfil && perfil.foto_perfil) {
-              const { data: urlData } = await supabase.storage
-                .from("hazplanimagenes")
-                .createSignedUrl(perfil.foto_perfil, 3600);
-              perfil.foto_perfil_url = urlData?.signedUrl || "";
-            }
-            perfilesTemp[p.user_id] = perfil || {
-              nombre: "Usuario",
-              foto_perfil_url: "",
-            };
+      // 2. Filtrar usuarios únicos (evitar repetidos y nulos)
+      const userIdsUnicos = [
+        ...new Set(
+          participantesData.filter((p) => !!p.user_id).map((p) => p.user_id)
+        ),
+      ];
+      setParticipantes(userIdsUnicos);
+
+      if (userIdsUnicos.length === 0) {
+        setPerfiles({});
+        setCargando(false);
+        return;
+      }
+
+      // 3. Traer datos de perfiles SOLO de esos usuarios
+      const { data: perfilesData, error: perfilesError } = await supabase
+        .from("usuariosRegistrados")
+        .select("user_id, nombre, foto_perfil")
+        .in("user_id", userIdsUnicos);
+
+      if (perfilesError) {
+        console.error("❌ Error al cargar perfiles:", perfilesError);
+        setPerfiles({});
+        setCargando(false);
+        return;
+      }
+
+      // 4. Crear objeto perfiles con URL pública de Supabase Storage
+      const SUPABASE_URL = supabase.supabaseUrl;
+      const BUCKET = "hazplanimagenperfil";
+      const perfilesMap = {};
+      perfilesData.forEach((perfil) => {
+        let fotoUrl = "";
+        if (perfil.foto_perfil && perfil.foto_perfil !== "null") {
+          // Usa el path tal cual viene de la base de datos (sin anteponer 'perfiles/')
+          let path = perfil.foto_perfil.startsWith("/")
+            ? perfil.foto_perfil.slice(1)
+            : perfil.foto_perfil;
+          fotoUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`;
+        } else {
+          if (!perfil.foto_perfil) {
+            console.warn("[FOTO] Usuario sin foto_perfil:", perfil.user_id);
+          } else {
+            console.warn(
+              "[FOTO] Valor inesperado en foto_perfil:",
+              perfil.foto_perfil
+            );
           }
         }
-        setPerfiles(perfilesTemp);
-      } else {
-        console.error("❌ Error al cargar participantes:", error);
-      }
+        perfilesMap[perfil.user_id] = {
+          nombre: perfil.nombre || "Usuario",
+          foto_perfil_url: fotoUrl,
+        };
+      });
+      setPerfiles(perfilesMap);
 
       setCargando(false);
     };
 
     fetchParticipantes();
 
-    // Suscribirse a cambios en tiempo real en participantes
-    console.log("📡 Configurando realtime para participantes...");
-    const participantesChannel = supabase
+    // Opcional: suscripción realtime si quieres
+    const channel = supabase
       .channel(`participantes-${eventoId}`)
       .on(
         "postgres_changes",
@@ -68,25 +98,14 @@ function ListaParticipantes({ eventoId }) {
           table: "participantes_eventos",
           filter: `evento_id=eq.${eventoId}`,
         },
-        (payload) => {
-          console.log("📡 Cambio en participantes detectado:", payload);
-
-          if (payload.eventType === "INSERT") {
-            console.log("➕ Nuevo participante agregado");
-            fetchParticipantes(); // Recargar lista completa
-          } else if (payload.eventType === "DELETE") {
-            console.log("➖ Participante eliminado");
-            fetchParticipantes(); // Recargar lista completa
-          }
+        () => {
+          fetchParticipantes();
         }
       )
-      .subscribe((status) => {
-        console.log("📡 Estado del canal participantes:", status);
-      });
+      .subscribe();
 
     return () => {
-      console.log("🧹 Limpiando canal de participantes");
-      supabase.removeChannel(participantesChannel);
+      supabase.removeChannel(channel);
     };
   }, [eventoId]);
 
@@ -110,21 +129,21 @@ function ListaParticipantes({ eventoId }) {
     <div className="lista-participantes">
       <h3>Participantes ({participantes.length})</h3>
       <ul>
-        {participantes.map((participante) => {
-          const perfil = perfiles[participante.user_id] || {};
+        {participantes.map((user_id) => {
+          const perfil = perfiles[user_id] || {};
           return (
-            <li key={participante.id} className="participante-item">
-              <Link to={`/perfil-usuario/${participante.user_id}`}>
+            <li key={user_id} className="participante-item">
+              <Link to={`/perfil-usuario/${user_id}`}>
                 {perfil.foto_perfil_url ? (
                   <img
                     src={perfil.foto_perfil_url}
-                    alt="Perfil"
+                    alt="Foto de perfil"
                     className="avatar-participante"
                   />
                 ) : (
                   <div className="avatar-placeholder"></div>
                 )}
-                <span>{perfil.nombre || "Usuario"}</span>
+                <span>{perfil.nombre}</span>
               </Link>
             </li>
           );

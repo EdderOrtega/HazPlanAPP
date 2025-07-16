@@ -109,8 +109,11 @@ function CrearPerfil() {
       return;
     }
     const nombreArchivo = `${carpeta}/${Date.now()}_${file.name}`;
+    // Usar el bucket correcto para perfiles
+    const bucket =
+      carpeta === "perfiles" ? "hazplanimagenperfil" : "hazplanimagenes";
     const { error } = await supabase.storage
-      .from("hazplanimagenes")
+      .from(bucket)
       .upload(nombreArchivo, file, { upsert: false });
     if (error) throw error;
     return nombreArchivo;

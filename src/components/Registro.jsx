@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ModalRegistroExitoso from "./ui/ModalRegistroExitoso";
 import iconoHazPlan from "/public/images/iconoHazPlanRedondo.png";
 import "../styles/registro.css";
+import Loader from "./ui/Loader";
 
 function Registro() {
   const [email, setEmail] = useState("");
@@ -66,6 +67,39 @@ function Registro() {
     <div className="registro-page">
       <div className="registro-container">
         <div className="registro-card">
+          {/* Enlace para regresar al inicio con ícono */}
+          <a
+            href="/"
+            className="registro-back-link"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              width: "fit-content",
+              margin: "20px 0 10px 0",
+              color: "#7c4dff",
+              fontSize: 20,
+              textDecoration: "none",
+              fontWeight: "bold",
+            }}
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15 19L8 12L15 5"
+                stroke="#7c4dff"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span style={{ fontSize: 16 }}>Volver al inicio</span>
+          </a>
           {/* Logo */}
           <div className="registro-logo">
             <img src={iconoHazPlan} alt="HazPlan Logo" />

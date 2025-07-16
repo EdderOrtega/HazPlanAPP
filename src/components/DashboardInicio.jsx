@@ -6,12 +6,7 @@ import EventoCard from "./EventoCard";
 import "../styles/dashboardInicio.css";
 import "../styles/pageTransitions.css";
 import Loader from "./ui/Loader";
-import heroImg from "/public/images/arte.png";
-import comunidadImg from "/public/images/comunidad.png";
-import deportesImg from "/public/images/deportes.png";
-import fandomsImg from "/public/images/fandoms.png";
-import saludImg from "/public/images/salud.png";
-import medioambienteImg from "/public/images/medioambiente.png";
+import heroImg from "/public/images/capiplanGorroSinFondo.png";
 import amigos2Img from "/public/images/amigos2.jpg";
 import amigos3Img from "/public/images/amigos3.jpg";
 import {
@@ -383,127 +378,12 @@ function DashboardInicio({ user }) {
 
         {/* Cards modernas con imagen de fondo y animaciones tipo GTA6 + info de empresas */}
         <div className="dashboard-hero-cards" ref={heroCardsRef}>
-          <div
-            className="modern-highlight-card animate-gta6-img"
-            style={{
-              backgroundImage: `url(${amigos2Img})`,
-              animationDelay: "0.1s",
-            }}
-          >
-            <div className="gta6-img-overlay" />
-            <div className="modern-card-content gta6-img-text">
-              <h3>Eventos deportivos y más</h3>
-              <p>
-                Empresas y gimnasios pueden crear torneos, clases y retos.
-                ¡Atrae nuevos clientes y fortalece tu marca!
-              </p>
-              <span className="modern-card-extra">
-                Costo para empresas: desde $299 MXN/mes
-              </span>
-              <span className="modern-card-extra">
-                Suscripción premium: incluye promoción y analíticas
-              </span>
-            </div>
-          </div>
-          <div
-            className="modern-highlight-card animate-gta6-img"
-            style={{
-              backgroundImage: `url(${amigos3Img})`,
-              animationDelay: "0.2s",
-            }}
-          >
-            <div className="gta6-img-overlay" />
-            <div className="modern-card-content gta6-img-text">
-              <h3>Encuentra tu fandom</h3>
-              <p>
-                Librerías, tiendas y cafés pueden organizar meetups,
-                lanzamientos y clubs. ¡Haz crecer tu comunidad!
-              </p>
-              <span className="modern-card-extra">
-                Negocios aliados: desde $199 MXN/evento
-              </span>
-              <span className="modern-card-extra">
-                Suscripción: eventos ilimitados y visibilidad extra
-              </span>
-            </div>
-          </div>
-          <div
-            className="modern-highlight-card animate-gta6-img"
-            style={{
-              backgroundImage: `url(${deportesImg})`,
-              animationDelay: "0.3s",
-            }}
-          >
-            <div className="gta6-img-overlay" />
-            <div className="modern-card-content gta6-img-text">
-              <h3>Bienestar y salud</h3>
-              <p>
-                Clínicas, spas y nutriólogos pueden ofrecer talleres, consultas
-                y experiencias. ¡Promociona tu servicio!
-              </p>
-              <span className="modern-card-extra">
-                Planes desde $249 MXN/mes
-              </span>
-              <span className="modern-card-extra">
-                Incluye: badge de empresa verificada y acceso a usuarios premium
-              </span>
-            </div>
-          </div>
-          <div
-            className="modern-highlight-card animate-gta6-img"
-            style={{
-              backgroundImage: `url(${fandomsImg})`,
-              animationDelay: "0.4s",
-            }}
-          >
-            <div className="gta6-img-overlay" />
-            <div className="modern-card-content gta6-img-text">
-              <h3>Cuida el planeta</h3>
-              <p>
-                Empresas ecológicas y ONGs pueden lanzar campañas, voluntariados
-                y retos verdes. ¡Haz la diferencia y gana visibilidad!
-              </p>
-              <span className="modern-card-extra">
-                Alianzas gratuitas y planes pro desde $99 MXN/mes
-              </span>
-              <span className="modern-card-extra">
-                Certificados, premios y difusión especial
-              </span>
-            </div>
-          </div>
+          {/* Cards eliminadas por solicitud */}
         </div>
 
         {/* Galería de imágenes animada */}
         <div className="dashboard-gallery" ref={galleryRef}>
-          <img
-            src={comunidadImg}
-            alt="Comunidad"
-            className="gallery-img animate-fadein"
-          />
-          <img
-            src={deportesImg}
-            alt="Deportes"
-            className="gallery-img animate-fadein"
-            style={{ animationDelay: "0.1s" }}
-          />
-          <img
-            src={fandomsImg}
-            alt="Fandoms"
-            className="gallery-img animate-fadein"
-            style={{ animationDelay: "0.2s" }}
-          />
-          <img
-            src={saludImg}
-            alt="Salud"
-            className="gallery-img animate-fadein"
-            style={{ animationDelay: "0.3s" }}
-          />
-          <img
-            src={medioambienteImg}
-            alt="Medioambiente"
-            className="gallery-img animate-fadein"
-            style={{ animationDelay: "0.4s" }}
-          />
+          {/* Imágenes eliminadas por solicitud */}
         </div>
 
         {/* Tips y sugerencias visuales */}
