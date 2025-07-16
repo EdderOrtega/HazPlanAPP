@@ -139,10 +139,11 @@ export default function ONGsPromoSection() {
             />
 
             {/* Controles custom */}
+            {/* Controles custom */}
             <div
               style={{
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "space-between",
                 alignItems: "center",
                 gap: "10px",
                 marginTop: "10px",
@@ -160,9 +161,10 @@ export default function ONGsPromoSection() {
                   setShowReplay([...showReplay]); // forzar re-render
                 }}
                 style={{
-                  position: "relative",
-                  padding: "10px 20px",
-                  fontSize: 16,
+                  padding: "8px",
+                  width: 50,
+                  height: 90,
+                  fontSize: 18,
                   color: "#fff",
                   background:
                     videoRefs.current[idx] && !videoRefs.current[idx].paused
@@ -177,9 +179,16 @@ export default function ONGsPromoSection() {
                     videoRefs.current[idx] && !videoRefs.current[idx].paused
                       ? "pulse 1.5s infinite"
                       : "none",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 4,
                 }}
               >
-                ▶ / ⏸
+                <span>▶</span>
+                <span>/</span>
+                <span>⏸</span>
               </button>
 
               {/* Progress bar */}
@@ -211,9 +220,10 @@ export default function ONGsPromoSection() {
                   setShowReplay([...showReplay]); // forzar re-render
                 }}
                 style={{
-                  position: "relative",
-                  padding: "10px 20px",
-                  fontSize: 16,
+                  padding: "8px",
+                  width: 50,
+                  height: 90,
+                  fontSize: 18,
                   color: "#fff",
                   background:
                     videoRefs.current[idx] && !videoRefs.current[idx].muted
@@ -228,9 +238,16 @@ export default function ONGsPromoSection() {
                     videoRefs.current[idx] && !videoRefs.current[idx].muted
                       ? "pulse 1.5s infinite"
                       : "none",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 4,
                 }}
               >
-                🔊 / 🔇
+                <span>🔊</span>
+                <span>/</span>
+                <span>🔇</span>
               </button>
             </div>
 
