@@ -38,52 +38,32 @@ function Formulario() {
     setError("");
     try {
       console.log("🔍 Buscando ubicación:", form.ubicacion);
-
-      // Determinar URL de la API
-      const isDev = window.location.hostname === "localhost";
-      const apiUrl = isDev
-        ? "http://localhost:3000/api/geocoding" // Para desarrollo local
-        : "/api/geocoding"; // Para producción (Vercel/Netlify)
-
-      const response = await fetch(
-        `${apiUrl}?q=${encodeURIComponent(form.ubicacion)}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+      // Usar la nueva ruta /api/geocode tanto en local como en producción
+      const res = await fetch(
+        `/api/geocode?q=${encodeURIComponent(form.ubicacion)}`
       );
-
-      if (!response.ok) {
-        throw new Error(`Error HTTP: ${response.status}`);
-      }
-
-      const data = await response.json();
+      if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
+      const data = await res.json();
       console.log(`📍 Resultados: ${data.length}`);
-
       if (data.length > 0) {
         const resultado = data[0];
-
         setCoordenadas({
           lat: parseFloat(resultado.lat),
           lon: parseFloat(resultado.lon),
         });
-
         console.log("✅ Ubicación encontrada:", {
           original: form.ubicacion,
           encontrada: resultado.display_name,
           coordenadas: [resultado.lat, resultado.lon],
         });
-
-        setStep(5); // Avanzar al siguiente paso correctamente
+        setStep(5);
       } else {
         setError(
           `No se encontró "${form.ubicacion}" en Monterrey. Intenta con una dirección más específica como "Av. Constitución 400, Centro" o lugares conocidos.`
         );
       }
-    } catch (error) {
-      console.error("❌ Error:", error);
+    } catch (err) {
+      console.error("❌ Error al buscar ubicación:", err);
       setError(
         "Error al buscar la ubicación. Verifica tu conexión e intenta nuevamente."
       );
