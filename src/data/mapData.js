@@ -163,7 +163,7 @@ export const categoryIcons = {
 export const mapConfig = {
   center: [25.673, -100.312],
   zoom: 12,
-  vehiculoIdAutorizado: "2f6d5e34-da27-469a-9728-61aa0a67e52a",
+  vehiculoIdAutorizado: "53d279f0-d7fa-4422-a911-2437bc9039c4",
   defaultMapStyle: "openstreetmap", // Mapa estándar por defecto
   monterreyArea: {
     latMin: 25.3,

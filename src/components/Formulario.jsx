@@ -37,29 +37,26 @@ function Formulario() {
     setValidandoUbicacion(true);
     setError("");
     try {
-      console.log("🔍 Buscando ubicación:", form.ubicacion);
-      // Usar la nueva ruta /api/geocode tanto en local como en producción
-      const res = await fetch(
-        `/api/geocode?q=${encodeURIComponent(form.ubicacion)}`
-      );
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        form.ubicacion + ", Monterrey, Nuevo León, México"
+      )}&countrycodes=mx&limit=5&addressdetails=1`;
+      const res = await fetch(url, {
+        headers: {
+          "User-Agent": "HazPlanApp/1.0",
+        },
+      });
       if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
       const data = await res.json();
-      console.log(`📍 Resultados: ${data.length}`);
       if (data.length > 0) {
         const resultado = data[0];
         setCoordenadas({
           lat: parseFloat(resultado.lat),
           lon: parseFloat(resultado.lon),
         });
-        console.log("✅ Ubicación encontrada:", {
-          original: form.ubicacion,
-          encontrada: resultado.display_name,
-          coordenadas: [resultado.lat, resultado.lon],
-        });
         setStep(5);
       } else {
         setError(
-          `No se encontró "${form.ubicacion}" en Monterrey. Intenta con una dirección más específica como "Av. Constitución 400, Centro" o lugares conocidos.`
+          `No se encontró "${form.ubicacion}". Intenta con una dirección más específica o lugares conocidos.`
         );
       }
     } catch (err) {
@@ -74,6 +71,11 @@ function Formulario() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    // Validar que el usuario esté en el paso final
+    if (step !== 8) {
+      setError("Completa todos los pasos antes de crear el evento.");
+      return;
+    }
     const {
       nombreEvento,
       ubicacion,
@@ -83,6 +85,24 @@ function Formulario() {
       cupo,
       descripcion,
     } = form;
+
+    // Validar campos obligatorios
+    if (
+      !nombreEvento ||
+      !ubicacion ||
+      !fecha ||
+      !fecha_fin ||
+      !tipo ||
+      !descripcion ||
+      !cupo ||
+      !coordenadas.lat ||
+      !coordenadas.lon
+    ) {
+      setError(
+        "Completa todos los campos obligatorios antes de crear el evento."
+      );
+      return;
+    }
 
     // Validar que las fechas sean futuras
     const now = new Date();
