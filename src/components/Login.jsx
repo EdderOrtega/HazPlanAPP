@@ -6,6 +6,7 @@ import logoHazPlan from "/public/images/iconoHazPlanRedondo.png";
 import Loader from "./ui/Loader";
 
 function Login() {
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -32,6 +33,25 @@ function Login() {
       setError("Error de conexión. Intenta de nuevo.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Función para login con Google
+  const loginGoogle = async () => {
+    setGoogleLoading(true);
+    setError("");
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin + "/perfil",
+        },
+      });
+      if (error) setError(error.message);
+    } catch {
+      setError("Error al conectar con Google. Intenta de nuevo.");
+    } finally {
+      setGoogleLoading(false);
     }
   };
 
@@ -88,6 +108,29 @@ function Login() {
               <span>{error}</span>
             </div>
           )}
+
+          {/* Botón de Google */}
+          <button
+            type="button"
+            onClick={loginGoogle}
+            className={`google-button ${googleLoading ? "loading" : ""}`}
+            disabled={googleLoading || loading}
+            style={{ marginBottom: 24 }}
+          >
+            {googleLoading ? (
+              <>
+                <div className="spinner"></div>
+                <span>Conectando con Google...</span>
+              </>
+            ) : (
+              <span>Entrar con Google</span>
+            )}
+          </button>
+
+          {/* Divider */}
+          <div className="divider">
+            <span>o continúa con email</span>
+          </div>
 
           {/* Formulario */}
           <form onSubmit={loginCorreo} className="login-form">
