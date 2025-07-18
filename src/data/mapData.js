@@ -8,6 +8,8 @@ import medioambienteIcon from "/public/images/medioambiente.png";
 import saludIcon from "/public/images/salud.png";
 import inclusionIcon from "/public/images/inclusion.png";
 import todosIcon from "/public/images/iconoHazPlanRedondo.png";
+import capiHeroIcono from "/public/images/capiHeroIcono.png";
+import capiCapitanIcono from "/public/images/capicapitan.png";
 
 // Rutas predefinidas para el vehículo capicamión
 export const rutasVehiculo = {
@@ -129,24 +131,25 @@ export const categoryIcons = {
   otro: todosIcon,
   mixto: todosIcon,
   // Nuevas categorías especializadas
-  ayuda_ciudadana: comunidadIcon,
-  limpieza_parques: medioambienteIcon,
-  reforestacion: medioambienteIcon,
-  limpieza_calles: comunidadIcon,
-  pintura_murales: arteIcon,
-  jardineria: medioambienteIcon,
-  limpieza_rios: medioambienteIcon,
-  construccion_comunitaria: comunidadIcon,
-  ayuda_ongs: mascotasIcon,
-  emergencia_animales: mascotasIcon,
-  rescate_animales: mascotasIcon,
-  alimentacion_refugio: mascotasIcon,
-  atencion_medica: saludIcon,
-  construccion_refugio: comunidadIcon,
-  limpieza_refugio: comunidadIcon,
-  donaciones_materiales: comunidadIcon,
-  transporte_animales: mascotasIcon,
-  asistencia_social: saludIcon,
+  ayuda_ciudadana: capiHeroIcono,
+  limpieza_parques: capiHeroIcono,
+  reforestacion: capiHeroIcono,
+  limpieza_calles: capiHeroIcono,
+  pintura_murales: capiHeroIcono,
+  jardineria: capiHeroIcono,
+  limpieza_rios: capiHeroIcono,
+  construccion_comunitaria: capiHeroIcono,
+
+  ayuda_ongs: capiCapitanIcono,
+  emergencia_animales: capiCapitanIcono,
+  rescate_animales: capiCapitanIcono,
+  alimentacion_refugio: capiCapitanIcono,
+  atencion_medica: capiCapitanIcono,
+  construccion_refugio: capiCapitanIcono,
+  limpieza_refugio: capiCapitanIcono,
+  donaciones_materiales: capiCapitanIcono,
+  transporte_animales: capiCapitanIcono,
+  asistencia_social: capiCapitanIcono,
   evento_premium: inclusionIcon,
   networking: comunidadIcon,
   conferencia: arteIcon,

@@ -268,35 +268,72 @@ function CrearPerfil() {
               alignItems: "center",
               justifyContent: "center",
               minHeight: "320px",
+              width: "100%",
+              maxWidth: 400,
+              boxSizing: "border-box",
             }}
           >
-            <label style={{ color: "#593c8f" }}>Foto de perfil:</label>
+            <label
+              style={{
+                color: "#593c8f",
+                width: "100%",
+                textAlign: "left",
+                marginBottom: 8,
+              }}
+            >
+              Foto de perfil:
+            </label>
             <input
               type="file"
               accept="image/*"
               onChange={(e) => setFotoPerfil(e.target.files[0])}
               required
-              style={{ color: "#222" }}
+              style={{
+                color: "#222",
+                width: "100%",
+                minWidth: 0,
+                maxWidth: "100%",
+                boxSizing: "border-box",
+                marginBottom: 12,
+              }}
             />
             <div
               style={{
                 display: "flex",
+                flexWrap: "wrap",
                 marginTop: "10px",
                 textAlign: "center",
+                width: "100%",
+                gap: 8,
               }}
             >
-              <button type="button" onClick={() => setStep(2)}>
+              <button
+                type="button"
+                onClick={() => setStep(2)}
+                style={{ flex: 1, minWidth: 120 }}
+              >
                 Atrás
               </button>
               <button
                 type="button"
                 onClick={() => setStep(4)}
                 disabled={!fotoPerfil}
-                style={{ marginLeft: "10px" }}
+                style={{ flex: 1, minWidth: 120 }}
               >
                 Siguiente
               </button>
             </div>
+            {/* Media query responsiva para pantallas pequeñas */}
+            <style>{`
+              @media (max-width: 480px) {
+                .crear-perfil-foto-input {
+                  width: 100% !important;
+                  min-width: 0 !important;
+                  max-width: 100% !important;
+                  font-size: 15px !important;
+                }
+              }
+            `}</style>
           </div>
         )}
 

@@ -212,7 +212,17 @@ function Mapa() {
         return;
       }
 
-      console.log("✅ Usuario válido:", user.id);
+      // Solo permitir a usuarios autorizados (puedes agregar más IDs al array)
+      const USUARIOS_AUTORIZADOS = [
+        "08d54fc4-0879-40a4-b247-b11c38a386f7",
+        // Agrega aquí más IDs si lo deseas
+      ];
+      if (!USUARIOS_AUTORIZADOS.includes(user.id)) {
+        alert("Solo usuarios autorizados pueden activar el evento sorpresa.");
+        return;
+      }
+
+      console.log("✅ Usuario válido y autorizado:", user.id);
 
       // Limpiar eventos anteriores antes de insertar nuevo
       console.log("🧹 Limpiando eventos anteriores...");

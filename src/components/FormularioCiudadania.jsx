@@ -152,6 +152,7 @@ function FormularioCiudadania() {
         nombre: nombreEvento,
         descripcion: descripcionCompleta,
         tipo,
+        categoria: tipoAyuda || "ayuda_ciudadana",
         ubicacion,
         fecha,
         fecha_fin,
@@ -315,44 +316,13 @@ function FormularioCiudadania() {
               fechaFin={form.fecha_fin}
               setFechaFin={(fecha) => setForm({ ...form, fecha_fin: fecha })}
             />
-            <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-              <button
-                type="button"
-                onClick={prev}
-                style={{
-                  backgroundColor: "#81C784",
-                  color: "white",
-                  padding: "10px 20px",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                }}
-              >
-                Atrás
-              </button>
-              <button
-                type="button"
-                onClick={next}
-                disabled={!form.fecha || !form.fecha_fin}
-                style={{
-                  backgroundColor: "#2E7D32",
-                  color: "white",
-                  padding: "10px 20px",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor:
-                    !form.fecha || !form.fecha_fin ? "not-allowed" : "pointer",
-                }}
-              >
-                Siguiente
-              </button>
-            </div>
-          </div>
-        )}
-
-        {step === 4 && (
-          <div>
-            <label style={{ display: "block", marginBottom: "15px" }}>
+            <label
+              style={{
+                display: "block",
+                marginBottom: "15px",
+                marginTop: "20px",
+              }}
+            >
               🎯 Tipo de ayuda ciudadana:
               <select
                 name="tipoAyuda"
@@ -387,7 +357,7 @@ function FormularioCiudadania() {
                 <option value="otro">🤝 Otro tipo de ayuda</option>
               </select>
             </label>
-            <div style={{ display: "flex", gap: "10px" }}>
+            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
               <button
                 type="button"
                 onClick={prev}
@@ -405,14 +375,17 @@ function FormularioCiudadania() {
               <button
                 type="button"
                 onClick={next}
-                disabled={!form.tipoAyuda}
+                disabled={!form.fecha || !form.fecha_fin || !form.tipoAyuda}
                 style={{
                   backgroundColor: "#2E7D32",
                   color: "white",
                   padding: "10px 20px",
                   border: "none",
                   borderRadius: "5px",
-                  cursor: !form.tipoAyuda ? "not-allowed" : "pointer",
+                  cursor:
+                    !form.fecha || !form.fecha_fin || !form.tipoAyuda
+                      ? "not-allowed"
+                      : "pointer",
                 }}
               >
                 Siguiente

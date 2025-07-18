@@ -38,20 +38,15 @@ function FormularioOngs() {
     try {
       console.log("🔍 Buscando ubicación:", form.ubicacion);
 
-      const isDev = window.location.hostname === "localhost";
-      const apiUrl = isDev
-        ? "http://localhost:3000/api/geocoding"
-        : "/api/geocoding";
-
-      const response = await fetch(
-        `${apiUrl}?q=${encodeURIComponent(form.ubicacion)}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      // Usar Nominatim directamente desde el frontend
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        form.ubicacion
+      )}&addressdetails=1&limit=3&countrycodes=mx`;
+      const response = await fetch(url, {
+        headers: {
+          Accept: "application/json",
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`Error HTTP: ${response.status}`);
@@ -62,18 +57,15 @@ function FormularioOngs() {
 
       if (data.length > 0) {
         const resultado = data[0];
-
         setCoordenadas({
           lat: parseFloat(resultado.lat),
           lon: parseFloat(resultado.lon),
         });
-
         console.log("✅ Ubicación encontrada:", {
           original: form.ubicacion,
           encontrada: resultado.display_name,
           coordenadas: [resultado.lat, resultado.lon],
         });
-
         setStep(3);
       } else {
         setError(
@@ -158,6 +150,7 @@ function FormularioOngs() {
         nombre: nombreEvento,
         descripcion: descripcionCompleta,
         tipo,
+        categoria: tipoEmergencia || "ayuda_ongs",
         ubicacion,
         fecha,
         fecha_fin,
@@ -223,7 +216,68 @@ function FormularioOngs() {
         {step === 1 && (
           <div>
             <label style={{ display: "block", marginBottom: "15px" }}>
-              🏷️ Título de la solicitud de ayuda:
+              🚨 Tipo de emergencia o ayuda:
+              <select
+                name="tipoEmergencia"
+                value={form.tipoEmergencia}
+                onChange={handleChange}
+                required
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  margin: "5px 0",
+                  borderRadius: "5px",
+                  border: "none",
+                }}
+              >
+                <option value="">Selecciona el tipo de emergencia</option>
+                <option value="emergencia_animales">
+                  🐕 Emergencia con animales
+                </option>
+                <option value="rescate_animales">🚑 Rescate de animales</option>
+                <option value="alimentacion_refugio">
+                  🍽️ Alimentación para refugio
+                </option>
+                <option value="atencion_medica">
+                  🏥 Atención médica veterinaria
+                </option>
+                <option value="construccion_refugio">
+                  �️ Construcción/reparación de refugio
+                </option>
+                <option value="limpieza_refugio">🧹 Limpieza de refugio</option>
+                <option value="donaciones_materiales">
+                  📦 Donaciones de materiales
+                </option>
+                <option value="transporte_animales">
+                  🚛 Transporte de animales
+                </option>
+                <option value="asistencia_social">
+                  🤝 Asistencia social general
+                </option>
+                <option value="otro">🆘 Otro tipo de emergencia</option>
+              </select>
+            </label>
+            <button
+              type="button"
+              onClick={next}
+              disabled={!form.tipoEmergencia}
+              style={{
+                backgroundColor: "#F57C00",
+                color: "white",
+                padding: "10px 20px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: form.tipoEmergencia ? "pointer" : "not-allowed",
+              }}
+            >
+              Siguiente
+            </button>
+          </div>
+        )}
+        {step === 2 && (
+          <div>
+            <label style={{ display: "block", marginBottom: "15px" }}>
+              �🏷️ Título de la solicitud de ayuda:
               <input
                 type="text"
                 name="nombreEvento"
@@ -242,6 +296,21 @@ function FormularioOngs() {
             </label>
             <button
               type="button"
+              onClick={prev}
+              style={{
+                backgroundColor: "#FFB74D",
+                color: "white",
+                padding: "10px 20px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                marginRight: "10px",
+              }}
+            >
+              Atrás
+            </button>
+            <button
+              type="button"
               onClick={next}
               disabled={!form.nombreEvento}
               style={{
@@ -258,7 +327,7 @@ function FormularioOngs() {
           </div>
         )}
 
-        {step === 2 && (
+        {step === 3 && (
           <div>
             <label style={{ display: "block", marginBottom: "15px" }}>
               📍 Ubicación donde se necesita la ayuda:
@@ -315,7 +384,7 @@ function FormularioOngs() {
           </div>
         )}
 
-        {step === 3 && (
+        {step === 4 && (
           <div>
             <CalendarioEvento
               fechaInicio={form.fecha}
@@ -358,7 +427,7 @@ function FormularioOngs() {
           </div>
         )}
 
-        {step === 4 && (
+        {step === 5 && (
           <div>
             <label style={{ display: "block", marginBottom: "15px" }}>
               🚨 Tipo de emergencia o ayuda:
@@ -402,7 +471,6 @@ function FormularioOngs() {
                 <option value="otro">🆘 Otro tipo de emergencia</option>
               </select>
             </label>
-
             <label style={{ display: "block", marginBottom: "15px" }}>
               ⚡ Nivel de urgencia:
               <select
@@ -429,7 +497,6 @@ function FormularioOngs() {
                 </option>
               </select>
             </label>
-
             <div style={{ display: "flex", gap: "10px" }}>
               <button
                 type="button"
@@ -467,7 +534,7 @@ function FormularioOngs() {
           </div>
         )}
 
-        {step === 5 && (
+        {step === 6 && (
           <div>
             <label style={{ display: "block", marginBottom: "15px" }}>
               👥 Número de voluntarios necesarios:
@@ -571,7 +638,7 @@ function FormularioOngs() {
           </div>
         )}
 
-        {step === 6 && (
+        {step === 7 && (
           <div>
             <label style={{ display: "block", marginBottom: "15px" }}>
               📦 Materiales necesarios (opcional):
@@ -655,7 +722,7 @@ function FormularioOngs() {
           </div>
         )}
 
-        {step === 7 && (
+        {step === 8 && (
           <div>
             <label style={{ display: "block", marginBottom: "15px" }}>
               📝 Descripción detallada de la emergencia:
