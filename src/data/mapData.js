@@ -1,6 +1,6 @@
 // Importar iconos de categorías
-import deportesIcon from "/public/images/deportes.png";
-import arteIcon from "/public/images/arte.png";
+import deportesIcon from "/images/deportes.png";
+import arteIcon from "/images/arte.png";
 import comunidadIcon from "/public/images/comunidad.png";
 import fandomsIcon from "/public/images/fandoms.png";
 import mascotasIcon from "/public/images/mascotas.png";
@@ -9,7 +9,7 @@ import saludIcon from "/public/images/salud.png";
 import inclusionIcon from "/public/images/inclusion.png";
 import todosIcon from "/public/images/iconoHazPlanRedondo.png";
 import capiHeroIcono from "/public/images/capiHeroIcono.png";
-import capiCapitanIcono from "/public/images/capicapitan.png";
+import capiCapitanIcono from "/public/images/iconoONG.png";
 
 // Rutas predefinidas para el vehículo capicamión
 export const rutasVehiculo = {
@@ -166,7 +166,10 @@ export const categoryIcons = {
 export const mapConfig = {
   center: [25.673, -100.312],
   zoom: 12,
-  vehiculoIdAutorizado: "53d279f0-d7fa-4422-a911-2437bc9039c4",
+  vehiculosIdsAutorizados: [
+    "08d54fc4-0879-40a4-b247-b11c38a386f7",
+    // Agrega aquí más IDs si lo deseas
+  ],
   defaultMapStyle: "openstreetmap", // Mapa estándar por defecto
   monterreyArea: {
     latMin: 25.3,

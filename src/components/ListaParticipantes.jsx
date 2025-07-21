@@ -132,18 +132,43 @@ function ListaParticipantes({ eventoId }) {
         {participantes.map((user_id) => {
           const perfil = perfiles[user_id] || {};
           return (
-            <li key={user_id} className="participante-item">
-              <Link to={`/perfil-usuario/${user_id}`}>
+            <li
+              key={user_id}
+              className="participante-item"
+              style={{ display: "flex", alignItems: "center", gap: 12 }}
+            >
+              <Link
+                to={`/perfil-usuario/${user_id}`}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  textDecoration: "none",
+                  color: "inherit",
+                  gap: 12,
+                }}
+              >
                 {perfil.foto_perfil_url ? (
                   <img
                     src={perfil.foto_perfil_url}
                     alt="Foto de perfil"
                     className="avatar-participante"
+                    style={{ verticalAlign: "middle" }}
                   />
                 ) : (
-                  <div className="avatar-placeholder"></div>
+                  <div
+                    className="avatar-placeholder"
+                    style={{ verticalAlign: "middle" }}
+                  ></div>
                 )}
-                <span>{perfil.nombre}</span>
+                <span
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    height: "100%",
+                  }}
+                >
+                  {perfil.nombre}
+                </span>
               </Link>
             </li>
           );

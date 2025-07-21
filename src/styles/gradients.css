@@ -1,0 +1,60 @@
+/* Gradiente animado para fondos morados */
+.gradient-card {
+  background: linear-gradient(135deg, #7b2ff7, #f107a3, #7b2ff7);
+  background-size: 400% 400%;
+  animation: gradientFlow 10s ease infinite;
+  color: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  padding: 2rem;
+  overflow: hidden;
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Texto con efecto glow */
+.gradient-text {
+  background: linear-gradient(90deg, #f107a3, #7b2ff7, #f107a3);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: textGlow 8s ease infinite;
+}
+
+@keyframes textGlow {
+  0% {
+    text-shadow: 0 0 10px #f107a3;
+  }
+  50% {
+    text-shadow: 0 0 20px #7b2ff7;
+  }
+  100% {
+    text-shadow: 0 0 10px #f107a3;
+  }
+}
+
+/* Imagenes responsivas */
+.dashboard-hero img,
+.dashboard-gta6-animaciones img {
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  object-fit: cover;
+}
+
+/* Animación hover en cards */
+.gradient-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}

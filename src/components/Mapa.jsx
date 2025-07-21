@@ -34,7 +34,7 @@ function Mapa() {
   // Usar hook personalizado para eventos
   const { eventos, isLoadingEventos, fetchEventos } = useMapEvents();
 
-  const { vehiculoIdAutorizado } = mapConfig;
+  const { vehiculosIdsAutorizados } = mapConfig;
   const rutaActual = rutasVehiculo[rutaSeleccionada];
 
   // Filtrar eventos válidos
@@ -45,21 +45,19 @@ function Mapa() {
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user);
-      console.log("👤 Usuario:", data.user?.id);
-      console.log("🔑 ID requerido:", vehiculoIdAutorizado);
-      console.log("✅ ¿Autorizado?", data.user?.id === vehiculoIdAutorizado);
+      // logs eliminados
     });
-  }, [vehiculoIdAutorizado]);
+  }, [vehiculosIdsAutorizados]);
 
   // Realtime listener mejorado para sincronización
   useEffect(() => {
     if (!user?.id) {
-      console.log("❌ Usuario no autenticado, saltando suscripción Realtime");
+      // log eliminado
       return;
     }
 
     const channelName = `eventos-tiempo-real-global`;
-    console.log(`📡 Creando canal compartido: ${channelName}`);
+    // log eliminado
 
     const channel = supabase
       .channel(channelName)
@@ -71,24 +69,14 @@ function Mapa() {
           table: "eventos_tiempo_real",
         },
         (payload) => {
-          console.log("📡 Realtime evento recibido:", {
-            eventType: payload.eventType,
-            tipo: payload.new?.tipo || payload.old?.tipo,
-            activo: payload.new?.activo || payload.old?.activo,
-            iniciado_por:
-              payload.new?.datos?.iniciado_por ||
-              payload.old?.datos?.iniciado_por,
-            currentUser: user.id,
-            timestamp: new Date().toISOString(),
-          });
+          // log eliminado
 
           if (
             payload.eventType === "INSERT" &&
             payload.new?.tipo === "evento_sorpresa_iniciado" &&
             payload.new?.activo === true
           ) {
-            console.log(`🎉 ACTIVANDO EVENTO SORPRESA PARA TODOS LOS USUARIOS`);
-            console.log(`📍 Datos del evento:`, payload.new);
+            // log eliminado
             setMostrarModalSorpresa(true);
             setRecorridoActivo(true);
             setRutaSeleccionada(payload.new?.datos?.ruta || "ruta1");
@@ -97,9 +85,7 @@ function Mapa() {
             payload.eventType === "DELETE" ||
             (payload.eventType === "UPDATE" && payload.new?.activo === false)
           ) {
-            console.log(
-              `🛑 DETENIENDO EVENTO SORPRESA PARA TODOS LOS USUARIOS`
-            );
+            // log eliminado
             setRecorridoActivo(false);
             setVehiculoIdx(0);
             setMostrarModalSorpresa(false);
@@ -108,20 +94,20 @@ function Mapa() {
         }
       )
       .subscribe((status) => {
-        console.log(`📡 Canal ${channelName} - Estado:`, status);
+        // log eliminado
         if (status === "SUBSCRIBED") {
-          console.log("✅ Suscripción Realtime exitosa");
+          // log eliminado
         } else if (status === "CHANNEL_ERROR") {
-          console.error("❌ Error en el canal Realtime");
+          // log eliminado
         } else if (status === "TIMED_OUT") {
-          console.error("⏰ Timeout en el canal Realtime");
+          // log eliminado
         } else if (status === "CLOSED") {
-          console.log("🔒 Canal Realtime cerrado");
+          // log eliminado
         }
       });
 
     return () => {
-      console.log(`🧹 Limpiando canal ${channelName}`);
+      // log eliminado
       supabase.removeChannel(channel);
     };
   }, [user?.id]);
@@ -129,10 +115,10 @@ function Mapa() {
   // Funciones para manejar eventos
   const handleUnirseEvento = async (evento) => {
     try {
-      console.log("🎯 Navegando al evento:", evento.nombre);
+      // log eliminado
       navigate(`/evento/${evento.id}`);
     } catch (error) {
-      console.error("❌ Error al navegar al evento:", error);
+      // log eliminado
     }
   };
 
@@ -141,7 +127,7 @@ function Mapa() {
   };
 
   const handleRecargarEventos = async () => {
-    console.log("🔄 Recargando todos los eventos...");
+    // log eliminado
     await fetchEventos();
   };
 
@@ -156,9 +142,7 @@ function Mapa() {
       return () => clearTimeout(timer);
     } else if (vehiculoIdx >= rutaActual.puntos.length - 1 && recorridoActivo) {
       // Si llegó al destino, esperar 3 minutos y limpiar automáticamente
-      console.log(
-        "🏁 Capicamión llegó al destino, iniciando temporizador de 3 minutos..."
-      );
+      // log eliminado
 
       // Iniciar contador regresivo
       setTiempoRestante(180); // 3 minutos en segundos
@@ -174,9 +158,7 @@ function Mapa() {
       }, 1000);
 
       const cleanupTimer = setTimeout(async () => {
-        console.log(
-          "⏰ Tiempo de espera terminado, limpiando evento automáticamente..."
-        );
+        // log eliminado
         clearInterval(countdownInterval);
         try {
           const { error } = await supabase
@@ -185,7 +167,7 @@ function Mapa() {
             .eq("tipo", "evento_sorpresa_iniciado");
 
           if (error) {
-            console.warn("⚠️ Error al limpiar evento automáticamente:", error);
+            // log eliminado
           } else {
             console.log(
               "✅ Evento limpiado automáticamente después de 3 minutos"
@@ -212,12 +194,14 @@ function Mapa() {
         return;
       }
 
-      // Solo permitir a usuarios autorizados (puedes agregar más IDs al array)
-      const USUARIOS_AUTORIZADOS = [
-        "08d54fc4-0879-40a4-b247-b11c38a386f7",
-        // Agrega aquí más IDs si lo deseas
-      ];
-      if (!USUARIOS_AUTORIZADOS.includes(user.id)) {
+      // Solo permitir a usuarios autorizados (usando mapConfig)
+      console.log(
+        "[DEBUG] ID actual:",
+        user.id,
+        "Autorizados:",
+        vehiculosIdsAutorizados
+      );
+      if (!vehiculosIdsAutorizados.includes(user.id)) {
         alert("Solo usuarios autorizados pueden activar el evento sorpresa.");
         return;
       }
@@ -442,15 +426,30 @@ function Mapa() {
             )}
 
             {/* Renderizar eventos usando el nuevo componente */}
-            {eventosFiltrados.map((evento) => (
-              <EventoMarker
-                key={`evento-${evento.id}-${evento.lat}-${evento.lon}`}
-                evento={evento}
-                user={user}
-                onUnirseEvento={handleUnirseEvento}
-                onNavigateToLogin={handleNavigateToLogin}
-              />
-            ))}
+            {eventosFiltrados.map((evento) => {
+              // Forzar categoría para íconos ONG y Ciudadanía
+              let eventoForzado = { ...evento };
+              if (
+                evento.categoria?.toLowerCase().includes("ong") ||
+                evento.tipo?.toLowerCase().includes("ong")
+              ) {
+                eventoForzado.categoria = "ayuda_ongs";
+              } else if (
+                evento.categoria?.toLowerCase().includes("ciudadan") ||
+                evento.tipo?.toLowerCase().includes("ciudadan")
+              ) {
+                eventoForzado.categoria = "ayuda_ciudadana";
+              }
+              return (
+                <EventoMarker
+                  key={`evento-${evento.id}-${evento.lat}-${evento.lon}`}
+                  evento={eventoForzado}
+                  user={user}
+                  onUnirseEvento={handleUnirseEvento}
+                  onNavigateToLogin={handleNavigateToLogin}
+                />
+              );
+            })}
 
             {/* Vehículo marker */}
             {recorridoActivo &&

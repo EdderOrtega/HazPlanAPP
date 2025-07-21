@@ -108,10 +108,9 @@ function CrearPerfil() {
       setError("Selecciona una imagen válida.");
       return;
     }
+    // Si es foto de perfil, carpeta = "perfiles"; si es de eventos, carpeta = "imagenesEventos"
     const nombreArchivo = `${carpeta}/${Date.now()}_${file.name}`;
-    // Usar el bucket correcto para perfiles
-    const bucket =
-      carpeta === "perfiles" ? "hazplanimagenperfil" : "hazplanimagenes";
+    const bucket = "hazplanimagenperfil";
     const { error } = await supabase.storage
       .from(bucket)
       .upload(nombreArchivo, file, { upsert: false });
@@ -128,7 +127,7 @@ function CrearPerfil() {
       }
       const fotosEventosPaths = [];
       for (const foto of fotosEventos) {
-        const path = await subirImagen(foto, "eventos");
+        const path = await subirImagen(foto, "imagenesEventos");
         fotosEventosPaths.push(path);
       }
       const {
@@ -157,7 +156,6 @@ function CrearPerfil() {
       setShowModal(true);
     } catch (err) {
       setError("Error al subir imágenes o crear perfil");
-      console.error(err);
     }
   };
 
@@ -496,7 +494,7 @@ function CrearPerfil() {
               style={{
                 color: "#593c8f",
                 background: "#fff",
-                border: "1px solid #ccc",
+                border: "1px solid #593c8f",
                 borderRadius: "6px",
                 padding: "8px",
                 fontSize: "16px",

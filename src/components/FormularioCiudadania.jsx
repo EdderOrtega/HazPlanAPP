@@ -152,7 +152,9 @@ function FormularioCiudadania() {
         nombre: nombreEvento,
         descripcion: descripcionCompleta,
         tipo,
-        categoria: tipoAyuda || "ayuda_ciudadana",
+        categoria: (tipoAyuda || "ayuda_ciudadana")
+          .toLowerCase()
+          .replace(/\s+/g, "_"),
         ubicacion,
         fecha,
         fecha_fin,

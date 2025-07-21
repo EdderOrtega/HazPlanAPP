@@ -2,15 +2,15 @@ import { mapConfig } from "../data/mapData";
 
 function MapControls({
   user,
+
+  vehiculosIdsAutorizados = mapConfig.vehiculosIdsAutorizados,
   recorridoActivo,
   rutaSeleccionada,
   onRecargarEventos,
   onIniciarRecorrido,
   onDetenerRecorrido,
-  eventosFiltrados,
+  eventosFiltrados = [],
 }) {
-  const { vehiculoIdAutorizado } = mapConfig;
-
   return (
     <div
       style={{
@@ -40,7 +40,7 @@ function MapControls({
 
       <h3>Eventos inmediatos y cercanos ({eventosFiltrados.length})</h3>
 
-      {user && user.id === vehiculoIdAutorizado && (
+      {user && vehiculosIdsAutorizados.includes(user.id) && (
         <div style={{ marginBottom: "10px" }}>
           <h4>Activar Capicamión:</h4>
           <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>

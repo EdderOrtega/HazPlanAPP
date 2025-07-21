@@ -1,3 +1,14 @@
+/* Palabras clave moradas y borde para empresas */
+.negocio-keyword {
+  color: #a259e6;
+  border: 2px solid #a259e6;
+  background: #fff;
+  padding: 0 6px;
+  border-radius: 6px;
+  font-weight: 900;
+  margin: 0 2px;
+  display: inline-block;
+}
 /* Dashboard Inicio - Usuarios logueados con Animaciones Premium */
 
 .dashboard-inicio {
@@ -707,7 +718,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, #593c8f99 0%, #7b5fb099 100%);
+  background: linear-gradient(135deg, #632ace 0%, #7b5fb099 100%);
   z-index: 2;
 }
 .hero-content {
@@ -1263,7 +1274,7 @@
   left: 50%;
   width: 400px;
   height: 200px;
-  background: radial-gradient(circle, #a18be6 0%, #fff0 80%);
+  background: radial-gradient(circle, #d2acec 0%, #6300c1ed 80%);
   filter: blur(40px) brightness(1.2);
   opacity: 0.5;
   z-index: 0;

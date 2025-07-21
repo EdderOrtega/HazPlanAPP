@@ -80,7 +80,7 @@ function ChatGrupal({ eventoId }) {
     });
 
     if (error) {
-      console.error("❌ Error al enviar mensaje:", error);
+      // log eliminado
     } else {
       setNuevoMensaje("");
       fetchMensajes(); // Refresca los mensajes después de enviar

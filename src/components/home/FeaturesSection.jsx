@@ -79,8 +79,8 @@ const FeaturesSection = React.forwardRef((props, ref) => {
             <GTAAnimatedElement
               key={i}
               animationType="flipIn"
-              delay={0.3 + i * 0.1}
-              duration={1.0}
+              delay={0.3 + i * 0.18}
+              duration={1.8}
               triggerStart="top 120%"
               className="feature-card"
               style={{
@@ -114,19 +114,24 @@ const FeaturesSection = React.forwardRef((props, ref) => {
               </div>
               <h3
                 style={{
-                  color: "var(--white)",
+                  color: "#fff",
                   fontSize: "1.3rem",
                   marginBottom: "15px",
                   fontWeight: "600",
+                  opacity: 1,
+                  textShadow:
+                    "0 2px 16px #fff, 0 0 2px #000, 0 0 32px #a259e6aa",
                 }}
               >
                 {feature.title}
               </h3>
               <p
                 style={{
-                  color: "var(--white)",
+                  color: "#fff",
                   fontSize: "0.95rem",
-                  opacity: "0.9",
+                  opacity: 1,
+                  textShadow:
+                    "0 2px 8px #fff, 0 0 2px #000, 0 0 16px #a259e6aa",
                 }}
               >
                 {feature.desc}

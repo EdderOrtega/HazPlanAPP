@@ -58,7 +58,8 @@ function EventoDetalle() {
           alignItems: "center",
           height: "100vh",
           paddingTop: "60px",
-          background: "linear-gradient(135deg, #e3d8f8 0%, #f0ebff 50%, #e8deff 100%)",
+          background:
+            "linear-gradient(135deg, #e3d8f8 0%, #f0ebff 50%, #e8deff 100%)",
         }}
       >
         <Loader />
@@ -68,7 +69,9 @@ function EventoDetalle() {
 
   return (
     <div
-      className={`evento-detalle nuevo-estilo-evento-detalle fondo-perfil-usuario fondo-categoria-${evento.tipo ? evento.tipo.toLowerCase().replace(/\s/g, "-") : "default"}`}
+      className={`evento-detalle nuevo-estilo-evento-detalle fondo-perfil-usuario fondo-categoria-${
+        evento.tipo ? evento.tipo.toLowerCase().replace(/\s/g, "-") : "default"
+      }`}
     >
       <h2
         className="evento-titulo anim-fadein evento-titulo-borde"
@@ -80,19 +83,27 @@ function EventoDetalle() {
       <div className="evento-navegacion-tabs anim-fadein-delay">
         <button
           className={
-            (seccionActiva === "detalles" ? "tab-activo " : "") + "evento-tab-borde"
+            (seccionActiva === "detalles" ? "tab-activo " : "") +
+            "evento-tab-borde"
           }
           onClick={() => setSeccionActiva("detalles")}
         >
-          <span role="img" aria-label="info">ℹ️</span> Detalles
+          <span role="img" aria-label="info">
+            ℹ️
+          </span>{" "}
+          Detalles
         </button>
         <button
           className={
-            (seccionActiva === "participantes" ? "tab-activo " : "") + "evento-tab-borde"
+            (seccionActiva === "participantes" ? "tab-activo " : "") +
+            "evento-tab-borde"
           }
           onClick={() => setSeccionActiva("participantes")}
         >
-          <span role="img" aria-label="personas">👥</span> Participantes
+          <span role="img" aria-label="personas">
+            👥
+          </span>{" "}
+          Participantes
         </button>
         <button
           className={
@@ -100,17 +111,79 @@ function EventoDetalle() {
           }
           onClick={() => setSeccionActiva("chat")}
         >
-          <span role="img" aria-label="chat">💬</span> Chat
+          <span role="img" aria-label="chat">
+            💬
+          </span>{" "}
+          Chat
         </button>
       </div>
 
       <div className="evento-contenido">
         {seccionActiva === "detalles" && (
           <div className="evento-detalles-card anim-slidein">
-            <div className="evento-detalles-header">
-              <span className={`evento-tipo-badge evento-tipo-badge-${evento.tipo ? evento.tipo.toLowerCase().replace(/\s/g, "-") : "default"}`}>
-                {evento.tipo || "Sin categoría"}
-              </span>
+            <div
+              className="evento-detalles-header"
+              style={{ display: "flex", flexDirection: "column", gap: 6 }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <span
+                  className={`evento-tipo-badge evento-tipo-badge-${
+                    evento.tipo
+                      ? evento.tipo.toLowerCase().replace(/\s/g, "-")
+                      : "default"
+                  }`}
+                >
+                  {evento.tipo || "Sin categoría"}
+                </span>
+                {/* Mostrar la categoría visual (la que determina el ícono en el mapa) */}
+                {evento.categoria && (
+                  <span
+                    className={`evento-tipo-badge evento-tipo-badge-${evento.categoria
+                      .toLowerCase()
+                      .replace(/\s/g, "-")}`}
+                    style={{
+                      background: (() => {
+                        // Colores del filtro
+                        const colores = {
+                          mascotas: "#f39c12",
+                          reforestacion: "#2ecc71",
+                          arte: "#e67e22",
+                          fandom: "#9b59b6",
+                          ayuda_ongs: "#1e88e5",
+                          ayuda_ciudadana: "#ab47bc",
+                          salud: "#e74c3c",
+                          club: "#3498db",
+                          juegos: "#1abc9c",
+                          actividad: "#27ae60",
+                        };
+                        const key = evento.categoria.toLowerCase();
+                        return colores[key] || "#667eea";
+                      })(),
+                      color: "#fff",
+                      fontWeight: 700,
+                      marginLeft: 0,
+                    }}
+                  >
+                    {(() => {
+                      // Etiquetas del filtro
+                      const etiquetas = {
+                        mascotas: "Mascotas",
+                        reforestacion: "Reforestación",
+                        arte: "Arte",
+                        fandom: "Fandom",
+                        ayuda_ongs: "ONGs",
+                        ayuda_ciudadana: "Ciudadanía",
+                        salud: "Salud Mental",
+                        club: "Lectura",
+                        juegos: "Juegos",
+                        actividad: "Deportes",
+                      };
+                      const key = evento.categoria.toLowerCase();
+                      return etiquetas[key] || evento.categoria;
+                    })()}
+                  </span>
+                )}
+              </div>
               <span className="evento-fecha">
                 {new Date(evento.fecha).toLocaleDateString("es-ES", {
                   weekday: "long",
@@ -122,15 +195,19 @@ function EventoDetalle() {
             </div>
             <div className="evento-detalles-body">
               <p className="evento-descripcion fondo-blanco-suave">
-                <strong>Descripción:</strong> {evento.descripcion || "Sin descripción disponible"}
+                <strong>Descripción:</strong>{" "}
+                {evento.descripcion || "Sin descripción disponible"}
               </p>
               <p className="evento-ubicacion fondo-blanco-suave">
-                <strong>Ubicación:</strong> {evento.ubicacion || "Ubicación no especificada"}
+                <strong>Ubicación:</strong>{" "}
+                {evento.ubicacion || "Ubicación no especificada"}
               </p>
               {creador && (
                 <div className="evento-creador-card fondo-morado-suave">
                   <span className="evento-creador-label">Organizado por:</span>
-                  <span className="evento-creador-nombre">{creador.nombre || "Usuario"}</span>
+                  <span className="evento-creador-nombre">
+                    {creador.nombre || "Usuario"}
+                  </span>
                 </div>
               )}
             </div>

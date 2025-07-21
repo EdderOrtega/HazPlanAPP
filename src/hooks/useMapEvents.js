@@ -28,7 +28,7 @@ export const useMapEvents = () => {
 
     if (!error) {
       setEventos(filtrarEventosActivos(data || []));
-      console.log(`📋 Eventos cargados: ${data?.length || 0}`);
+      // console.log eliminado
     } else {
       console.error("❌ Error al cargar eventos:", error);
     }
@@ -41,7 +41,7 @@ export const useMapEvents = () => {
     fetchEventos();
 
     // Suscribirse a cambios en tiempo real en la tabla eventos
-    console.log("🔧 Configurando listener de eventos...");
+    // console.log eliminado
     const eventosChannelName = `eventos-updates-${Date.now()}`;
     const eventosChannel = supabase
       .channel(eventosChannelName)
@@ -53,13 +53,13 @@ export const useMapEvents = () => {
           table: "eventos",
         },
         (payload) => {
-          console.log("📡 ¡Cambio detectado en tabla eventos!:", payload);
+          // console.log eliminado
 
           if (payload.eventType === "INSERT") {
-            console.log("➕ Insertando nuevo evento en mapa:", payload.new);
+            // console.log eliminado
             setEventos((prev) => filtrarEventosActivos([...prev, payload.new]));
           } else if (payload.eventType === "UPDATE") {
-            console.log("✏️ Actualizando evento en mapa:", payload.new);
+            // console.log eliminado
             setEventos((prev) =>
               filtrarEventosActivos(
                 prev.map((evento) =>
@@ -68,7 +68,7 @@ export const useMapEvents = () => {
               )
             );
           } else if (payload.eventType === "DELETE") {
-            console.log("🗑️ Eliminando evento del mapa:", payload.old);
+            // console.log eliminado
             setEventos((prev) =>
               filtrarEventosActivos(
                 prev.filter((evento) => evento.id !== payload.old.id)
@@ -78,16 +78,16 @@ export const useMapEvents = () => {
         }
       )
       .subscribe((status) => {
-        console.log(`📡 Canal ${eventosChannelName} - Estado:`, status);
+        // console.log eliminado
         if (status === "SUBSCRIBED") {
-          console.log("✅ Suscripción a eventos exitosa");
+          // console.log eliminado
         } else if (status === "CHANNEL_ERROR") {
           console.error("❌ Error en el canal de eventos");
         }
       });
 
     return () => {
-      console.log("🧹 Limpiando canal de eventos");
+      // console.log eliminado
       supabase.removeChannel(eventosChannel);
     };
   }, []);

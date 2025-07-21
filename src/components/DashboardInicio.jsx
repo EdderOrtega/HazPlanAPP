@@ -1,14 +1,13 @@
 import ONGsPromoSection from "./ONGsPromoSection";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-// import { supabase } from "../supabaseClient";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import EventoCard from "./EventoCard";
 import "../styles/dashboardInicio.css";
 import "../styles/pageTransitions.css";
 import Loader from "./ui/Loader";
-import heroImg from "/public/images/heroFondoCamion.png";
 import amigos2Img from "/public/images/amigos2.jpg";
 import amigos3Img from "/public/images/amigos3.jpg";
+
 import {
   FaInstagram,
   FaFacebook,
@@ -18,6 +17,7 @@ import {
   FaEnvelope,
 } from "react-icons/fa6";
 import logoHazPlan from "/public/images/iconoHazPlanRedondo.png";
+import capilentesImg from "/public/images/capilentes.png";
 import StatCard from "./StatCard";
 import {
   FaCalendarCheck,
@@ -26,13 +26,13 @@ import {
 } from "react-icons/fa6";
 import EventosCarruselRecomendados from "./EventosCarruselRecomendados";
 
-import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 function DashboardInicio({ user }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [estadisticas, setEstadisticas] = useState({
     eventosAsistidos: 0,
     eventosCreados: 0,
@@ -46,6 +46,7 @@ function DashboardInicio({ user }) {
   const carruselRef = useRef();
   const empresasRef = useRef();
   const inspiracionRef = useRef();
+  const inspiracionTitleRef = useRef();
   const heroCardsRef = useRef();
   const galleryRef = useRef();
   const tipsRef = useRef();
@@ -53,210 +54,16 @@ function DashboardInicio({ user }) {
   const footerRef = useRef();
 
   useEffect(() => {
-    if (loading) return;
-    // Limpiar triggers previos para evitar duplicados y bugs
-    ScrollTrigger.getAll().forEach((t) => t.kill());
-
-    // Hero animación de entrada
-    if (heroRef.current) {
-      gsap.fromTo(
-        heroRef.current,
-        { opacity: 0, y: 80 },
-        { opacity: 1, y: 0, duration: 1, ease: "expo.out" }
-      );
-      const heroContent = heroRef.current.querySelector(".hero-content");
-      if (heroContent) {
-        gsap.fromTo(
-          heroContent,
-          { opacity: 0, y: 40 },
-          { opacity: 1, y: 0, duration: 1, delay: 0.2, ease: "expo.out" }
-        );
-      }
-    }
-    // Stats: stagger animado (trigger en el contenedor padre)
-    if (statsRef.current) {
-      const cards = statsRef.current.querySelectorAll(".stat-simple");
-      gsap.fromTo(
-        cards,
-        { opacity: 0, y: 40, scale: 0.9 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.7,
-          stagger: 0.12,
-          ease: "expo.out",
-          scrollTrigger: {
-            trigger: statsRef.current,
-            start: "top 90%",
-            toggleActions: "play none none none",
-            once: true,
-          },
-        }
-      );
-    }
-    // Carrusel recomendado
-    if (carruselRef.current) {
-      gsap.fromTo(
-        carruselRef.current,
-        { opacity: 0, y: 60 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "expo.out",
-          scrollTrigger: { trigger: carruselRef.current, start: "top 90%" },
-        }
-      );
-    }
-    // Empresas card
-    if (empresasRef.current) {
-      gsap.fromTo(
-        empresasRef.current,
-        { opacity: 0, scale: 0.93 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: { trigger: empresasRef.current, start: "top 90%" },
-        }
-      );
-    }
-    // Inspiración parallax
-    if (inspiracionRef.current) {
-      gsap.fromTo(
-        inspiracionRef.current,
-        { opacity: 0, y: 60 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "expo.out",
-          scrollTrigger: { trigger: inspiracionRef.current, start: "top 90%" },
-        }
-      );
-    }
-    // Hero cards tipo GTA6 (trigger en el contenedor padre)
-    if (heroCardsRef.current) {
-      const cards = heroCardsRef.current.querySelectorAll(
-        ".modern-highlight-card"
-      );
-      gsap.fromTo(
-        cards,
-        { opacity: 0, y: 60, scale: 0.92 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.7,
-          stagger: 0.1,
-          ease: "expo.out",
-          scrollTrigger: {
-            trigger: heroCardsRef.current,
-            start: "top 90%",
-            toggleActions: "play none none none",
-            once: true,
-          },
-        }
-      );
-    }
-    // Galería
-    if (galleryRef.current) {
-      const imgs = galleryRef.current.querySelectorAll(".gallery-img");
-      gsap.fromTo(
-        imgs,
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-          stagger: 0.08,
-          ease: "power2.out",
-          scrollTrigger: { trigger: galleryRef.current, start: "top 95%" },
-        }
-      );
-    }
-    // Tips
-    if (tipsRef.current) {
-      const tipCards = tipsRef.current.querySelectorAll(".tip-card");
-      gsap.fromTo(
-        tipCards,
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-          stagger: 0.1,
-          ease: "power2.out",
-          scrollTrigger: { trigger: tipsRef.current, start: "top 95%" },
-        }
-      );
-    }
-    // GTA6 animaciones (trigger en el contenedor padre)
-    if (gta6Ref.current) {
-      const gta6Cards = gta6Ref.current.querySelectorAll(".gta6-img-card");
-      gsap.fromTo(
-        gta6Cards,
-        { opacity: 0, y: 40, scale: 0.92 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.7,
-          stagger: 0.1,
-          ease: "expo.out",
-          scrollTrigger: {
-            trigger: gta6Ref.current,
-            start: "top 95%",
-            toggleActions: "play none none none",
-            once: true,
-          },
-        }
-      );
-    }
-    // Footer
-    if (footerRef.current) {
-      gsap.fromTo(
-        footerRef.current,
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: { trigger: footerRef.current, start: "top 98%" },
-        }
-      );
-    }
-    // Refrescar triggers después de un pequeño delay para asegurar layout
-    setTimeout(() => {
-      if (window.ScrollTrigger) window.ScrollTrigger.refresh();
-    }, 100);
-    // Limpieza de triggers al desmontar
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-    };
-  }, [loading]);
-
-  useEffect(() => {
     const fetchData = async () => {
       if (!user) return;
 
       try {
         setLoading(true);
-        // Obtener gustos/intereses del usuario
-        // Suponiendo que el campo se llama "gustos" y es string separado por comas
-        // Puedes ajustar el nombre del campo según tu base
-        // Descomenta y ajusta si tienes supabase:
-        // const { data: perfil } = await supabase.from("usuariosRegistrados").select("gustos").eq("user_id", user.id).single();
-        // if (perfil && perfil.gustos) setGustos(perfil.gustos.split(",").map(g => g.trim()));
         setEstadisticas({
           eventosAsistidos: 0,
           eventosCreados: 0,
           proximosEventos: 0,
         });
-        // Aquí podrías dejar la lógica de supabase si quieres estadísticas reales
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       } finally {
@@ -266,6 +73,218 @@ function DashboardInicio({ user }) {
 
     fetchData();
   }, [user]);
+
+  useLayoutEffect(() => {
+    if (loading) return;
+
+    const ctx = gsap.context(() => {
+      // --- h1: efecto "wave" ---
+      if (heroRef.current) {
+        const h1 = heroRef.current.querySelector("h1");
+        if (h1) {
+          const chars = h1.textContent.split("");
+          h1.innerHTML = chars
+            .map(
+              (c) =>
+                `<span class="hazplan-char" style="display:inline-block">${
+                  c === " " ? "&nbsp;" : c
+                }</span>`
+            )
+            .join("");
+          const charEls = h1.querySelectorAll(".hazplan-char");
+          // Entrada: fade+up, luego loop tipo "wave"
+          gsap.fromTo(
+            charEls,
+            { opacity: 0, y: 60 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 1.1,
+              ease: "elastic.out(1, 0.6)",
+              stagger: 0.04,
+              delay: 0.2,
+              onComplete: () => {
+                gsap.to(charEls, {
+                  y: (i) => Math.sin(i / 2) * 12,
+                  color: "#a259e6",
+                  textShadow: "0 2px 8px #6c2ebf99",
+                  repeat: -1,
+                  yoyo: true,
+                  duration: 1.2,
+                  ease: "sine.inOut",
+                  stagger: {
+                    each: 0.04,
+                    repeat: -1,
+                    yoyo: true,
+                  },
+                  delay: 0.2,
+                });
+              },
+            }
+          );
+        }
+      }
+
+      // FadeUp animación para todas las cards y secciones
+      const fadeUp = (target, delay = 0, stagger = 0.1) => {
+        if (!target) return;
+        gsap.fromTo(
+          target,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "expo.out",
+            stagger,
+            delay,
+            scrollTrigger: {
+              trigger: target,
+              start: "top 90%",
+              toggleActions: "play none none reset",
+            },
+          }
+        );
+      };
+
+      fadeUp(heroRef.current);
+      if (statsRef.current) {
+        const statCards = statsRef.current.querySelectorAll(".stat-simple");
+        fadeUp(statCards, 0.2);
+        // Animación especial eliminada para la card de Próximos eventos
+      }
+      fadeUp(carruselRef.current);
+      fadeUp(empresasRef.current);
+      fadeUp(inspiracionRef.current);
+
+      // --- Inspiración: efecto "flip" ---
+      // Inspiración: animación por palabra, sin cortar palabras
+      if (inspiracionTitleRef.current) {
+        const el = inspiracionTitleRef.current;
+        const words = el.textContent.split(/\s+/);
+        el.innerHTML = words
+          .map(
+            (w, i) =>
+              `<span class="inspiracion-title-word" style="display:inline-flex; margin-right:8px; color:${
+                i % 2 === 0 ? "#fff" : "#a259e6"
+              }; font-weight:900;">${w}</span>`
+          )
+          .join(" ");
+        const wordEls = el.querySelectorAll(".inspiracion-title-word");
+        gsap.fromTo(
+          wordEls,
+          { opacity: 0, y: 40, scale: 0.7 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1.1,
+            duration: 1.1,
+            ease: "power4.out",
+            stagger: 0.09,
+            delay: 0.2,
+            onComplete: () => {
+              gsap.to(wordEls, {
+                scale: 1.04,
+                color: (i) => (i % 2 === 0 ? "#fff" : "#a259e6"),
+                textShadow: (i) =>
+                  i % 2 === 0 ? "0 2px 8px #a259e6aa" : "0 2px 8px #fff8",
+                repeat: -1,
+                yoyo: true,
+                duration: 1.2,
+                ease: "sine.inOut",
+                stagger: {
+                  each: 0.09,
+                  repeat: -1,
+                  yoyo: true,
+                },
+                delay: 0.2,
+              });
+            },
+          }
+        );
+      }
+
+      // Si quieres probar otro título, aquí puedes agregar un fade+skew:
+      // Por ejemplo, para empresasRef.current.querySelector('h2')
+      if (empresasRef.current) {
+        const h2 = empresasRef.current.querySelector("h2");
+        if (h2) {
+          const words = h2.textContent.split(/\s+/);
+          h2.innerHTML = words
+            .map(
+              (w, i) =>
+                `<span class="empresas-title-word" style="display:inline-flex; margin-right:8px; color:${
+                  i % 2 === 0 ? "#a259e6" : "#fff"
+                }; font-weight:900;">${w}</span>`
+            )
+            .join(" ");
+          const wordEls = h2.querySelectorAll(".empresas-title-word");
+          gsap.fromTo(
+            wordEls,
+            { opacity: 0, y: 40, scale: 0.7 },
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1.1,
+              duration: 1.1,
+              ease: "bounce.out",
+              stagger: 0.09,
+              delay: 0.2,
+              onComplete: () => {
+                gsap.to(wordEls, {
+                  scale: 1.04,
+                  color: (i) => (i % 2 === 0 ? "#a259e6" : "#fff"),
+                  textShadow: (i) =>
+                    i % 2 === 0 ? "0 2px 8px #fff8" : "0 2px 8px #a259e6aa",
+                  repeat: -1,
+                  yoyo: true,
+                  duration: 1.2,
+                  ease: "sine.inOut",
+                  stagger: {
+                    each: 0.09,
+                    repeat: -1,
+                    yoyo: true,
+                  },
+                  delay: 0.2,
+                });
+              },
+            }
+          );
+        }
+      }
+
+      if (heroCardsRef.current) {
+        const cards = heroCardsRef.current.querySelectorAll(
+          ".modern-highlight-card"
+        );
+        if (cards.length > 0) fadeUp(cards, 0, 0.1);
+      }
+
+      if (galleryRef.current) {
+        const imgs = galleryRef.current.querySelectorAll(".gallery-img");
+        if (imgs.length > 0) fadeUp(imgs, 0, 0.05);
+      }
+
+      if (tipsRef.current) {
+        const tipCards = tipsRef.current.querySelectorAll(".tip-card");
+        if (tipCards.length > 0) fadeUp(tipCards, 0, 0.08);
+      }
+
+      if (gta6Ref.current) {
+        const gta6Cards = gta6Ref.current.querySelectorAll(".gta6-img-card");
+        if (gta6Cards.length > 0) fadeUp(gta6Cards, 0, 0.08);
+      }
+
+      fadeUp(footerRef.current);
+
+      requestAnimationFrame(() => ScrollTrigger.refresh(true));
+    });
+
+    return () => {
+      ctx.revert();
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, [location.pathname, loading]);
 
   if (loading) {
     return (
@@ -278,12 +297,11 @@ function DashboardInicio({ user }) {
   return (
     <div
       className="dashboard-inicio page-transition-container"
-      style={{ overflowX: "hidden" }}
+      style={{ overflowX: "clip" }}
     >
       <div className="dashboard-inicio-inner">
-        {/* HERO visual con overlay y animación */}
+        {/* 🔥 HERO */}
         <div className="dashboard-hero" ref={heroRef}>
-          <img src={heroImg} alt="Hero HazPlan" className="hero-bg-img" />
           <div className="hero-overlay" />
           <div className="hero-content animate-fadein">
             <h1>¡Bienvenido a HazPlan!</h1>
@@ -294,7 +312,7 @@ function DashboardInicio({ user }) {
           </div>
         </div>
 
-        {/* Estadísticas rápidas con animación */}
+        {/* 🔥 STATS */}
         <div
           ref={statsRef}
           className="stats-grid stagger-animation stats-grid-simple"
@@ -304,41 +322,52 @@ function DashboardInicio({ user }) {
             number={estadisticas.eventosAsistidos}
             label="Eventos asistidos"
             duration={1200}
-            delay={0}
           />
           <StatCard
             icon={<FaCalendarPlus />}
             number={estadisticas.eventosCreados}
             label="Eventos creados"
             duration={1200}
-            delay={200}
           />
           <StatCard
             icon={<FaCalendarDay />}
             number={estadisticas.proximosEventos}
             label="Próximos eventos"
             duration={1200}
-            delay={400}
           />
         </div>
-        {/* Carrusel horizontal tipo Spotify */}
-        <div ref={carruselRef}>
+
+        {/* 🔥 CARRUSEL con efecto glassmorphism */}
+        <div
+          ref={carruselRef}
+          style={{
+            background: "rgba(255,255,255,0.13)",
+            borderRadius: "2rem",
+            boxShadow: "0 8px 32px 0 #a259e633",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            border: "1.5px solid #a259e655",
+            padding: "1.5rem 0 1.5rem 0",
+            marginBottom: 32,
+          }}
+        >
           <EventosCarruselRecomendados />
         </div>
 
-        {/* Card informativa para empresas, negocios y ONGs con animación y estilo destacado */}
+        {/* 🔥 EMPRESAS */}
         <section
           className="dashboard-info-empresas animate-empresas-card"
           ref={empresasRef}
         >
           <div className="empresas-bg-glow"></div>
-          <h2>¿Tienes un negocio, empresa u organización?</h2>
+          <h2>
+            ¿Tienes un <span className="negocio-keyword">negocio</span>,{" "}
+            <span className="negocio-keyword">empresa</span> u{" "}
+            <span className="negocio-keyword">organización</span>?
+          </h2>
           <p>
             Únete a HazPlan y crea eventos, talleres, campañas o experiencias
             para miles de usuarios.
-            <br />
-            <strong>Promociona tu marca</strong>, conecta con tu comunidad y
-            accede a herramientas exclusivas para aliados.
           </p>
           <ul className="info-list">
             <li>
@@ -362,57 +391,43 @@ function DashboardInicio({ user }) {
           </button>
         </section>
 
-        {/* Animación de parallax y sección de inspiración */}
+        {/* 🔥 INSPIRACIÓN */}
         <div
-          className="dashboard-inspiration animate-parallax"
+          className="dashboard-inspiration animate-parallax inspiration-bg"
           ref={inspiracionRef}
+          style={{
+            background:
+              "linear-gradient(135deg, rgb(208 149 255) 60%, rgb(136 56 211)",
+            borderRadius: "2rem",
+            boxShadow: "0 8px 32px 0 #a259e633",
+            position: "relative",
+            overflow: "hidden",
+            display: "grid",
+            marginBottom: 32,
+            justifyItems: "center",
+          }}
         >
-          <h2>¿Listo para tu próxima aventura?</h2>
-          <p>
+          <h2 ref={inspiracionTitleRef}>¿Listo para tu próxima aventura?</h2>
+          <p style={{ color: "#fff" }}>
             Explora eventos, haz nuevos amigos y vive experiencias inolvidables.
           </p>
+          <img
+            src={capilentesImg}
+            alt="Capilentes"
+            style={{
+              bottom: 0,
+              width: "120px",
+              pointerEvents: "none",
+            }}
+          />
         </div>
 
-        {/* Sección de ONGs aliadas con videos tipo TikTok */}
+        {/* 🔥 ONGs */}
         <ONGsPromoSection />
 
-        {/* Cards modernas con imagen de fondo y animaciones tipo GTA6 + info de empresas */}
-        <div className="dashboard-hero-cards" ref={heroCardsRef}>
-          {/* Cards eliminadas por solicitud */}
-        </div>
-
-        {/* Galería de imágenes animada */}
-        <div className="dashboard-gallery" ref={galleryRef}>
-          {/* Imágenes eliminadas por solicitud */}
-        </div>
-
-        {/* Tips y sugerencias visuales */}
-        <div className="section tips-section" ref={tipsRef}>
-          <h2 className="section-title">💡 Tips para ti</h2>
-          <div className="tips-grid">
-            <div className="tip-card">
-              <div className="tip-icon">🎯</div>
-              <h4>Completa tu perfil</h4>
-              <p>Agrega tus intereses para recibir mejores recomendaciones</p>
-              <button onClick={() => navigate("/perfil")}>
-                Completar perfil
-              </button>
-            </div>
-            <div className="tip-card">
-              <div className="tip-icon">👥</div>
-              <h4>Invita amigos</h4>
-              <p>Comparte HazPlan con tus amigos y creen eventos juntos</p>
-              <button onClick={() => {}}>Compartir app</button>
-            </div>
-          </div>
-        </div>
-
-        {/* Animaciones dinámicas tipo GTA6 con imágenes de amigos */}
+        {/* 🔥 GTA6 CARDS */}
         <div className="dashboard-gta6-animaciones" ref={gta6Ref}>
-          <div
-            className="gta6-img-card animate-gta6-img"
-            style={{ animationDelay: "0.1s" }}
-          >
+          <div className="gta6-img-card">
             <img src={amigos2Img} alt="Amigos HazPlan 2" className="gta6-img" />
             <div className="gta6-img-overlay" />
             <div className="gta6-img-text">
@@ -423,10 +438,7 @@ function DashboardInicio({ user }) {
               </p>
             </div>
           </div>
-          <div
-            className="gta6-img-card animate-gta6-img"
-            style={{ animationDelay: "0.3s" }}
-          >
+          <div className="gta6-img-card">
             <img src={amigos3Img} alt="Amigos HazPlan 3" className="gta6-img" />
             <div className="gta6-img-overlay" />
             <div className="gta6-img-text">
@@ -439,6 +451,8 @@ function DashboardInicio({ user }) {
           </div>
         </div>
       </div>
+
+      {/* 🔥 FOOTER */}
       <footer className="dashboard-footer" ref={footerRef}>
         <div className="footer-content">
           <div className="footer-logo">

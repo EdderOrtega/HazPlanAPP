@@ -40,7 +40,7 @@ function MisEventos() {
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("Error al cargar eventos:", error);
+        // log eliminado
       } else {
         setMisEventos(eventosData || []);
       }
@@ -58,7 +58,7 @@ function MisEventos() {
         .delete()
         .eq("id", eventoId);
       if (error) {
-        console.error("Error al eliminar evento:", error);
+        // log eliminado
         alert("Error al eliminar el evento");
       } else {
         setMisEventos(misEventos.filter((e) => e.id !== eventoId));

@@ -1,15 +1,26 @@
 import L from "leaflet";
 import { categoryIcons, mapConfig } from "../data/mapData";
-import iconoHazPlanRedondo from "/public/images/iconoHazPlanRedondo.png";
+import iconoHazPlanRedondo from "/images/iconoHazPlanRedondo.png";
 
 // Función para crear iconos personalizados según la categoría
 // Recibe el evento completo para poder distinguir entre tipo y categoria
 export const createCategoryIcon = (evento, size = 40) => {
   // Si tiene subcategoría (evento.categoria), usarla; si no, usar tipo
   const categoria = evento?.categoria || evento?.tipo;
-  const normalizedCategoria = categoria
+  let normalizedCategoria = categoria
     ? categoria.toLowerCase().trim().replace(/\s+/g, "")
     : null;
+
+  // Forzar icono correcto para ONG y Ciudadanía aunque la subcategoría no coincida exactamente
+  if (normalizedCategoria && normalizedCategoria.includes("ayuda_ongs")) {
+    normalizedCategoria = "ayuda_ongs";
+  } else if (
+    normalizedCategoria &&
+    normalizedCategoria.includes("ayuda_ciudadana")
+  ) {
+    normalizedCategoria = "ayuda_ciudadana";
+  }
+
   const iconUrl =
     normalizedCategoria && categoryIcons[normalizedCategoria]
       ? categoryIcons[normalizedCategoria]

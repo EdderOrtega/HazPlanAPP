@@ -1,3 +1,21 @@
+@keyframes btn-replay-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 24px #7c4dff55;
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 8px 32px #7c4dff99;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 24px #7c4dff55;
+  }
+}
+.btn-replay-animated {
+  animation: btn-replay-pulse 1.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, box-shadow;
+}
 /* ===============================================
    MODAL COMING SOON TIPO TIKTOK - PANTALLA COMPLETA
    =============================================== */

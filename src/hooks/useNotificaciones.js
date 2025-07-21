@@ -17,15 +17,12 @@ export function useNotificaciones() {
         } = await supabase.auth.getUser();
 
         if (!currentUser) {
-          console.log("❌ No hay usuario autenticado para notificaciones");
+          // console.log eliminado
           return;
         }
 
         setUser(currentUser);
-        console.log(
-          "👤 Usuario autenticado para notificaciones:",
-          currentUser.id
-        );
+        // console.log eliminado
 
         // Cargar contador inicial de notificaciones
         await actualizarContadorNotificaciones(currentUser.id);
@@ -47,7 +44,7 @@ export function useNotificaciones() {
               filter: `user_id=eq.${currentUser.id}`,
             },
             (payload) => {
-              console.log("🔔 Nueva notificación recibida:", payload);
+              // console.log eliminado
 
               // Actualizar contador
               actualizarContadorNotificaciones(currentUser.id);
@@ -88,7 +85,7 @@ export function useNotificaciones() {
             }
           )
           .subscribe((status) => {
-            console.log(`📡 Canal notificaciones - Estado:`, status);
+            // console.log eliminado
           });
       } catch (error) {
         console.error("❌ Error al inicializar notificaciones:", error);
@@ -105,7 +102,7 @@ export function useNotificaciones() {
     // Cleanup function
     return () => {
       if (notificationChannel) {
-        console.log("🧹 Limpiando canal de notificaciones");
+        // console.log eliminado
         supabase.removeChannel(notificationChannel);
       }
     };
@@ -151,11 +148,7 @@ export function useNotificaciones() {
 
       setMensajesNoLeidos(msgCount || 0);
 
-      console.log(
-        `📊 Contadores actualizados - Notificaciones: ${
-          notifCount || 0
-        }, Mensajes: ${msgCount || 0}`
-      );
+      // console.log eliminado
     } catch (error) {
       console.error("❌ Error al actualizar contadores:", error);
       // En caso de error, mantener valores por defecto

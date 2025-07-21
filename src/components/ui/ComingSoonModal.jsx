@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import ciudadVideo from "/public/videos/HazPlanCiudades.mp4";
 import iconoHazPlan from "/public/images/iconoHazPlanRedondo.png";
+import camiImg from "/public/images/capiCamion.png";
 import "../../styles/comingSoonModal.css";
 
 let autoShowTimeout = null;
 let userClosed = false;
+
 const ComingSoonModal = ({ isOpen, onClose }) => {
   const [showContent, setShowContent] = useState(false);
   const [showLogo, setShowLogo] = useState(false);
@@ -13,6 +15,7 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
   const [isMuted, setIsMuted] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
   const videoRef = useRef(null);
+  const textIntervalRef = useRef(null);
 
   const texts = [
     {
@@ -31,7 +34,7 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
       description: "Forma parte de la revolución social",
     },
     {
-      title: " ¡Eventos sorpresas!",
+      title: "¡Eventos sorpresas!",
       subtitle: "Gana boletos para el Mundial 🏆",
       description: "Participa en eventos exclusivos y gana entradas oficiales",
     },
@@ -44,22 +47,23 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
       setShowLogo(false);
       setLogoAnimation(false);
       setVideoEnded(false);
+      setCurrentText(0); // Reinicia textos
 
       const sequence = [
-        { time: 100, action: () => setShowLogo(true) },
-        { time: 200, action: () => setLogoAnimation(true) },
-        { time: 3200, action: () => setShowLogo(false) },
-        { time: 3700, action: () => setShowContent(true) },
+        { time: 200, action: () => setShowLogo(true) },
+        { time: 400, action: () => setLogoAnimation(true) },
+        { time: 3400, action: () => setShowLogo(false) },
+        { time: 3900, action: () => setShowContent(true) },
       ];
 
-      let timers = [];
-      if (!videoEnded) {
-        timers = sequence.map(({ time, action }) => setTimeout(action, time));
-      }
+      const timers = sequence.map(({ time, action }) =>
+        setTimeout(action, time)
+      );
 
       if (videoRef.current) {
         videoRef.current.currentTime = 0;
         videoRef.current.muted = false;
+        videoRef.current.loop = false; // 🔥 FORZAR sin loop
         videoRef.current.play().catch(() => {
           videoRef.current.muted = true;
           setIsMuted(true);
@@ -67,46 +71,65 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
         });
       }
 
-      let textInterval;
-      if (!videoEnded) {
-        textInterval = setInterval(() => {
+      const delayBeforeNextText = 4500 + 6000;
+      const textTimeout = setTimeout(() => {
+        setCurrentText(1);
+        textIntervalRef.current = setInterval(() => {
           setCurrentText((prev) => (prev + 1) % texts.length);
-        }, 40000);
-      }
+        }, 6000);
+      }, delayBeforeNextText);
 
-      // Solo reabrir automáticamente si el usuario NO lo cerró
       if (autoShowTimeout) clearTimeout(autoShowTimeout);
-      autoShowTimeout = setTimeout(() => {
-        if (!userClosed && isOpen && typeof onClose === "function") {
-          onClose();
-          setTimeout(() => {
-            if (!userClosed && typeof onClose === "function") onClose(true); // true para indicar auto
-          }, 3000);
-        }
-      }, 40000);
 
       return () => {
         timers.forEach(clearTimeout);
-        clearInterval(textInterval);
+        clearTimeout(textTimeout);
+        clearInterval(textIntervalRef.current);
         if (autoShowTimeout) clearTimeout(autoShowTimeout);
       };
     }
-  }, [isOpen, texts.length, videoEnded, onClose]);
+  }, [isOpen]);
 
   const handleVideoEnd = () => {
+    if (videoRef.current) videoRef.current.pause();
+    clearInterval(textIntervalRef.current);
     setVideoEnded(true);
     setShowContent(false);
     setShowLogo(false);
     setLogoAnimation(false);
+    setCurrentText(0);
   };
 
   const handleReplay = () => {
+    // Limpiar timeouts e intervalos previos
+    clearInterval(textIntervalRef.current);
     setVideoEnded(false);
+    setShowContent(false);
+    setShowLogo(false);
+    setLogoAnimation(false);
     setCurrentText(0);
+
+    // Secuencia de animación igual que al abrir el modal
+    const timers = [];
+    timers.push(setTimeout(() => setShowLogo(true), 200));
+    timers.push(setTimeout(() => setLogoAnimation(true), 400));
+    timers.push(setTimeout(() => setShowLogo(false), 3400));
+    timers.push(setTimeout(() => setShowContent(true), 3900));
+
+    // Reiniciar video
     if (videoRef.current) {
       videoRef.current.currentTime = 0;
       videoRef.current.play();
     }
+
+    // Reiniciar ciclo de textos igual que en useEffect
+    const delayBeforeNextText = 4500 + 6000;
+    setTimeout(() => {
+      setCurrentText(1);
+      textIntervalRef.current = setInterval(() => {
+        setCurrentText((prev) => (prev + 1) % texts.length);
+      }, 6000);
+    }, delayBeforeNextText);
   };
 
   const handleClose = () => {
@@ -139,7 +162,7 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
   return (
     <div className="coming-soon-modal" onClick={handleBackdropClick}>
       <div className="modal-container">
-        {/* Video de fondo - Optimizado */}
+        {/* Video sin loop */}
         <video
           ref={videoRef}
           className="modal-video"
@@ -158,7 +181,7 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
         {/* Overlay oscuro */}
         <div className="modal-overlay"></div>
 
-        {/* Logo de bienvenida cinematográfico (solo icono, sin texto) */}
+        {/* Logo de bienvenida */}
         {showLogo && (
           <div className={`modal-intro-logo ${logoAnimation ? "animate" : ""}`}>
             <div className="modal-logo-container">
@@ -172,7 +195,7 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
           </div>
         )}
 
-        {/* Barras cinematográficas */}
+        {/* Cinematic bars */}
         <div className="cinematic-bars">
           <div className="bar-top"></div>
           <div className="bar-bottom"></div>
@@ -217,49 +240,10 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
             showContent && !videoEnded ? "show" : ""
           }`}
         >
-          {/* Logo HazPlan en la parte superior */}
-          {/* Botón "Ver de nuevo" cuando termina el video */}
-          {videoEnded && (
-            <div
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                zIndex: 20,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <button
-                onClick={handleReplay}
-                style={{
-                  background: "#7c4dff",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "24px",
-                  padding: "18px 38px",
-                  fontSize: "1.3rem",
-                  fontWeight: 700,
-                  boxShadow: "0 4px 24px #7c4dff55",
-                  cursor: "pointer",
-                  marginBottom: "18px",
-                  transition: "all 0.2s",
-                }}
-              >
-                Ver de nuevo
-              </button>
-              <span style={{ color: "#fff", fontWeight: 500 }}>
-                El video ha terminado
-              </span>
-            </div>
-          )}
           <div className="modal-header">
             <h1 className="hazplan-logo">HazPlan</h1>
           </div>
 
-          {/* Textos dinámicos centrados con efecto esférico */}
           <div className="modal-text-center">
             <div className="text-sphere-container">
               {texts.map((text, index) => (
@@ -281,7 +265,6 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          {/* Indicadores de progreso */}
           <div className="text-indicators">
             {texts.map((_, index) => (
               <div
@@ -291,29 +274,69 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
             ))}
           </div>
 
-          {/* Botón de acción */}
           <div className="modal-actions">
             <button className="btn-notify" onClick={handleClose}>
               <span>¡Quiero ser notificado!</span>
               <div className="button-glow"></div>
             </button>
           </div>
-
-          {/* Partículas flotantes */}
-          <div className="modal-particles">
-            {[...Array(20)].map((_, i) => (
-              <div
-                key={i}
-                className={`particle particle-${i % 4}`}
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 3}s`,
-                  animationDuration: `${3 + Math.random() * 4}s`,
-                }}
-              ></div>
-            ))}
-          </div>
         </div>
+
+        {/* Botón "Ver de nuevo" */}
+        {videoEnded && (
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              zIndex: 20,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <button
+              onClick={handleReplay}
+              className="btn-replay-animated"
+              style={{
+                background: "rgba(60, 0, 90, 0.70)",
+                color: "#fff",
+                border: "2px solid #fff",
+                borderRadius: "24px",
+                padding: "18px 38px",
+                fontSize: "1.3rem",
+                fontWeight: 700,
+                boxShadow: "0 4px 24px #7c4dff55",
+                cursor: "pointer",
+                marginBottom: "18px",
+                transition: "all 0.2s",
+                backdropFilter: "blur(2px)",
+                display: "grid",
+                alignItems: "center",
+                gap: "14px",
+              }}
+            >
+              <img
+                src={camiImg}
+                alt="Camión HazPlan"
+                style={{
+                  width: "150px",
+                  height: "150px",
+                  objectFit: "contain",
+                  filter: "drop-shadow(0 2px 8px #7c4dff88)",
+                  userSelect: "none",
+                  pointerEvents: "none",
+                }}
+                draggable={false}
+              />
+              Ver de nuevo
+            </button>
+            <span style={{ color: "#fff", fontWeight: 500 }}>
+              El video ha terminado
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

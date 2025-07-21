@@ -82,7 +82,7 @@ function App() {
     const timer = setTimeout(() => {
       setShowSplash(false);
       // Ya no mostrar intro, ir directo al Home
-    }, 6500); // Reducido a 6000ms para evitar reinicio del video
+    }, 6000); // Ahora splash dura 5 segundos
     return () => clearTimeout(timer);
   }, [user]);
 

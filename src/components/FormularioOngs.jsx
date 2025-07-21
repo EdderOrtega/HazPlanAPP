@@ -150,7 +150,9 @@ function FormularioOngs() {
         nombre: nombreEvento,
         descripcion: descripcionCompleta,
         tipo,
-        categoria: tipoEmergencia || "ayuda_ongs",
+        categoria: (tipoEmergencia || "ayuda_ongs")
+          .toLowerCase()
+          .replace(/\s+/g, "_"),
         ubicacion,
         fecha,
         fecha_fin,

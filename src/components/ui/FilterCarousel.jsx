@@ -3,6 +3,7 @@ import "../../styles/filterCarousel.css";
 import "../../styles/contrastImprovements.css";
 
 // Importar las imágenes de assets
+
 import arte from "/public/images/arte.png";
 import comunidad from "/public/images/comunidad.png";
 import deportes from "/public/images/deportes.png";
@@ -12,6 +13,8 @@ import mascotas from "/public/images/mascotas.png";
 import medioambiente from "/public/images/medioambiente.png";
 import salud from "/public/images/salud.png";
 import iconoHazPlanRedondo from "/public/images/iconoHazPlanRedondo.png";
+import capiHeroIcono from "/public/images/capiHeroIcono.png";
+import capiCapitanIcono from "/public/images/iconoONG.png";
 
 const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
   // Definir filtros con iconos de imágenes
@@ -23,22 +26,22 @@ const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
       color: "#667eea",
     },
     {
+      value: "mascotas",
+      label: "Mascotas",
+      icon: mascotas,
+      color: "#f39c12",
+    },
+    {
       value: "reforestacion",
       label: "Reforestación",
       icon: medioambiente,
       color: "#2ecc71",
     },
     {
-      value: "salud",
-      label: "Salud Mental",
-      icon: salud,
-      color: "#e74c3c",
-    },
-    {
-      value: "mascotas",
-      label: "Mascotas",
-      icon: mascotas,
-      color: "#f39c12",
+      value: "arte",
+      label: "Arte",
+      icon: arte,
+      color: "#e67e22",
     },
     {
       value: "fandom",
@@ -47,11 +50,25 @@ const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
       color: "#9b59b6",
     },
     {
-      value: "arte",
-      label: "Arte",
-      icon: arte,
-      color: "#e67e22",
+      value: "ayuda_ongs",
+      label: "ONGs",
+      icon: capiCapitanIcono,
+      color: "#1e88e5",
     },
+    {
+      value: "ayuda_ciudadana",
+      label: "Ciudadanía",
+      icon: capiHeroIcono,
+      color: "#ab47bc",
+    },
+
+    {
+      value: "salud",
+      label: "Salud Mental",
+      icon: salud,
+      color: "#e74c3c",
+    },
+
     {
       value: "club",
       label: "Lectura",

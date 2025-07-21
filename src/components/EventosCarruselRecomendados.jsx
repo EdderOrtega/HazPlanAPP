@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
 // Datos de ejemplo (puedes reemplazar por props o datos reales)
@@ -50,23 +50,110 @@ const eventosMock = [
 ];
 
 function EventosCarruselRecomendados({ eventos = eventosMock }) {
+  const cardsRef = useRef([]);
+  const titleRef = useRef();
+  useEffect(() => {
+    if (!cardsRef.current) return;
+    import("gsap").then(({ default: gsap }) => {
+      // Animación de cards (igual que antes)
+      cardsRef.current.forEach((el, idx) => {
+        if (!el) return;
+        gsap.fromTo(
+          el,
+          { scale: 0.92, boxShadow: "0 2px 12px #0002", opacity: 0 },
+          {
+            scale: 1,
+            opacity: 1,
+            boxShadow: "0 8px 32px #a259e655",
+            duration: 1.1,
+            ease: "elastic.out(1, 0.5)",
+            delay: 0.2 + idx * 0.12,
+            onComplete: () => {
+              gsap.to(el, {
+                scale: 1.04,
+                boxShadow: "0 0 32px #a259e6cc",
+                background:
+                  "linear-gradient(135deg, #a259e6 60%, #3a2566 100%)",
+                repeat: -1,
+                yoyo: true,
+                duration: 1.2,
+                ease: "sine.inOut",
+                delay: 0.1 * idx,
+              });
+            },
+          }
+        );
+      });
+      // Animación de texto h2 (fade+pop, colores alternados blanco/morado, salto de línea natural)
+      if (titleRef.current) {
+        const el = titleRef.current;
+        const text = el.textContent;
+        const words = text.split(/\s+/);
+        el.innerHTML = words
+          .map((w, i) => {
+            const color = i % 2 === 0 ? "#fff" : "#a259e6";
+            return `<span class="carrusel-title-word" style="display:inline-flex; margin-right:8px; color:${color}; font-weight:900;">${w}</span>`;
+          })
+          .join(" ");
+        const wordEls = el.querySelectorAll(".carrusel-title-word");
+        gsap.fromTo(
+          wordEls,
+          { opacity: 0, scale: 0.7 },
+          {
+            opacity: 1,
+            scale: 1.12,
+            duration: 0.7,
+            ease: "back.out(2)",
+            stagger: 0.09,
+            delay: 0.2,
+            onComplete: () => {
+              gsap.to(wordEls, {
+                scale: 1.04,
+                color: (i) => (i % 2 === 0 ? "#fff" : "#eee3f8ff"),
+                textShadow: (i) =>
+                  i % 2 === 0 ? "0 2px 8px #e0d2ecf6" : "0 2px 8px #fff8",
+                repeat: -1,
+                yoyo: true,
+                duration: 1.2,
+                ease: "sine.inOut",
+                stagger: {
+                  each: 0.09,
+                  repeat: -1,
+                  yoyo: true,
+                },
+                delay: 0.2,
+              });
+            },
+          }
+        );
+      }
+    });
+  }, [eventos]);
   return (
     <section
       style={{
-        background: "#2a1747",
+        background: "rgb(131 67 228)",
         padding: "32px 0 24px 0",
         borderRadius: "18px",
         margin: "40px 0",
-        boxShadow: "0 4px 24px #1a0e2a55",
+        boxShadow: "0 4px 24px rgb(88 38 163)",
       }}
     >
       <h2
+        ref={titleRef}
         style={{
           color: "#fff",
           marginLeft: 32,
           marginBottom: 18,
           fontWeight: 700,
           fontSize: 28,
+          letterSpacing: 1,
+          lineHeight: 1.25,
+          wordBreak: "break-word",
+          whiteSpace: "normal",
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
         }}
       >
         Próximamente eventos recomendados para ti
@@ -80,9 +167,10 @@ function EventosCarruselRecomendados({ eventos = eventosMock }) {
           scrollbarWidth: "thin",
         }}
       >
-        {eventos.map((evento) => (
+        {eventos.map((evento, idx) => (
           <div
             key={evento.id}
+            ref={(el) => (cardsRef.current[idx] = el)}
             style={{
               minWidth: 220,
               maxWidth: 220,
@@ -180,6 +268,7 @@ function EventosCarruselRecomendados({ eventos = eventosMock }) {
                   boxShadow: "0 2px 8px #7c4dff33",
                   transition: "background 0.2s",
                 }}
+                onClick={() => (window.location.href = `/evento/${evento.id}`)}
               >
                 Ver evento
               </button>
