@@ -14,7 +14,7 @@ import medioambiente from "/public/images/medioambiente.png";
 import salud from "/public/images/salud.png";
 import iconoHazPlanRedondo from "/public/images/iconoHazPlanRedondo.png";
 import capiHeroIcono from "/public/images/capiHeroIcono.png";
-import capiCapitanIcono from "/public/images/iconoONG.png";
+import capiCapitanIcono from "/public/images/IconoONG.png";
 
 const FilterCarousel = ({ filtro, setFiltro, eventosCounts = {} }) => {
   // Definir filtros con iconos de imágenes

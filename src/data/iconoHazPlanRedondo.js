@@ -1,2 +1,2 @@
-import iconoHazPlanRedondo from "/public/images/iconoHazPlanRedondo.png";
+import iconoHazPlanRedondo from "/images/iconoHazPlanRedondo.png";
 export default iconoHazPlanRedondo;

@@ -1,1 +1,1 @@
-import capilentesImg from "/public/images/capilentes.png";
+import capilentesImg from "/images/capilentes.png";

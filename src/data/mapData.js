@@ -1,15 +1,15 @@
 // Importar iconos de categorías
 import deportesIcon from "/images/deportes.png";
 import arteIcon from "/images/arte.png";
-import comunidadIcon from "/public/images/comunidad.png";
-import fandomsIcon from "/public/images/fandoms.png";
-import mascotasIcon from "/public/images/mascotas.png";
-import medioambienteIcon from "/public/images/medioambiente.png";
-import saludIcon from "/public/images/salud.png";
-import inclusionIcon from "/public/images/inclusion.png";
-import todosIcon from "/public/images/iconoHazPlanRedondo.png";
-import capiHeroIcono from "/public/images/capiHeroIcono.png";
-import capiCapitanIcono from "/public/images/iconoONG.png";
+import comunidadIcon from "/images/comunidad.png";
+import fandomsIcon from "/images/fandoms.png";
+import mascotasIcon from "/images/mascotas.png";
+import medioambienteIcon from "/images/medioambiente.png";
+import saludIcon from "/images/salud.png";
+import inclusionIcon from "/images/inclusion.png";
+import todosIcon from "/images/iconoHazPlanRedondo.png";
+import capiHeroIcono from "/images/capiHeroIcono.png";
+import capiCapitanIcono from "/images/IconoONG.png";
 
 // Rutas predefinidas para el vehículo capicamión
 export const rutasVehiculo = {
