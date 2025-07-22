@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import amigos2 from "/public/images/amigos2.jpg";
-import amigos3 from "/public/images/amigos3.jpg";
-import iconoHazPlan from "/public/images/iconoHazPlanRedondo.png";
-import ciudadVideo from "/public/videos/HazPlanCiudades.mp4";
+import amigos2 from "/images/amigos2.jpg";
+import amigos3 from "/images/amigos3.jpg";
+import iconoHazPlan from "/images/iconoHazPlanRedondo.png";
+import ciudadVideo from "/videos/HazPlanCiudades.mp4";
 import "../styles/introScreen.css";
 
 function IntroScreen({ onFinish }) {

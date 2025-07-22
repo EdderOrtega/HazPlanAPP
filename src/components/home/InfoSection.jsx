@@ -109,12 +109,17 @@ const InfoSection = React.forwardRef(({ sectionKey }, ref) => {
                   : sectionKey === "section2"
                   ? "heartBeat3D 8s ease-in-out infinite"
                   : "bounce3D 8s ease-in-out infinite",
-              display: "inline-block",
+              display: "flex",
+              gap: "0.25em",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "2.5rem",
               opacity: 1,
               animationName: "fadeIn",
               animationDuration: "2s",
               animationDelay: "0.5s",
               animationFillMode: "forwards",
+              flexWrap: "nowrap",
             }}
           >
             {section.icons}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import ciudadVideo from "/public/videos/HazPlanCiudades.mp4";
-import iconoHazPlan from "/public/images/iconoHazPlanRedondo.png";
-import camiImg from "/public/images/capiCamion.png";
+import ciudadVideo from "/videos/HazPlanCiudades.mp4";
+import iconoHazPlan from "/images/iconoHazPlanRedondo.png";
+import camiImg from "/images/capiCamion.png";
 import "../../styles/comingSoonModal.css";
 
 let autoShowTimeout = null;
@@ -15,6 +15,22 @@ const ComingSoonModal = ({ isOpen, onClose }) => {
   const [isMuted, setIsMuted] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
   const videoRef = useRef(null);
+  // Preload video as soon as possible
+  useEffect(() => {
+    // Crea un objeto de video oculto para forzar la precarga si aún no está en caché
+    const preloadVideo = document.createElement("video");
+    preloadVideo.src = ciudadVideo;
+    preloadVideo.preload = "auto";
+    preloadVideo.muted = true;
+    preloadVideo.style.display = "none";
+    document.body.appendChild(preloadVideo);
+    // Intenta cargar el video
+    preloadVideo.load();
+    // Limpieza
+    return () => {
+      document.body.removeChild(preloadVideo);
+    };
+  }, []);
   const textIntervalRef = useRef(null);
 
   const texts = [

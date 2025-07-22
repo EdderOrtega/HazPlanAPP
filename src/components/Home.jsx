@@ -1,3 +1,4 @@
+import React from "react";
 import HeroSection from "./home/HeroSection";
 import FeaturesSection from "./home/FeaturesSection";
 import InfoSection from "./home/InfoSection";
@@ -6,10 +7,31 @@ import DashboardInicio from "./DashboardInicio";
 import BusinessPromoSection from "./BusinessPromoSection"; // Nueva sección para empresas
 import ONGsPromoSection from "./ONGsPromoSection";
 import useGTAScrollAnimations from "../hooks/useGTAScrollAnimations";
+// Importar los videos de ONGs para precarga
+import videoONG from "/videos/HazPlanONG.mp4";
+import videoSorpresa from "/videos/HazPlanEventoSorpresa.mp4";
 
 function Home({ user, onShowComingSoon }) {
   // Hook para animaciones de scroll estilo GTA 6
   useGTAScrollAnimations();
+
+  // Precargar videos de ONGs al montar Home
+  React.useEffect(() => {
+    const ONG_VIDEOS = [videoONG, videoSorpresa];
+    const preloads = ONG_VIDEOS.map((src) => {
+      const v = document.createElement("video");
+      v.src = src;
+      v.preload = "auto";
+      v.muted = true;
+      v.style.display = "none";
+      document.body.appendChild(v);
+      v.load();
+      return v;
+    });
+    return () => {
+      preloads.forEach((v) => document.body.removeChild(v));
+    };
+  }, []);
 
   // Si el usuario está logueado, mostrar dashboard personalizado
   if (user) {
