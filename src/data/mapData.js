@@ -168,6 +168,10 @@ export const mapConfig = {
   zoom: 12,
   vehiculosIdsAutorizados: [
     "08d54fc4-0879-40a4-b247-b11c38a386f7",
+    "588b2b86-6775-4e46-bb98-0f5ada6d9d1c",
+    "f88c6ac4-8895-4323-8b72-34a9f49dfb73",
+    "648a6ffc-1ce7-44c9-bc9a-c1218caee0fe",
+
     // Agrega aquí más IDs si lo deseas
   ],
   defaultMapStyle: "openstreetmap", // Mapa estándar por defecto
