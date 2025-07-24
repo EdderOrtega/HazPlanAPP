@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
+import Loader from "../ui/Loader";
 import {
   FiCalendar,
   FiMapPin,
@@ -111,9 +112,8 @@ function EditarEvento() {
         }}
       >
         <div className="loader" style={{ marginBottom: 16 }} />
-        <span style={{ color: "#b42acb", fontWeight: 500 }}>
-          Cargando evento...
-        </span>
+
+        <Loader />
       </div>
     );
   if (error)
@@ -158,6 +158,7 @@ function EditarEvento() {
         padding: "32px 24px",
         position: "relative",
         minHeight: 480,
+        marginTop: 80,
       }}
     >
       <button
@@ -192,6 +193,7 @@ function EditarEvento() {
           flexDirection: "column",
           gap: 18,
           marginTop: 18,
+          marginBottom: 46,
         }}
         autoComplete="off"
       >
@@ -303,6 +305,7 @@ function EditarEvento() {
             borderRadius: 8,
             fontWeight: 600,
             fontSize: 17,
+            width: "100%",
             marginTop: 8,
             display: "flex",
             alignItems: "center",

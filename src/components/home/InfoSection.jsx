@@ -82,9 +82,11 @@ const InfoSection = React.forwardRef(({ sectionKey }, ref) => {
                 : "linear-gradient(45deg, var(--primary-purple), var(--violet))",
             borderRadius: "50%",
             display: "flex",
+            flexDirection: "row",
             alignItems: "center",
-            justifyContent: "center",
-            fontSize: "3rem",
+            justifyContent: "space-evenly",
+            gap: "0.2em",
+            fontSize: "clamp(1.5rem, 2.5vw, 2.3rem)",
             marginBottom: 32,
             boxShadow: "0 4px 24px rgba(103,58,183,0.18)",
             animation:
@@ -99,31 +101,35 @@ const InfoSection = React.forwardRef(({ sectionKey }, ref) => {
             animationDuration: "1.7s",
             animationDelay: "0.18s",
             animationFillMode: "forwards",
+            overflow: "hidden",
           }}
         >
-          <span
-            style={{
-              animation:
-                sectionKey === "section1"
-                  ? "iconSpin3D 8s linear infinite"
-                  : sectionKey === "section2"
-                  ? "heartBeat3D 8s ease-in-out infinite"
-                  : "bounce3D 8s ease-in-out infinite",
-              display: "flex",
-              gap: "0.25em",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "2.5rem",
-              opacity: 1,
-              animationName: "fadeIn",
-              animationDuration: "2s",
-              animationDelay: "0.5s",
-              animationFillMode: "forwards",
-              flexWrap: "nowrap",
-            }}
-          >
-            {section.icons}
-          </span>
+          {[...section.icons.matchAll(/\p{Emoji}/gu)].map((match, idx) => (
+            <span
+              key={idx}
+              style={{
+                animation:
+                  sectionKey === "section1"
+                    ? "iconSpin3D 8s linear infinite"
+                    : sectionKey === "section2"
+                    ? "heartBeat3D 8s ease-in-out infinite"
+                    : "bounce3D 8s ease-in-out infinite",
+                display: "block",
+                width: "32px",
+                height: "32px",
+                fontSize: "inherit",
+                lineHeight: 1,
+                opacity: 1,
+                animationName: "fadeIn",
+                animationDuration: "2s",
+                animationDelay: `${0.5 + idx * 0.2}s`,
+                animationFillMode: "forwards",
+                textAlign: "center",
+              }}
+            >
+              {match[0]}
+            </span>
+          ))}
         </div>
         <h2
           style={{

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
-import videoONG from "/public/videos/HazPlanONG.mp4";
-import videoSorpresa from "/public/videos/HazPlanEventoSorpresa.mp4";
+import videoONG from "/videos/HazPlanONG.mp4";
+import videoSorpresa from "/videos/HazPlanEventoSorpresa.mp4";
 // import LazyVideo from "./ui/LazyVideo";
 
 const ONGS = [

@@ -55,10 +55,12 @@ const HeroSection = React.forwardRef((props, ref) => {
               "0 0 60px rgba(103, 58, 183, 0.6), 0 0 100px rgba(184, 91, 204, 0.4)",
             animation: "float3D 4s ease-in-out infinite",
             transformStyle: "preserve-3d",
+            whiteSpace: "pre-line",
           }}
-        >
-          HazPlan
-        </h1>
+          dangerouslySetInnerHTML={{
+            __html: "HazPlan".split("").join("<br />"),
+          }}
+        />
 
         <p
           style={{

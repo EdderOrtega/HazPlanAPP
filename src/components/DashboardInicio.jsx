@@ -5,8 +5,8 @@ import EventoCard from "./EventoCard";
 import "../styles/dashboardInicio.css";
 import "../styles/pageTransitions.css";
 import Loader from "./ui/Loader";
-import amigos2Img from "/public/images/amigos2.jpg";
-import amigos3Img from "/public/images/amigos3.jpg";
+import amigos2Img from "/images/amigos2.jpg";
+import amigos3Img from "/images/amigos3.jpg";
 
 import {
   FaInstagram,
